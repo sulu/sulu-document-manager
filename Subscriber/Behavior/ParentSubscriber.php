@@ -7,23 +7,18 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior;
 
 use Sulu\Component\DocumentManager\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Behavior\TimestampBehavior;
-use Sulu\Component\DocumentManager\PropertyEncoder;
 use Sulu\Component\DocumentManager\MetadataFactory;
-use ProxyManager\Factory\LazyLoadingGhostFactory;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use PHPCR\NodeInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Sulu\Component\DocumentManager\ProxyFactory;
 
 /**
  * Set the parent and children on the doucment
@@ -31,21 +26,12 @@ use ProxyManager\Proxy\LazyLoadingInterface;
 class ParentSubscriber implements EventSubscriberInterface
 {
     private $proxyFactory;
-    private $dispatcher;
-    private $registry;
-    private $metadataFactory;
 
-    public function __construct(
-        LazyLoadingGhostFactory $proxyFactory,
-        EventDispatcherInterface $dispatcher,
-        DocumentRegistry $registry,
-        MetadataFactory $metadataFactory
-    )
-    {
+    /**
+     * @param ProxyFactory $proxyFactory
+     */
+    public function __construct(ProxyFactory $proxyFactory) {
         $this->proxyFactory = $proxyFactory;
-        $this->dispatcher = $dispatcher;
-        $this->registry = $registry;
-        $this->metadataFactory = $metadataFactory;
     }
 
     /**
@@ -66,42 +52,17 @@ class ParentSubscriber implements EventSubscriberInterface
         $document = $event->getDocument();
         $node = $event->getNode();
 
-        if ($document instanceof ParentBehavior) {
-            $this->mapParent($document, $node);
+        if (!$document instanceof ParentBehavior) {
+            return;
         }
+
+        $this->mapParent($document, $node);
     }
 
     private function mapParent($document, NodeInterface $node)
     {
-        $childDocument = $document;
-        $childNode = $node;
-        $eventDispatcher = $this->dispatcher;
-        $registry = $this->registry;
-        $parentNode = $childNode->getParent();
-        $parentMetadata = $this->metadataFactory->getMetadataForPhpcrNode($parentNode);
-
-        $initializer = function (
-            LazyLoadingInterface $document, 
-            $method, 
-            array $parameters, 
-            &$initializer
-        ) use (
-            $childDocument,
-            $parentNode,
-            $eventDispatcher,
-            $registry
-        )
-        {
-            $locale = $registry->getLocaleForDocument($childDocument);
-
-            $hydrateEvent = new HydrateEvent($parentNode, $locale);
-            $hydrateEvent->setDocument($document);
-            $eventDispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
-
-            $initializer = null;
-        };
-
-        $parentDocument = $this->proxyFactory->createProxy($parentMetadata->getClass(), $initializer);
-        $document->setParent($parentDocument);
+        // TODO: performance warning: We are eagerly fetching the parent node
+        $targetNode = $node->getParent();
+        $document->setParent($this->proxyFactory->createProxyForNode($document, $targetNode));
     }
 }

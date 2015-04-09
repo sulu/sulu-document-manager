@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
  
-namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior;
+namespace Sulu\Component\DocumentManager\Tests\Unit;
 
 use Sulu\Component\DocumentManager\Subscriber\Behavior\TimestampSubscriber;
 use Sulu\Component\DocumentManager\PropertyEncoder;
@@ -24,58 +24,59 @@ use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
 use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
-use Sulu\Component\DocumentManager\Subscriber\Behavior\ParentSubscriber;
+use Sulu\Component\DocumentManager\ProxyFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
-use Sulu\Component\DocumentManager\ProxyFactory;
 
-class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
+class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
-        $this->document = new TestParentDocument();
-        $this->notImplementing = new \stdClass;
         $this->node = $this->prophesize(NodeInterface::class);
         $this->parentNode = $this->prophesize(NodeInterface::class);
-        $this->parentDocument = new \stdClass();
-        $this->proxyFactory = $this->prophesize(ProxyFactory::class);
+        $this->metadataFactory = $this->prophesize(MetadataFactory::class);
+        $this->metadata = $this->prophesize(Metadata::class);
+        $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
+        $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->proxyFactory = new LazyLoadingGhostFactory();
+        $this->document = new TestProxyDocument();
 
-        $this->subscriber = new ParentSubscriber(
-            $this->proxyFactory->reveal()
+        $this->factory = new ProxyFactory(
+            $this->proxyFactory,
+            $this->dispatcher->reveal(),
+            $this->documentRegistry->reveal(),
+            $this->metadataFactory->reveal()
         );
-
-        $this->hydrateEvent->getNode()->willReturn($this->node);
-    }
-
-    /**
-     * It should return early if the document does not implement the ParentBehavior interface
-     */
-    public function testHydrateNotImplementing()
-    {
-        $this->hydrateEvent->getDocument()->willReturn($this->notImplementing);
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 
     /**
      * It should populate the documents parent property with a proxy
      */
-    public function testHydrateParent()
+    public function testCreateProxy()
     {
-        $this->hydrateEvent->getDocument()->willReturn($this->document);
-
         $this->node->getParent()->willReturn($this->parentNode->reveal());
+        $this->metadataFactory->getMetadataForPhpcrNode($this->parentNode->reveal())->willReturn($this->metadata->reveal());
+        $this->metadata->getClass()->willReturn(TestProxyDocumentProxy::class);
 
-        $this->proxyFactory->createProxyForNode($this->document, $this->parentNode->reveal())->willReturn($this->parentDocument);
+        $proxy = $this->factory->createProxyForNode($this->document, $this->parentNode->reveal());
 
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
-        $this->assertSame($this->parentDocument, $this->document->getParent());
+        $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
 
-        return $this->document;
+        return $proxy;
+    }
+
+    /**
+     * It should lazy load the proxy
+     *
+     * @depends testCreateProxy
+     */
+    public function testHydrateLazyProxy($proxy)
+    {
+        $this->assertEquals('Hello', $proxy->getTitle());
     }
 }
 
-class TestParentDocument implements ParentBehavior
+class TestProxyDocument implements ParentBehavior
 {
     private $parent;
 
@@ -89,3 +90,12 @@ class TestParentDocument implements ParentBehavior
         $this->parent = $parent;
     }
 }
+
+class TestProxyDocumentProxy
+{
+    public function getTitle()
+    {
+        return 'Hello';
+    }
+}
+
