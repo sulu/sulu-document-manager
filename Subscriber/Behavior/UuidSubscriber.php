@@ -14,6 +14,8 @@ use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Behavior\UuidBehavior;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Symfony\Component\EventDispatcher\Event;
+use Sulu\Component\DocumentManager\Event\AbstractDocumentNodeEvent;
 
 /**
  * Maps the UUID
@@ -26,14 +28,12 @@ class UuidSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::HYDRATE => 'handleHydrate',
+            Events::HYDRATE => 'handleUuid',
+            Events::PERSIST => array('handleUuid', '0'),
         );
     }
 
-    /**
-     * @param HydrateEvent $event
-     */
-    public function handleHydrate(HydrateEvent $event)
+    public function handleUuid(AbstractDocumentNodeEvent $event)
     {
         $document = $event->getDocument();
 

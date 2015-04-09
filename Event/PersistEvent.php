@@ -13,23 +13,8 @@ namespace Sulu\Component\DocumentManager\Event;
 use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 
-class PersistEvent extends Event
+class PersistEvent extends AbstractDocumentNodeEvent
 {
-    /**
-     * @var object $document
-     */
-    private $document;
-
-    /**
-     * @var NodeInterface
-     */
-    private $node;
-
-    /**
-     * @var string $locale
-     */
-    private $locale;
-
     /**
      * @param object $document
      */
@@ -62,26 +47,5 @@ class PersistEvent extends Event
 
         return $this->node;
     }
-
-    public function hasNode()
-    {
-        return null !== $this->node;
-    }
-
-    /**
-     * @return object
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale() 
-    {
-        return $this->locale;
-    }
-    
+   
 }

@@ -14,29 +14,8 @@ use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 
-class HydrateEvent extends Event
+class HydrateEvent extends AbstractDocumentNodeEvent
 {
-    /**
-     * @var object $document
-     */
-    private $document;
-
-
-    /**
-     * @var string $locale
-     */
-    private $locale;
-
-    /**
-     * @var NodeInterface
-     */
-    private $node;
-
-    /**
-     * @var AccessorClass
-     */
-    private $accessor;
-
     /**
      * @param object $document
      */
@@ -44,15 +23,6 @@ class HydrateEvent extends Event
     {
         $this->locale = $locale;
         $this->node = $node;
-    }
-
-    /**
-     * @return NodeInterface
-     * @throws \RuntimeException
-     */
-    public function getNode()
-    {
-        return $this->node;
     }
 
     /**
@@ -69,37 +39,6 @@ class HydrateEvent extends Event
 
         return $this->document;
     }
-
-    /**
-     * @return string
-     */
-    public function getLocale() 
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @return DocumentAccessor
-     */
-    public function getAccessor()
-    {
-        if ($this->accessor) {
-            return $this->accessor;
-        }
-
-        $this->accessor = new DocumentAccessor($this->getDocument());
-
-        return $this->accessor;
-    }
-
-    /**
-     * Return true if the document has been set
-     */
-    public function hasDocument()
-    {
-        return null !== $this->document;
-    }
-
 
     /**
      * @param object $document

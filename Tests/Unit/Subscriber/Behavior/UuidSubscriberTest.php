@@ -40,20 +40,20 @@ class UuidSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHydrateNotImplementing()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->notImplementing);
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->subscriber->handleUuid($this->hydrateEvent->reveal());
     }
 
     /**
      * It should set the node name on the document
      */
-    public function testHydrate()
+    public function testUuid()
     {
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
         $this->hydrateEvent->getDocument()->willReturn($this->document);
         $this->hydrateEvent->getAccessor()->willReturn($this->accessor);
         $this->node->getIdentifier()->willReturn('hello');
 
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->subscriber->handleUuid($this->hydrateEvent->reveal());
 
         $this->assertEquals('hello', $this->document->getUuid());
     }

@@ -43,7 +43,7 @@ class DocumentManager
      * @param string $locale Locale
      * @param string $aliasOrClass Document alias or class
      */
-    public function find($id, $locale, $aliasOrClass = null)
+    public function find($id, $locale = null, $aliasOrClass = null)
     {
         $event = new Event\FindEvent($id, $locale, $aliasOrClass = null);
         $this->eventDispatcher->dispatch(Events::FIND, $event);
