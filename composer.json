@@ -4,7 +4,10 @@
     "require": {
         "doctrine/phpcr-odm": "~1.2",
         "symfony/event-dispatcher": "~2.0",
-        "symfony-cmf/core-bundle": "~1.2"
+        "symfony-cmf/core-bundle": "~1.2",
+        "ocramius/proxy-manager": "~1.0",
+        "aferrandini/urlizer": "1.0.*",
+        "symfony-cmf/core-bundle": "~1.1"
     },
     "require-dev": {
         "jackalope/jackalope-doctrine-dbal": "~1.2@dev"
