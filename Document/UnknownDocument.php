@@ -12,14 +12,16 @@ namespace Sulu\Component\DocumentManager\Document;
 
 use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use Sulu\Component\DocumentManager\Behavior\NodeNameBehavior;
+use Sulu\Component\DocumentManager\Behavior\UuidBehavior;
 
 /**
  * This document class is used when an unmapped node is loaded
  */
-class UnknownDocument implements ParentBehavior, NodeNameBehavior
+class UnknownDocument implements ParentBehavior, NodeNameBehavior, UuidBehavior
 {
     private $parent;
     private $nodeName;
+    private $uuid;
 
     /**
      * {@inheritDoc}
@@ -43,5 +45,13 @@ class UnknownDocument implements ParentBehavior, NodeNameBehavior
     public function getNodeName()
     {
         return $this->nodeName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUuid() 
+    {
+        return $this->uuid;
     }
 }

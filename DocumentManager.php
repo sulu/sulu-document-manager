@@ -186,17 +186,4 @@ class DocumentManager
 
         return $event->getResult();
     }
-
-    /**
-     * Create a document helper for the given document.
-     * The docment helper performs operations upon the document
-     * such as changing localization, copying locales, reordering
-     * child nodes, etc.
-     *
-     * @param object $document
-     */
-    public function createHelper($document)
-    {
-        return new DocumentHelper($document);
-    }
 }
