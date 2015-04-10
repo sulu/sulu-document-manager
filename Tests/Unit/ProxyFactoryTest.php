@@ -27,6 +27,7 @@ use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use Sulu\Component\DocumentManager\ProxyFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 
 class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -73,6 +74,19 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
     public function testHydrateLazyProxy($proxy)
     {
         $this->assertEquals('Hello', $proxy->getTitle());
+    }
+
+    /**
+     * It should create a children node collection
+     */
+    public function testCreateChildrenCollection()
+    {
+        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+        $this->documentRegistry->getLocaleForDocument($this->document)->willReturn('de');
+        $childrenCollection = $this->factory->createChildrenCollection($this->document);
+
+        $this->assertInstanceOf(ChildrenCollection::class, $childrenCollection);
+
     }
 }
 

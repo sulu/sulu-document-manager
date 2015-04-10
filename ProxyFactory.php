@@ -94,12 +94,12 @@ class ProxyFactory
      */
     public function createChildrenCollection($document)
     {
-        $node = $this->documentRegistry->getNodeForDocument($document);
-        $locale = $this->documentRegistry->getLocaleForDocument($document);
+        $node = $this->registry->getNodeForDocument($document);
+        $locale = $this->registry->getLocaleForDocument($document);
 
         return new ChildrenCollection(
             $node,
-            $this->eventDispatcher,
+            $this->dispatcher,
             $locale
         );
     }
