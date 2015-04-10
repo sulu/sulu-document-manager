@@ -26,20 +26,41 @@ class DocumentInspector
         $this->proxyFactory = $proxyFactory;
     }
 
+    /**
+     * Return the parent document for the given document
+     *
+     * @param object $document
+     *
+     * @return object
+     */
     public function getParent($document)
     {
         $parentNode = $this->getNode($document)->getParent();
         return $this->proxyFactory->createProxyForNode($parentNode);
     }
 
+    /**
+     * Return the PHPCR node for the given document
+     *
+     * @param object $document
+     *
+     * @return NodeInterface
+     */
     public function getNode($document)
     {
         return $this->documentRegistry->getNodeForDocument($document);
     }
 
+    /**
+     * Returns lazy-loading children collection for given document
+     *
+     * @param object $document
+     *
+     * @return ChildrenCollection
+     */
     public function getChildren($document)
     {
-        return new ChildrenCollection($document);
+        return $this->proxyFactory->createChildrenCollection($document);
     }
 
     /**

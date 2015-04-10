@@ -54,6 +54,29 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
         $path = $this->documentInspector->getPath($this->document);
         $this->assertEquals('/path/to', $path);
     }
+
+    /**
+     * It should return a PHPCR node
+     */
+    public function testGetPhpcrNode()
+    {
+        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+
+        $result = $this->documentInspector->getNode($this->document);
+        $this->assertEquals($this->node->reveal(), $result);
+    }
+
+    /**
+     * It should return a children
+     */
+    public function testGetChildren()
+    {
+        $childrenCollection = new \stdClass;
+        $this->proxyFactory->createChildrenCollection($this->document)->willReturn($childrenCollection);
+        $this->assertEquals(
+            $childrenCollection,
+            $this->documentInspector->getChildren($this->document)
+        );
+
+    }
 }
-
-
