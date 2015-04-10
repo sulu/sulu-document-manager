@@ -46,4 +46,34 @@ class PropertyEncoder
             $name
         );
     }
+
+    /**
+     * @param string $name
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function localizedContentName($name, $locale)
+    {
+        return sprintf(
+            '%s:%s-%s',
+            $this->namespaceRegistry->getPrefix('content_localized'),
+            $locale,
+            $name
+        );
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    public function contentName($name)
+    {
+        return sprintf(
+            '%s:%s',
+            $this->namespaceRegistry->getPrefix('content'),
+            $name
+        );
+    }
 }

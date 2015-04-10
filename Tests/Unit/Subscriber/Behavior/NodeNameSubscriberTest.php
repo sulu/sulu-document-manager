@@ -40,7 +40,7 @@ class NodeNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHydrateNotImplementing()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->notImplementing);
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->subscriber->handleNodeName($this->hydrateEvent->reveal());
     }
 
     /**
@@ -53,7 +53,7 @@ class NodeNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->hydrateEvent->getAccessor()->willReturn($this->accessor);
         $this->node->getName()->willReturn('hello');
 
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->subscriber->handleNodeName($this->hydrateEvent->reveal());
 
         $this->assertEquals('hello', $this->document->getNodeName());
     }

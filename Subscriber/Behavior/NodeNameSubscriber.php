@@ -38,7 +38,7 @@ class NodeNameSubscriber implements EventSubscriberInterface
     /**
      * @param HydrateEvent $event
      */
-    public function handleHydrate(AbstractDocumentNodeEvent $event)
+    public function handleNodeName(AbstractDocumentNodeEvent $event)
     {
         $document = $event->getDocument();
 

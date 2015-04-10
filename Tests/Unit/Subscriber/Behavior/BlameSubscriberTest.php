@@ -27,6 +27,10 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        if (!class_exists(UserInterface::class)) {
+            $this->markTestSkipped('This class has dependency on SuluSecurityBundle');
+        }
+
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
         $this->notImplementing = new \stdClass;
