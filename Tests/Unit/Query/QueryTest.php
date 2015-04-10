@@ -6,7 +6,7 @@ use PHPCR\Query\QueryResultInterface;
 use Sulu\Component\DocumentManager\Query\Query;
 use PHPCR\Query\QueryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sulu\Component\DocumentManager\Query\ResultCollection;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 
@@ -60,7 +60,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteDocument()
     {
-        $resultCollection = $this->prophesize(ResultCollection::class);
+        $resultCollection = $this->prophesize(QueryResultCollection::class);
         $this->dispatcher->dispatch(Events::QUERY_EXECUTE, new QueryExecuteEvent($this->query))->will(function ($args) use ($resultCollection) {
             $args[1]->setResult($resultCollection->reveal());
         });

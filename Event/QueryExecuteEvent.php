@@ -13,7 +13,7 @@ namespace Sulu\Component\DocumentManager\Event;
 use Symfony\Component\EventDispatcher\Event;
 use PHPCR\Query\QueryInterface;
 use Sulu\Component\DocumentManager\Query\Query;
-use Sulu\Component\DocumentManager\Query\ResultCollection;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 
 class QueryExecuteEvent extends Event
 {
@@ -29,7 +29,7 @@ class QueryExecuteEvent extends Event
         return $this->query;
     }
 
-    public function setResult(ResultCollection $collection)
+    public function setResult(QueryResultCollection $collection)
     {
         $this->result = $collection;
     }

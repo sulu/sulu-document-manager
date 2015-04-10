@@ -20,7 +20,7 @@ use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 use Sulu\Component\DocumentManager\Query\Query;
 use PHPCR\Query\QueryResultInterface;
-use Sulu\Component\DocumentManager\Query\ResultCollection;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 
 class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +83,7 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
         $this->queryExecuteEvent->getQuery()->willReturn($this->query->reveal());
 
         $this->queryExecuteEvent->setResult(
-            new ResultCollection(
+            new QueryResultCollection(
                 $this->phpcrResult->reveal(),
                 $this->dispatcher->reveal(),
                 $locale

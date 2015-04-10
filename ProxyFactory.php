@@ -15,6 +15,7 @@ use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use ProxyManager\Factory\LazyLoadingGhostFactory;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use PHPCR\NodeInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
@@ -50,6 +51,9 @@ class ProxyFactory
     /**
      * Create a new proxy object from the given document for
      * the given target node.
+     *
+     * TODO: We only pass the document here in order to correctly evaluate its locale
+     *       later. I wonder if it necessary.
      */
     public function createProxyForNode($fromDocument, NodeInterface $targetNode)
     {
@@ -78,5 +82,25 @@ class ProxyFactory
         };
 
         return $this->proxyFactory->createProxy($targetMetadata->getClass(), $initializer);
+    }
+
+
+    /**
+     * Create a new children collection for the given document
+     *
+     * @param object $document
+     *
+     * @return ChildrenCollection
+     */
+    public function createChildrenCollection($document)
+    {
+        $node = $this->documentRegistry->getNodeForDocument($document);
+        $locale = $this->documentRegistry->getLocaleForDocument($document);
+
+        return new ChildrenCollection(
+            $node,
+            $this->eventDispatcher,
+            $locale
+        );
     }
 }

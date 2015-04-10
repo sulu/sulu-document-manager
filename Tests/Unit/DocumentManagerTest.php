@@ -20,7 +20,7 @@ use Sulu\Component\DocumentManager\Query\Query;
 use PHPCR\Query\QueryInterface;
 use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
-use Sulu\Component\DocumentManager\Query\ResultCollection;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 
 class DocumentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
         $this->document = new \stdClass();
 
         $this->query = $this->prophesize(Query::class);
-        $this->resultCollection = $this->prophesize(ResultCollection::class);
+        $this->resultCollection = $this->prophesize(QueryResultCollection::class);
     }
 
     /**
@@ -179,7 +179,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
     private $query;
     private $resultCollection;
 
-    public function __construct(Query $query, ResultCollection $resultCollection)
+    public function __construct(Query $query, QueryResultCollection $resultCollection)
     {
         $this->query = $query;
         $this->resultCollection = $resultCollection;

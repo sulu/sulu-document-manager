@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use PHPCR\SessionInterface;
 use PHPCR\Query\QueryInterface;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
-use Sulu\Component\DocumentManager\Query\ResultCollection;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Events;
 
 /**
@@ -85,7 +85,7 @@ class QuerySubscriber implements EventSubscriberInterface
         $locale = $query->getLocale();
         $phpcrResult = $query->getPhpcrQuery()->execute();
 
-        $event->setResult(new ResultCollection($phpcrResult, $this->eventDispatcher, $locale));
+        $event->setResult(new QueryResultCollection($phpcrResult, $this->eventDispatcher, $locale));
     }
 
     /**

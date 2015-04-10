@@ -12,7 +12,6 @@ namespace Sulu\Component\DocumentManager\Query;
 
 use PHPCR\Query\QueryInterface;
 use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\Query\ResultCollection;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;

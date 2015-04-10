@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Query;
+namespace Sulu\Component\DocumentManager\Collection;
 
 use PHPCR\Query\QueryResultInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -18,14 +18,13 @@ use Sulu\Component\DocumentManager\Events;
 /**
  * Lazily hydrate query results
  */
-class ResultCollection implements \Iterator, \Countable
+class QueryResultCollection extends AbstractLazyCollection
 {
     private $eventDispatcher;
     private $result;
     private $locale;
 
     private $initialized = false;
-    private $rows;
     private $primarySelector = null;
 
     public function __construct(QueryResultInterface $result, EventDispatcherInterface $eventDispatcher, $locale, $primarySelector = null)
@@ -36,16 +35,10 @@ class ResultCollection implements \Iterator, \Countable
         $this->locale = $locale;
     }
 
-    public function count()
-    {
-        $this->initialize();
-        return $this->rows->count();
-    }
-
     public function current()
     {
         $this->initialize();
-        $row = $this->rows->current();
+        $row = $this->elements->current();
         $node = $row->getNode($this->primarySelector);
 
         $hydrateEvent = new HydrateEvent($node, $this->locale);
@@ -54,51 +47,13 @@ class ResultCollection implements \Iterator, \Countable
         return $hydrateEvent->getDocument();
     }
 
-    public function key()
-    {
-        $this->initialize();
-
-        return $this->rows->key();
-    }
-
-    public function next()
-    {
-        $this->initialize();
-
-        return $this->rows->next();
-    }
-
-    public function rewind()
-    {
-        $this->initialize();
-
-        return $this->rows->rewind();
-    }
-
-    public function valid()
-    {
-        $this->initialize();
-
-        return $this->rows->valid();
-    }
-
-    public function getArrayCopy()
-    {
-        $copy = array();
-        foreach ($this as $document) {
-            $copy[] = $document;
-        }
-
-        return $copy;
-    }
-
-    private function initialize()
+    protected function initialize()
     {
         if (true === $this->initialized) {
             return;
         }
 
-        $this->rows = $this->result->getRows();
+        $this->elements = $this->result->getRows();
         $this->initialized = true;
     }
 }
