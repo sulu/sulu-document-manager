@@ -25,12 +25,7 @@ class PropertyEncoder
      */
     public function localizedSystemName($name, $locale)
     {
-        return sprintf(
-            '%s:%s-%s',
-            $this->namespaceRegistry->getPrefix('system_localized'),
-            $locale,
-            $name
-        );
+        return $this->formatLocalizedName('system_localized', $name, $locale);
     }
 
     /**
@@ -40,11 +35,7 @@ class PropertyEncoder
      */
     public function systemName($name)
     {
-        return sprintf(
-            '%s:%s',
-            $this->namespaceRegistry->getPrefix('system'),
-            $name
-        );
+        return $this->formatName('system', $name);
     }
 
     /**
@@ -55,12 +46,7 @@ class PropertyEncoder
      */
     public function localizedContentName($name, $locale)
     {
-        return sprintf(
-            '%s:%s-%s',
-            $this->namespaceRegistry->getPrefix('content_localized'),
-            $locale,
-            $name
-        );
+        return $this->formatLocalizedName('content_localized', $name, $locale);
     }
 
     /**
@@ -70,9 +56,36 @@ class PropertyEncoder
      */
     public function contentName($name)
     {
+        return $this->formatName('content', $name);
+    }
+
+    private function formatName($role, $name)
+    {
+        $prefix = $this->namespaceRegistry->getPrefix($role);
+
+        if (!$prefix) {
+            return $name;
+        }
+
         return sprintf(
             '%s:%s',
-            $this->namespaceRegistry->getPrefix('content'),
+            $prefix,
+            $name
+        );
+    }
+
+    private function formatLocalizedName($role, $name, $locale)
+    {
+        $prefix = $this->namespaceRegistry->getPrefix($role);
+
+        if (!$prefix) {
+            return sprintf('%s-%s', $locale, $name);
+        }
+
+        return sprintf(
+            '%s:%s-%s',
+            $prefix,
+            $locale,
             $name
         );
     }

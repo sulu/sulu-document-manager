@@ -40,6 +40,20 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * It should set the node to the event on persist if the node for the document
+     * being persisted is already in the registry
+     */
+    public function testNodeFromRegistry()
+    {
+        $this->persistEvent->hasNode()->willReturn(false);
+        $this->persistEvent->getDocument()->willReturn($this->document);
+        $this->registry->hasDocument($this->document)->willReturn(true);
+        $this->registry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+        $this->persistEvent->setNode($this->node->reveal())->shouldBeCalled();
+        $this->subscriber->handleNodeFromRegistry($this->persistEvent->reveal());
+    }
+
+    /**
      * It should return early if the document has already been set
      */
     public function testDocumentFromRegistryAlreadySet()

@@ -34,7 +34,7 @@ class NamespaceRegistry
      */
     public function getPrefix($role)
     {
-        if (!isset($this->roleMap[$role])) {
+        if (!array_key_exists($role, $this->roleMap)) {
             throw new DocumentManagerException(sprintf(
                 'Trying to get non-existant namespace alias role "%s", known roles: "%s"',
                 $role, implode('", "', array_keys($this->roleMap))

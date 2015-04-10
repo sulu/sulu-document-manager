@@ -35,8 +35,8 @@ class LocaleSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::HYDRATE => 'handleLocale',
-            Events::PERSIST => array('handleLocale', '0'),
+            Events::HYDRATE => array('handleLocale', 250),
+            Events::PERSIST => array('handleLocale', 250),
         );
     }
 

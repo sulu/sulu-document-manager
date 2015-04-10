@@ -50,7 +50,10 @@ class RegistratorSubscriber implements EventSubscriberInterface
                 array('handleDocumentfromRegistry', 510),
                 array('handleHydrate', 490),
             ),
-            Events::PERSIST => array('handlePersist', 450),
+            Events::PERSIST => array(
+                array('handlePersist', 450),
+                array('handleNodeFromRegistry', 510),
+            ),
             Events::REMOVE => array('handleRemove', 490),
             Events::CLEAR => array('handleClear', 500),
         );
@@ -75,6 +78,27 @@ class RegistratorSubscriber implements EventSubscriberInterface
 
         $document = $this->documentRegistry->getDocumentForNode($node);
         $event->setDocument($document);
+    }
+
+    /**
+     * If the node for the persisted documnet is in the registry
+     *
+     * @param PersistEvent
+     */
+    public function handleNodeFromRegistry(PersistEvent $event) 
+    {
+        if ($event->hasNode()) {
+            return;
+        }
+
+        $document = $event->getDocument();
+
+        if (!$this->documentRegistry->hasDocument($document)) {
+            return;
+        }
+
+        $node = $this->documentRegistry->getNodeForDocument($document);
+        $event->setNode($node);
     }
 
     /**

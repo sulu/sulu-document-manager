@@ -125,6 +125,8 @@ class MetadataFactory
      */
     public function getMetadataForClass($class)
     {
+        $class = ClassNameInflector::getUserClassName($class);
+
         if (!isset($this->classMap[$class])) {
             throw new MetadataNotFoundException(sprintf(
                 'Metadata with class "%s" not found, known classes: "%s"',
