@@ -48,4 +48,10 @@ class HydrateEvent extends AbstractDocumentNodeEvent
         $this->document = $document;
         $this->accessor = null;
     }
+
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+    
 }
