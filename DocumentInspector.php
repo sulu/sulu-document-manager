@@ -76,6 +76,26 @@ class DocumentInspector
     }
 
     /**
+     * Return the depth of the given document within the content repository
+     *
+     * @return integer
+     */
+    public function getDepth($document)
+    {
+        return $this->getNode($document)->getDepth();
+    }
+
+    /**
+     * Return the name of the document
+     *
+     * @return string
+     */
+    public function getName($document)
+    {
+        return $this->getNode($document)->getName();
+    }
+
+    /**
      * Return the path for the given document
      *
      * @param object $document

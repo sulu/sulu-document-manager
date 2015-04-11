@@ -15,6 +15,8 @@ namespace Sulu\Component\DocumentManager;
  *
  * Note that this is not used by the document mangager itself, but
  * is a useful utility for implementors.
+ *
+ * TODO: Move this class to somewhere more appropriate
  */
 class PathSegmentRegistry
 {

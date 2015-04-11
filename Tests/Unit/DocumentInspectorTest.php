@@ -67,6 +67,28 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * It should return the depth of the document in the repository
+     */
+    public function testGetDepth()
+    {
+        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+        $this->node->getDepth()->willReturn(6);
+        $result = $this->documentInspector->getDepth($this->document);
+        $this->assertEquals(6, $result);
+    }
+
+    /**
+     * It should return the name of the document
+     */
+    public function testGetName()
+    {
+        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+        $this->node->getName()->willReturn('hello');
+        $result = $this->documentInspector->getName($this->document);
+        $this->assertEquals('hello', $result);
+    }
+
+    /**
      * It should return a children
      */
     public function testGetChildren()
@@ -77,6 +99,5 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
             $childrenCollection,
             $this->documentInspector->getChildren($this->document)
         );
-
     }
 }
