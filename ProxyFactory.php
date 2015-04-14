@@ -81,7 +81,10 @@ class ProxyFactory
             $initializer = null;
         };
 
-        return $this->proxyFactory->createProxy($targetMetadata->getClass(), $initializer);
+        $proxy = $this->proxyFactory->createProxy($targetMetadata->getClass(), $initializer);
+        $this->registry->registerDocument($proxy, $targetNode, $registry->getLocaleForDocument($fromDocument));
+
+        return $proxy;
     }
 
 
@@ -95,7 +98,7 @@ class ProxyFactory
     public function createChildrenCollection($document)
     {
         $node = $this->registry->getNodeForDocument($document);
-        $locale = $this->registry->getLocaleForDocument($document);
+        $locale = $this->registry->getOriginalLocaleForDocument($document);
 
         return new ChildrenCollection(
             $node,

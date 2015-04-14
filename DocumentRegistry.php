@@ -3,6 +3,7 @@
 namespace Sulu\Component\DocumentManager;
 
 use PHPCR\NodeInterface;
+use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
  * Handles the mapping between managed documents and nodes
@@ -34,6 +35,11 @@ class DocumentRegistry
     private $documentLocaleMap;
 
     /**
+     * @var array
+     */
+    private $originalLocaleMap;
+
+    /**
      * Register a document
      *
      * @param mixed $document
@@ -41,10 +47,18 @@ class DocumentRegistry
      */
     public function registerDocument($document, NodeInterface $node, $locale)
     {
-        $oid = spl_object_hash($document);
+        $oid = $this->getObjectIdentifier($document);
         $this->documentMap[$oid] = $document;
-        $this->documentNodeMap[$oid] = $node;
+        $this->documentNodeMap[$oid] = $node->getIdentifier();
+        $this->nodeMap[$node->getIdentifier()] = $node;
         $this->nodeDocumentMap[$node->getIdentifier()] = $document;
+        $this->documentLocaleMap[$oid] = $locale;
+    }
+
+    public function updateLocale($document, $locale)
+    {
+        $oid = $this->getObjectIdentifier($document);
+        $this->originalLocaleMap[$oid] = $this->getLocaleForDocument($document);
         $this->documentLocaleMap[$oid] = $locale;
     }
 
@@ -57,7 +71,7 @@ class DocumentRegistry
      */
     public function hasDocument($document)
     {
-        $oid = spl_object_hash($document);
+        $oid = $this->getObjectIdentifier($document);
 
         return isset($this->documentMap[$oid]);
     }
@@ -66,7 +80,7 @@ class DocumentRegistry
      * Return true if the node is managed
      *
      * @param NodeInterface $node
-     * @return boolean
+     Id* @return boolean
      */
     public function hasNode(NodeInterface $node)
     {
@@ -80,7 +94,10 @@ class DocumentRegistry
     {
         $this->documentMap = array();
         $this->documentNodeMap = array();
+        $this->nodeMap = array();
         $this->nodeDocumentMap = array();
+        $this->documentLocaleMap = array();
+        $this->originalLocaleMap = array();
     }
 
     /**
@@ -91,16 +108,18 @@ class DocumentRegistry
      */
     public function deregisterDocument($document)
     {
-        $oid = spl_object_hash($document);
+        $oid = $this->getObjectIdentifier($document);
+
         $this->assertDocumentExists($oid);
 
-        $node = $this->documentNodeMap[$oid];
-        $nodeIdentifier = $node->getIdentifier();
+        $nodeIdentifier = $this->documentNodeMap[$oid];
 
+        unset($this->nodeMap[$nodeIdentifier]);
         unset($this->nodeDocumentMap[$nodeIdentifier]);
         unset($this->documentMap[$oid]);
         unset($this->documentNodeMap[$oid]);
         unset($this->documentLocaleMap[$oid]);
+        unset($this->originalLocaleMap[$oid]);
     }
 
     /**
@@ -112,10 +131,10 @@ class DocumentRegistry
      */
     public function getNodeForDocument($document)
     {
-        $oid = spl_object_hash($document);
+        $oid = $this->getObjectIdentifier($document);
         $this->assertDocumentExists($oid);
 
-        return $this->documentNodeMap[$oid];
+        return $this->nodeMap[$this->documentNodeMap[$oid]];
     }
 
     /**
@@ -127,11 +146,31 @@ class DocumentRegistry
      */
     public function getLocaleForDocument($document)
     {
-        $oid = spl_object_hash($document);
+        $oid = $this->getObjectIdentifier($document);
         $this->assertDocumentExists($oid);
 
         return $this->documentLocaleMap[$oid];
     }
+
+    /**
+     * Return the original locale for the document
+     *
+     * @param object $document
+     *
+     * @return string
+     */
+    public function getOriginalLocaleForDocument($document)
+    {
+        $oid = $this->getObjectIdentifier($document);
+        $this->assertDocumentExists($oid);
+
+        if (isset($this->originalLocaleMap[$oid])) {
+            return $this->originalLocaleMap[$oid];
+        }
+
+        return $this->getLocaleForDocument($document);
+    }
+
 
     /**
      * Return the document for the given managed node
@@ -171,5 +210,17 @@ class DocumentRegistry
                 $identifier, count($this->documentMap)
             ));
         }
+    }
+
+    /**
+     * Get the spl object hash for the given object
+     *
+     * @param object $document
+     *
+     * @return string
+     */
+    private function getObjectIdentifier($document)
+    {
+        return spl_object_hash($document);
     }
 }

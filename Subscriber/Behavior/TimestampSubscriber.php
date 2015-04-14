@@ -83,7 +83,7 @@ class TimestampSubscriber implements EventSubscriberInterface
         $accessor->set(
             self::CREATED,
             $node->getPropertyValueWithDefault(
-                $this->encoder->localizedSystemName(self::CREATED, $locale),
+                $v = $this->encoder->localizedSystemName(self::CREATED, $locale),
                 null
             )
         );

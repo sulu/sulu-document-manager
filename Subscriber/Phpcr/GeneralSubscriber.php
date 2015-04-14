@@ -78,7 +78,6 @@ class GeneralSubscriber implements EventSubscriberInterface
         $document = $event->getDocument();
         $node = $this->documentRegistry->getNodeForDocument($document);
         $node->remove();
-        $this->documentRegistry->deregisterDocument($document);
     }
 
     public function handleMove(MoveEvent $event)

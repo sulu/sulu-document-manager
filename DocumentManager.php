@@ -142,17 +142,13 @@ class DocumentManager
      *       database structure and breaks abstraction. Use the domain-aware
      *       query builder instead.
      *
-     * By default will return a PHPCR-ODM Query object:
-     *
-     * http://doctrine-phpcr-odm.readthedocs.org/en/latest/reference/query.html
-     *
-     * @param string $queryString
+     * @param mixed $innertQuery Either a JCR-SQL2 string, or a PHPCR query object
      *
      * @return Query
      */
-    public function createQuery($queryString, $locale = null)
+    public function createQuery($query, $locale = null)
     {
-        $event = new Event\QueryCreateEvent($queryString, $locale);
+        $event = new Event\QueryCreateEvent($query, $locale);
         $this->eventDispatcher->dispatch(Events::QUERY_CREATE, $event);
 
         return $event->getQuery();
@@ -171,19 +167,5 @@ class DocumentManager
         $this->eventDispatcher->dispatch(Events::QUERY_CREATE_BUILDER, $event);
 
         return $event->getQueryBuilder();
-    }
-
-    /**
-     * Return documents based on a PHPCR query.
-     *
-     * NOTE: Avoid using this method, use the domain-aware query builder instead.
-     */
-    public function getDocumentsByPhpcrQuery(QueryInterface $phpcrQuery, $aliasOrClass = null, $primarySelector = null)
-    {
-        $query = new Query($phpcrQuery, $this->eventDispatcher);
-        $event = new Event\QueryExecuteEvent($query, $aliasOrClass, $primarySelector);
-        $this->eventDispatcher->dispatch(Events::QUERY_EXECUTE, $event);
-
-        return $event->getResult();
     }
 }

@@ -10,12 +10,20 @@
 
 namespace Sulu\Component\DocumentManager\Behavior;
 
-use Sulu\Component\DocumentManager\Behavior\TitleBehavior;
-
 /**
- * The PHPCR nodes of objects implementing this behavior will have
- * names automatically assigned based on their title.
+ * Document can have a human-friendly title.
  */
-interface AutoNameBehavior extends TitleBehavior, ParentBehavior
+interface TitleBehavior
 {
+    /**
+     * Return a title
+     *
+     * @return string
+     */
+    public function getTitle();
+
+    /**
+     * Set the title
+     */
+    public function setTitle($title);
 }

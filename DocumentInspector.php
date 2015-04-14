@@ -36,7 +36,12 @@ class DocumentInspector
     public function getParent($document)
     {
         $parentNode = $this->getNode($document)->getParent();
-        return $this->proxyFactory->createProxyForNode($parentNode);
+
+        if (!$parentNode) {
+            return null;
+        }
+
+        return $this->proxyFactory->createProxyForNode($document, $parentNode);
     }
 
     /**
@@ -107,5 +112,19 @@ class DocumentInspector
         return $this->documentRegistry
             ->getNodeForDocument($document)
             ->getPath();
+    }
+
+    /**
+     * Return the UUID of the given document
+     *
+     * @param object $document
+     *
+     * @return string
+     */
+    public function getUuid($document)
+    {
+        return $this->documentRegistry
+            ->getNodeForDocument($document)
+            ->getIdentifier();
     }
 }

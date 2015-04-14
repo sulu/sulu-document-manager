@@ -58,7 +58,18 @@ class QuerySubscriber implements EventSubscriberInterface
      */
     public function handleCreate(QueryCreateEvent $event)
     {
-        $phpcrQuery = $this->getQueryManager()->createQuery($event->getQueryString(), QueryInterface::JCR_SQL2);
+        $innerQuery = $event->getInnerQuery();
+
+        if (is_string($innerQuery)) {
+            $phpcrQuery = $this->getQueryManager()->createQuery($innerQuery, QueryInterface::JCR_SQL2);
+        } elseif ($innerQuery instanceof QueryInterface) {
+            $phpcrQuery = $innerQuery;
+        } else {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected inner query to be either a string or a PHPCR query object, got: "%s"',
+                is_object($innerQuery) ? get_class($innerQuery) : gettype($innerQuery)
+            ));
+        }
 
         $event->setQuery(new Query($phpcrQuery, $this->eventDispatcher, $event->getLocale(), $event->getPrimarySelector()));
     }

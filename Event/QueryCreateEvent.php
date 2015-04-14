@@ -16,21 +16,21 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 class QueryCreateEvent extends Event
 {
-    private $queryString;
+    private $innerQuery;
     private $query;
     private $locale;
     private $primarySelector;
 
-    public function __construct($queryString, $locale, $primarySelector = null)
+    public function __construct($innerQuery, $locale, $primarySelector = null)
     {
-        $this->queryString = $queryString;
+        $this->innerQuery = $innerQuery;
         $this->locale = $locale;
         $this->primarySelector = $primarySelector;
     }
 
-    public function getQueryString()
+    public function getInnerQuery()
     {
-        return $this->queryString;
+        return $this->innerQuery;
     }
 
     public function setQuery(Query $query)

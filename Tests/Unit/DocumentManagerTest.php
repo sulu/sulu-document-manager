@@ -141,17 +141,6 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
         $this->markTestSkipped('Not supported yet');
     }
 
-    /**
-     * It should issue a query execute PHPCR event
-     */
-    public function testQueryExecute()
-    {
-        $subscriber = $this->addSubscriber();
-        $query = $this->prophesize(QueryInterface::class);
-        $this->manager->getDocumentsByPhpcrQuery($query->reveal());
-        $this->assertTrue($subscriber->queryExecute);
-    }
-
     private function addSubscriber()
     {
         $subscriber = new TestDocumentManagerSubscriber($this->query->reveal(), $this->resultCollection->reveal());

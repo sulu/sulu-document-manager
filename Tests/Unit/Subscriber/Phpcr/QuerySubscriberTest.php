@@ -46,7 +46,7 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should provide a Query object
+     * It should provide a Query object from a JCR-SQL2 string
      */
     public function testHandleCreate()
     {
@@ -54,10 +54,32 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
         $locale = 'fr';
         $primarySelector = 'p';
 
-        $this->queryCreateEvent->getQueryString()->willReturn($query);
+        $this->queryCreateEvent->getInnerQuery()->willReturn($query);
         $this->queryCreateEvent->getLocale()->willReturn($locale);
         $this->queryCreateEvent->getPrimarySelector()->willReturn($primarySelector);
         $this->queryManager->createQuery($query, 'JCR-SQL2')->willReturn($this->phpcrQuery->reveal());
+        $this->queryCreateEvent->setQuery(new Query(
+            $this->phpcrQuery->reveal(),
+            $this->dispatcher->reveal(),
+            $locale,
+            $primarySelector
+        ))->shouldBeCalled();
+
+        $this->subscriber->handleCreate($this->queryCreateEvent->reveal());
+    }
+
+    /**
+     * It should provide a Query object for a PHPCR query object
+     */
+    public function testHandleCreateFromPhpcrQuery()
+    {
+        $locale = 'fr';
+        $primarySelector = 'p';
+
+        $this->queryCreateEvent->getInnerQuery()->willReturn($this->phpcrQuery->reveal());
+        $this->queryCreateEvent->getLocale()->willReturn($locale);
+        $this->queryCreateEvent->getPrimarySelector()->willReturn($primarySelector);
+        $this->queryManager->createQuery($this->phpcrQuery->reveal(), 'JCR-SQL2')->willReturn($this->phpcrQuery->reveal());
         $this->queryCreateEvent->setQuery(new Query(
             $this->phpcrQuery->reveal(),
             $this->dispatcher->reveal(),
