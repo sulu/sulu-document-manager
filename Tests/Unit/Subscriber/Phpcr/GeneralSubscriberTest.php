@@ -54,7 +54,6 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->removeEvent->getDocument()->willReturn($this->document);
         $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
         $this->node->remove()->shouldBeCalled();
-        $this->documentRegistry->deregisterDocument($this->document)->shouldBeCalled();
 
         $this->subscriber->handleRemove($this->removeEvent->reveal());
     }

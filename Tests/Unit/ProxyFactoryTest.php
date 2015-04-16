@@ -82,7 +82,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateChildrenCollection()
     {
         $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
-        $this->documentRegistry->getLocaleForDocument($this->document)->willReturn('de');
+        $this->documentRegistry->getOriginalLocaleForDocument($this->document)->willReturn('de');
         $childrenCollection = $this->factory->createChildrenCollection($this->document);
 
         $this->assertInstanceOf(ChildrenCollection::class, $childrenCollection);
