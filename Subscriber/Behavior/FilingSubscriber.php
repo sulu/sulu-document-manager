@@ -7,11 +7,13 @@ use Sulu\Component\DocumentManager\Behavior\FilingBehavior;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\DocumentManager;
 use Sulu\Component\DocumentManager\MetadataFactory;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Sulu\Component\DocumentManager\Events;
 
 /**
  * Automatically set the parnet at a pre-determined location
  */
-class FilingSubscriber
+class FilingSubscriber implements EventSubscriberInterface
 {
     private $basePath;
     private $nodeManager;
@@ -37,7 +39,7 @@ class FilingSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            Events::PERSIST => array('handlePersist', 250),
+            Events::PERSIST => array('handlePersist', 490),
         );
     }
 

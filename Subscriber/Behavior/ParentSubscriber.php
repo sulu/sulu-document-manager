@@ -56,6 +56,15 @@ class ParentSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if ($node->getDepth() == 0) {
+            throw new \RuntimeException(sprintf(
+                'Cannot apply parent behavior to root node "%s" with type "%s" for document of class "%s"',
+                $node->getPath(),
+                $node->getPrimaryNodeType()->getName(),
+                get_class($document)
+            ));
+        }
+
         $this->mapParent($document, $node);
     }
 

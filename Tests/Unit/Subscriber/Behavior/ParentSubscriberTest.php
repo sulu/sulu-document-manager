@@ -65,6 +65,7 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->hydrateEvent->getDocument()->willReturn($this->document);
 
         $this->node->getParent()->willReturn($this->parentNode->reveal());
+        $this->node->getDepth()->willReturn(2);
 
         $this->proxyFactory->createProxyForNode($this->document, $this->parentNode->reveal())->willReturn($this->parentDocument);
 
@@ -72,6 +73,21 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->parentDocument, $this->document->getParent());
 
         return $this->document;
+    }
+
+    /**
+     * It should throw an exception if the node for the document is a root node
+     *
+     * @expectedException RuntimeException
+     */
+    public function testThrowExceptionRootNode()
+    {
+        $this->hydrateEvent->getDocument()->willReturn($this->document);
+
+        $this->node->getParent()->willReturn($this->parentNode->reveal());
+        $this->node->getDepth()->willReturn(0);
+
+        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 }
 

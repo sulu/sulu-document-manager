@@ -17,27 +17,10 @@ use Sulu\Component\DocumentManager\Behavior\UuidBehavior;
 /**
  * This document class is used when an unmapped node is loaded
  */
-class UnknownDocument implements ParentBehavior, NodeNameBehavior, UuidBehavior
+class UnknownDocument implements NodeNameBehavior, UuidBehavior
 {
-    private $parent;
     private $nodeName;
     private $uuid;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
 
     /**
      * {@inheritDoc}
