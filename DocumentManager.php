@@ -24,15 +24,9 @@ class DocumentManager
      */
     private $eventDispatcher;
 
-    /**
-     * @var NodeManager
-     */
-    private $nodeManager;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher, NodeManager $nodeManager)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->nodeManager = $nodeManager;
     }
 
     /**
