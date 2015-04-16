@@ -19,6 +19,6 @@ namespace Sulu\Component\DocumentManager\Behavior;
  *
  * If the parent document does not exist, it will be created.
  */
-interface FilingBehavior extends ParentBehavior
+interface AliasFilingBehavior extends ParentBehavior
 {
 }

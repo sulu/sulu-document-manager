@@ -10,12 +10,11 @@
  
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior;
 
-use Sulu\Component\DocumentManager\Subscriber\Behavior\FilingSubscriber;
 use Sulu\Component\DocumentManager\PropertyEncoder;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Behavior\FilingBehavior;
+use Sulu\Component\DocumentManager\Behavior\AliasFilingBehavior;
 use Prophecy\Argument;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -26,21 +25,22 @@ use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\Subscriber\Behavior\AliasFilingSubscriber;
 
-class FilingSubscriberTest extends \PHPUnit_Framework_TestCase
+class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->notImplementing = new \stdClass;
-        $this->document = new FilingTestDocument();
+        $this->document = new AliasFilingTestDocument();
         $this->parentDocument = new \stdClass;
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->documentManager = $this->prophesize(DocumentManager::class);
         $this->metadataFactory = $this->prophesize(MetadataFactory::class);
         $this->metadata = $this->prophesize(Metadata::class);
 
-        $this->subscriber = new FilingSubscriber(
+        $this->subscriber = new AliasFilingSubscriber(
             $this->nodeManager->reveal(),
             $this->documentManager->reveal(),
             $this->metadataFactory->reveal(),
@@ -65,7 +65,7 @@ class FilingSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent->getDocument()->willReturn($this->document);
         $this->persistEvent->getLocale()->willReturn('fr');
-        $this->metadataFactory->getMetadataForClass(FilingTestDocument::class)->willReturn($this->metadata->reveal());
+        $this->metadataFactory->getMetadataForClass(AliasFilingTestDocument::class)->willReturn($this->metadata->reveal());
         $this->metadata->getAlias()->willReturn('test');
         $this->nodeManager->createPath('/base/path/test')->shouldBeCalled();
         $this->documentManager->find('/base/path/test', 'fr')->willReturn($this->parentDocument);
@@ -77,7 +77,7 @@ class FilingSubscriberTest extends \PHPUnit_Framework_TestCase
 
 }
 
-class FilingTestDocument implements FilingBehavior
+class AliasFilingTestDocument implements AliasFilingBehavior
 {
     private $parent;
 

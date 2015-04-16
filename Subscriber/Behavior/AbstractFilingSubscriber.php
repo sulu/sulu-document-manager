@@ -13,23 +13,20 @@ use Sulu\Component\DocumentManager\Events;
 /**
  * Automatically set the parnet at a pre-determined location
  */
-class FilingSubscriber implements EventSubscriberInterface
+abstract class AbstractFilingSubscriber implements EventSubscriberInterface
 {
     private $basePath;
     private $nodeManager;
     private $documentManager;
-    private $metadataFactory;
 
     public function __construct(
         NodeManager $nodeManager,
         DocumentManager $documentManager,
-        MetadataFactory $metadataFactory,
         $basePath
     )
     {
         $this->nodeManager = $nodeManager;
         $this->documentManager = $documentManager;
-        $this->metadataFactory = $metadataFactory;
         $this->basePath = $basePath;
     }
 
@@ -47,15 +44,29 @@ class FilingSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
 
-        if (!$document instanceof FilingBehavior) {
+        if (!$this->supports($document)) {
             return;
         }
 
         $locale = $event->getLocale();
-        $alias = $this->metadataFactory->getMetadataForClass(get_class($document))->getAlias();
-        $path = sprintf('%s/%s', $this->basePath, $alias);
+        $parentName = $this->getParentName($document);
+        $path = sprintf('%s/%s', $this->basePath, $parentName);
         $this->nodeManager->createPath($path);
         $parentDocument = $this->documentManager->find($path, $locale);
         $document->setParent($parentDocument);
     }
+
+    /**
+     * Return true if this subscriber should be applied to the document
+     *
+     * @param object $document
+     */
+    abstract protected function supports($document);
+
+    /**
+     * Return the name of the parent document
+     *
+     * @return string
+     */
+    abstract protected function getParentName($document);
 }
