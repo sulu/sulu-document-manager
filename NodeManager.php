@@ -72,12 +72,12 @@ class NodeManager
         $this->session->move($srcPath, $destPath);
     }
 
-    public function copy($srcId, $destId)
+    public function copy($srcId, $parentDestId)
     {
         $workspace = $this->session->getWorkspace();
         $srcPath = $this->normalizeToPath($srcId);
-        $destPath = $this->normalizeToPath($destId);
-        $destPath = $destPath . '/' . PathHelper::getNodeName($srcPath);
+        $parentDestPath = $this->normalizeToPath($parentDestId);
+        $destPath = $parentDestPath . '/' . PathHelper::getNodeName($srcPath);
 
         $workspace->copy($srcPath, $destPath);
 

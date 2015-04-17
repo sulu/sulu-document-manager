@@ -113,6 +113,17 @@ class DocumentManager
     }
 
     /**
+     * Refresh the given document with the persisted state of the node
+     *
+     * @param object $document
+     */
+    public function refresh($document)
+    {
+        $event = new Event\RefreshEvent($document);
+        $this->eventDispatcher->dispatch(Events::REFRESH, $event);
+    }
+
+    /**
      * Persist changes to the persistent storage
      */
     public function flush()

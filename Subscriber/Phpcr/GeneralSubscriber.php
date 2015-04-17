@@ -24,6 +24,7 @@ use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\CopyEvent;
 use Sulu\Component\DocumentManager\Event\ClearEvent;
 use Sulu\Component\DocumentManager\Event\FlushEvent;
+use Sulu\Component\DocumentManager\Event\RefreshEvent;
 
 /**
  * This class aggregates some basic repository operations.
@@ -31,6 +32,9 @@ use Sulu\Component\DocumentManager\Event\FlushEvent;
  * NOTE: If any of these methods need to become more complicated, and
  *       the changes cannot be done by implementing ANOTHER subscriber, then
  *       the individual operations should be broken out into individual subscribers.
+ *
+ * NOTE: The event dispatcher is added here for the "refresh" method. This is a clear
+ *       sign that this should be refactored. The hydration, at least, should be outsourced.
  */
 class GeneralSubscriber implements EventSubscriberInterface
 {
@@ -44,13 +48,20 @@ class GeneralSubscriber implements EventSubscriberInterface
      */
     private $nodeManager;
 
+    /**
+     * @var EventDispatcher
+     */
+    private $eventDispatcher;
+
     public function __construct(
         DocumentRegistry $documentRegistry,
-        NodeManager $nodeManager
+        NodeManager $nodeManager,
+        EventDispatcherInterface $eventDispatcher
     )
     {
         $this->documentRegistry = $documentRegistry;
         $this->nodeManager = $nodeManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -93,6 +104,21 @@ class GeneralSubscriber implements EventSubscriberInterface
         $node = $this->documentRegistry->getNodeForDocument($document);
         $newPath = $this->nodeManager->copy($node->getPath(), $event->getDestId());
         $event->setCopiedPath($newPath);
+    }
+
+    public function handleRefresh(RefreshEvent $event)
+    {
+        $document = $event->getDocument();
+        $node = $this->documentRegistry->getNodeForDocument($document);
+        $locale = $this->documentRegistry->getLocaleForDocument($document);
+
+        // revert/reload the node to the persisted state
+        $node->revert();
+
+        // rehydrate the document
+        $hydrateEvent = new HydrateEvent($node, $locale);
+        $hydrateEvent->setDocument($document);
+        $this->eventDispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
     }
 
     public function handleClear(ClearEvent $event)

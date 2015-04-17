@@ -19,6 +19,10 @@ use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\CopyEvent;
 use Sulu\Component\DocumentManager\Event\ClearEvent;
 use Sulu\Component\DocumentManager\Event\FlushEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Event\RefreshEvent;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,19 +33,22 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
+        $this->eventDispatcher = $this->prophesize(EventDispatcher::class);
 
         $this->removeEvent = $this->prophesize(RemoveEvent::class);
         $this->moveEvent = $this->prophesize(MoveEvent::class);
         $this->copyEvent = $this->prophesize(CopyEvent::class);
         $this->clearEvent = $this->prophesize(ClearEvent::class);
         $this->flushEvent = $this->prophesize(FlushEvent::class);
+        $this->refreshEvent = $this->prophesize(RefreshEvent::class);
 
         $this->document = new \stdClass;
         $this->node = $this->prophesize(NodeInterface::class);
 
         $this->subscriber = new GeneralSubscriber(
             $this->documentRegistry->reveal(),
-            $this->nodeManager->reveal()
+            $this->nodeManager->reveal(),
+            $this->eventDispatcher->reveal()
         );
     }
 
@@ -81,7 +88,8 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->copyEvent->getDestId()->willReturn(self::DST_PATH);
         $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
         $this->node->getPath()->willReturn(self::SRC_PATH);
-        $this->nodeManager->copy(self::SRC_PATH, self::DST_PATH)->shouldBeCalled();
+        $this->nodeManager->copy(self::SRC_PATH, self::DST_PATH)->willReturn('foobar');
+        $this->copyEvent->setCopiedPath('foobar')->shouldBeCalled();
 
         $this->subscriber->handleCopy($this->copyEvent->reveal());
     }
@@ -102,5 +110,21 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->nodeManager->save()->shouldBeCalled();
         $this->subscriber->handleFlush($this->flushEvent->reveal());
+    }
+
+    /**
+     * It should refresh a document
+     */
+    public function testHandleRefresh()
+    {
+        $this->refreshEvent->getDocument()->willReturn($this->document);
+        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+        $this->node->revert()->shouldBeCalled();
+        $this->documentRegistry->getLocaleForDocument($this->document)->willReturn('fr');
+
+        $event = new HydrateEvent($this->node->reveal(), 'fr');
+        $this->eventDispatcher->dispatch(Events::REFRESH, $event);
+
+        $this->subscriber->handleRefresh($this->refreshEvent->reveal());
     }
 }

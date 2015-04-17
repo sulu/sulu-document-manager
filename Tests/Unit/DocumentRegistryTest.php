@@ -120,7 +120,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     public function testUpdateLocale()
     {
         $this->registry->registerDocument($this->document, $this->node->reveal(), 'fr');
-        $this->registry->updateLocale($this->document, 'de');
+        $this->registry->updateLocale($this->document, 'de', 'fr');
         $this->assertEquals('de', $this->registry->getLocaleForDocument($this->document));
         $this->assertEquals('fr', $this->registry->getOriginalLocaleForDocument($this->document));
     }

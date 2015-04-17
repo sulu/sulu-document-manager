@@ -23,6 +23,11 @@ class Events
     const REMOVE = 'sulu_document_manager.remove';
 
     /**
+     * Fired when a document should be refreshed
+     */
+    const REFRESH = 'sulu_document_manager.refresh';
+
+    /**
      * Fired when a document is copied via. the document manager
      */
     const COPY = 'sulu_document_manager.copy';

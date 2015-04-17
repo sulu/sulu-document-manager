@@ -21,6 +21,7 @@ use PHPCR\Query\QueryInterface;
 use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
+use Sulu\Component\DocumentManager\Event\RefreshEvent;
 
 class DocumentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,6 +89,16 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
         $subscriber = $this->addSubscriber();
         $this->manager->create('foo');
         $this->assertTrue($subscriber->create);
+    }
+
+    /**
+     * It should issue a refresh event
+     */
+    public function testRefresh()
+    {
+        $subscriber = $this->addSubscriber();
+        $this->manager->refresh($this->document);
+        $this->assertTrue($subscriber->refresh);
     }
 
     /**
@@ -164,6 +175,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
     public $queryCreate = false;
     public $queryCreateBuilder = false;
     public $queryExecute = false;
+    public $refresh = false;
 
     private $query;
     private $resultCollection;
@@ -188,6 +200,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
             Events::QUERY_CREATE => 'handleQueryCreate',
             Events::QUERY_CREATE_BUILDER => 'handleQueryBuilderCreate',
             Events::QUERY_EXECUTE => 'handleQueryExecute',
+            Events::REFRESH => 'handleRefresh',
         );
     }
 
@@ -243,5 +256,10 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
     {
         $this->queryExecute = true;
         $event->setResult($this->resultCollection);
+    }
+
+    public function handleRefresh(RefreshEvent $event)
+    {
+        $this->refresh = true;
     }
 }
