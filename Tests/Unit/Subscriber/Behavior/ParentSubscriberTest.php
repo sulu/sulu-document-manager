@@ -7,27 +7,16 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior;
 
-use Sulu\Component\DocumentManager\Subscriber\Behavior\TimestampSubscriber;
-use Sulu\Component\DocumentManager\PropertyEncoder;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Behavior\TimestampBehavior;
-use Prophecy\Argument;
-use Sulu\Component\DocumentManager\DocumentAccessor;
-use ProxyManager\Factory\LazyLoadingGhostFactory;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\Document\UnknownDocument;
 use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\ParentSubscriber;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use ProxyManager\Proxy\LazyLoadingInterface;
 use Sulu\Component\DocumentManager\ProxyFactory;
+use Sulu\Component\DocumentManager\DocumentInspector;
+use Sulu\Component\DocumentManager\DocumentManager;
 
 class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,14 +24,18 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
         $this->document = new TestParentDocument();
-        $this->notImplementing = new \stdClass;
+        $this->notImplementing = new \stdClass();
         $this->node = $this->prophesize(NodeInterface::class);
         $this->parentNode = $this->prophesize(NodeInterface::class);
         $this->parentDocument = new \stdClass();
         $this->proxyFactory = $this->prophesize(ProxyFactory::class);
+        $this->inspector = $this->prophesize(DocumentInspector::class);
+        $this->documentManager = $this->prophesize(DocumentManager::class);
 
         $this->subscriber = new ParentSubscriber(
-            $this->proxyFactory->reveal()
+            $this->proxyFactory->reveal(),
+            $this->inspector->reveal(),
+            $this->documentManager->reveal()
         );
 
         $this->hydrateEvent->getNode()->willReturn($this->node);
@@ -95,7 +88,7 @@ class TestParentDocument implements ParentBehavior
 {
     private $parent;
 
-    public function getParent() 
+    public function getParent()
     {
         return $this->parent;
     }

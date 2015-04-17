@@ -82,7 +82,7 @@ class DocumentManager
      * @param object $document
      * @param boolean $dereference
      */
-    public function remove($document, $dereference = false
+    public function remove($document, $dereference = false)
     {
         $event = new Event\RemoveEvent($document, $dereference);
         $this->eventDispatcher->dispatch(Events::REMOVE, $event);
