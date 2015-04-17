@@ -70,26 +70,12 @@ class GeneralSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::REMOVE => array('handleRemove', 500),
             Events::MOVE => array('handleMove', 500),
             Events::COPY => array('handleCopy', 500),
             Events::CLEAR => array('handleClear', 500),
             Events::FLUSH => array('handleFlush', 500),
             Events::REFRESH => array('handleRefresh', 500),
         );
-    }
-
-    /**
-     * Remove the given documents node from PHPCR session and optoinally
-     * remove any references to the node
-     *
-     * @param RemoveEvent $event
-     */
-    public function handleRemove(RemoveEvent $event)
-    {
-        $document = $event->getDocument();
-        $node = $this->documentRegistry->getNodeForDocument($document);
-        $node->remove();
     }
 
     public function handleMove(MoveEvent $event)

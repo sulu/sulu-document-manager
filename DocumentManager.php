@@ -39,7 +39,7 @@ class DocumentManager
      */
     public function find($id, $locale = null, $aliasOrClass = null)
     {
-        $event = new Event\FindEvent($id, $locale, $aliasOrClass = null);
+        $event = new Event\FindEvent($id, $locale, $aliasOrClass);
         $this->eventDispatcher->dispatch(Events::FIND, $event);
 
         return $event->getDocument();

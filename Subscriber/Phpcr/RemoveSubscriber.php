@@ -16,6 +16,7 @@ use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use PHPCR\NodeInterface;
+use Sulu\Component\DocumentManager\Events;
 
 /**
  * Remove subscriber
@@ -66,7 +67,7 @@ class RemoveSubscriber implements EventSubscriberInterface
             $this->dereference($node);
         }
 
-        $node->remove();
+        $this->nodeManager->remove($document->getUuid());
     }
 
     /**

@@ -18,6 +18,7 @@ use Sulu\Component\DocumentManager\Event\FindEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
 
 /**
  * This class is responsible for finding documents

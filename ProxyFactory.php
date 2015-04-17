@@ -19,6 +19,7 @@ use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use PHPCR\NodeInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Sulu\Component\DocumentManager\Collection\ReferrerCollection;
 
 /**
  * Handle creation of proxies
