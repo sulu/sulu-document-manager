@@ -106,7 +106,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
         $this->node2->getPath()->willReturn(self::PATH2);
 
 
-        $this->workspace->copy(self::PATH1, self::PATH2)->shouldBeCalled();
+        $this->workspace->copy(self::PATH1, self::PATH2 . '/to')->shouldBeCalled();
         $this->manager->copy(self::UUID1, self::UUID2);
     }
 

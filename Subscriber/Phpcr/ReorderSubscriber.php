@@ -64,27 +64,40 @@ class ReorderSubscriber implements EventSubscriberInterface
 
         $node = $this->documentRegistry->getNodeForDocument($document);
         $parentNode = $node->getParent();
-        $siblingPath = $siblingId;
 
+        $nodeName = $node->getName();
+        $siblingName = $this->resolveSiblingName($siblingId, $parentNode, $node);
+        if (true === $after) {
+            $siblingName = $this->resolveAfterSiblingName($parentNode, $siblingName);
+        }
+
+        $parentNode->orderBefore($nodeName, $siblingName);
+    }
+
+    private function resolveSiblingName($siblingId, NodeInterface $parentNode, NodeInterface $node)
+    {
+        if (null === $siblingId) {
+            return null;
+        }
+
+        $siblingPath = $siblingId;
         if (UUIDHelper::isUUID($siblingId)) {
             $siblingPath = $this->nodeManager->find($siblingId)->getPath();
         }
 
-        if (PathHelper::getParentPath($siblingPath) !== $parentNode->getPath()) {
+        if ($siblingPath !== null && PathHelper::getParentPath($siblingPath) !== $parentNode->getPath()) {
             throw new DocumentManagerException(sprintf(
                 'Cannot reorder documents which are not siblings. Trying to reorder "%s" to "%s"',
                 $node->getPath(), $siblingPath
             ));
         }
 
-        $siblingName = PathHelper::getNodeName($siblingPath);
-        $nodeName = $node->getName();
 
-        if (true === $after) {
-            $siblingName = $this->resolveAfterSiblingName($parentNode, $siblingName);
+        if (null !== $siblingPath) {
+            return PathHelper::getNodeName($siblingPath);
         }
 
-        $parentNode->orderBefore($nodeName, $siblingName);
+        return $node->getName();
     }
 
     /**

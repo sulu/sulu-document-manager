@@ -201,7 +201,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
             Events::QUERY_CREATE_BUILDER => 'handleQueryBuilderCreate',
             Events::QUERY_EXECUTE => 'handleQueryExecute',
             Events::REFRESH => 'handleRefresh',
-            Events::REORDER = 'handleReorder'
+            Events::REORDER => 'handleReorder'
         );
     }
 
