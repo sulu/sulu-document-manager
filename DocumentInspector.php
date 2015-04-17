@@ -81,6 +81,18 @@ class DocumentInspector
     }
 
     /**
+     * Reutrn the original (requested) locale for the given document
+     *
+     * @param object $document
+     *
+     * @return string
+     */
+    public function getOriginalLocale($document)
+    {
+        return $this->documentRegistry->getOriginalLocaleForDocument($document);
+    }
+
+    /**
      * Return the depth of the given document within the content repository
      *
      * @return integer

@@ -108,6 +108,8 @@ class DocumentManager
     {
         $event = new Event\CopyEvent($document, $destPath);
         $this->eventDispatcher->dispatch(Events::COPY, $event);
+
+        return $event->getCopiedPath();
     }
 
     /**

@@ -91,7 +91,8 @@ class GeneralSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
         $node = $this->documentRegistry->getNodeForDocument($document);
-        $this->nodeManager->copy($node->getPath(), $event->getDestId());
+        $newPath = $this->nodeManager->copy($node->getPath(), $event->getDestId());
+        $event->setCopiedPath($newPath);
     }
 
     public function handleClear(ClearEvent $event)

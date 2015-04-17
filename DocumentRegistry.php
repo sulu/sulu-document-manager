@@ -55,10 +55,10 @@ class DocumentRegistry
         $this->documentLocaleMap[$oid] = $locale;
     }
 
-    public function updateLocale($document, $locale)
+    public function updateLocale($document, $locale, $originalLocale = null)
     {
         $oid = $this->getObjectIdentifier($document);
-        $this->originalLocaleMap[$oid] = $this->getLocaleForDocument($document);
+        $this->originalLocaleMap[$oid] = $originalLocale;
         $this->documentLocaleMap[$oid] = $locale;
     }
 

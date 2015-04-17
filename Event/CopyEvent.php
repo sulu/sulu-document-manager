@@ -15,5 +15,17 @@ use Symfony\Component\EventDispatcher\Event;
 
 class CopyEvent extends MoveEvent
 {
+    private $copiedPath;
+
+    public function getCopiedPath() 
+    {
+        return $this->copiedPath;
+    }
+    
+    public function setCopiedPath($copiedPath)
+    {
+        $this->copiedPath = $copiedPath;
+    }
+    
 }
 
