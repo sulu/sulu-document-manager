@@ -12,7 +12,6 @@ namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber;
 
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use Sulu\Component\DocumentManager\Subscriber\Phpcr\GeneralSubscriber;
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
@@ -35,7 +34,6 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
         $this->eventDispatcher = $this->prophesize(EventDispatcher::class);
 
-        $this->removeEvent = $this->prophesize(RemoveEvent::class);
         $this->moveEvent = $this->prophesize(MoveEvent::class);
         $this->copyEvent = $this->prophesize(CopyEvent::class);
         $this->clearEvent = $this->prophesize(ClearEvent::class);
@@ -50,19 +48,6 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
             $this->nodeManager->reveal(),
             $this->eventDispatcher->reveal()
         );
-    }
-
-    /**
-     * It should remove nodes from the PHPCR session and deregister the
-     * given document,
-     */
-    public function testHandleRemove()
-    {
-        $this->removeEvent->getDocument()->willReturn($this->document);
-        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
-        $this->node->remove()->shouldBeCalled();
-
-        $this->subscriber->handleRemove($this->removeEvent->reveal());
     }
 
     /**

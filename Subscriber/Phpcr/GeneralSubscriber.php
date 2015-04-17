@@ -80,8 +80,8 @@ class GeneralSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Remove the given documents node from PHPCR session and deregister the
-     * document.
+     * Remove the given documents node from PHPCR session and optoinally
+     * remove any references to the node
      *
      * @param RemoveEvent $event
      */

@@ -19,6 +19,9 @@ use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use PHPCR\NodeInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Sulu\Component\DocumentManager\ProxyFactory;
+use Sulu\Component\DocumentManager\DocumentInspector;
+use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
 
 /**
  * Set the parent and children on the doucment
@@ -26,12 +29,22 @@ use Sulu\Component\DocumentManager\ProxyFactory;
 class ParentSubscriber implements EventSubscriberInterface
 {
     private $proxyFactory;
+    private $inspector;
+    private $documentManager;
 
     /**
      * @param ProxyFactory $proxyFactory
      */
-    public function __construct(ProxyFactory $proxyFactory) {
+    public function __construct(
+        ProxyFactory $proxyFactory,
+        DocumentInspector $inspector,
+        DocumentManager $documentManager
+
+    )
+    {
         $this->proxyFactory = $proxyFactory;
+        $this->inspector = $inspector;
+        $this->documentManager = $documentManager;
     }
 
     /**
@@ -41,6 +54,7 @@ class ParentSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::HYDRATE => 'handleHydrate',
+            Events::PERSIST => 'handleChangeParent',
         );
     }
 
@@ -66,6 +80,33 @@ class ParentSubscriber implements EventSubscriberInterface
         }
 
         $this->mapParent($document, $node);
+    }
+
+    /**
+     * @param PersistEvent $event
+     */
+    public function handleChangeParent(PersistEvent $event)
+    {
+        $document = $event->getDocument();
+
+        if (!$document instanceof ParentBehavior) {
+            return;
+        }
+
+        $parentDocument = $document->getParent();
+
+        if (!$parentDocument) {
+            return;
+        }
+
+        $node = $this->inspector->getNode($document);
+        $parentNode = $this->inspector->getNode($parentDocument);
+
+        if ($parentNode->getPath() === $node->getParent()->getPath()) {
+            return;
+        }
+
+        $this->documentManager->move($document, $parentNode->getPath());
     }
 
     private function mapParent($document, NodeInterface $node)

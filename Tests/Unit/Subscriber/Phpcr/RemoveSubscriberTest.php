@@ -1,0 +1,109 @@
+<?php
+/*
+ * This file is part of the Sulu CMS.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+ 
+namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber;
+
+use Sulu\Component\DocumentManager\Subscriber\Phpcr\RemoveSubscriber;
+use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\RemoveEvent;
+use PHPCR\NodeInterface;
+use PHPCR\PropertyInterface;
+
+class RemoveSubscriberTest extends \PHPUnit_Framework_TestCase
+{
+    public function setUp()
+    {
+        $this->nodeManager = $this->prophesize(NodeManager::class);
+        $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
+        $this->removeEvent = $this->prophesize(RemoveEvent::class);
+        $this->document = new \stdClass;
+        $this->node = $this->prophesize(NodeInterface::class);
+        $this->node1 = $this->prophesize(NodeInterface::class);
+        $this->node2 = $this->prophesize(NodeInterface::class);
+        $this->property1 = $this->prophesize(PropertyInterface::class);
+        $this->property2 = $this->prophesize(PropertyInterface::class);
+
+
+        $this->subscriber = new RemoveSubscriber(
+            $this->documentRegistry->reveal(),
+            $this->nodeManager->reveal()
+        );
+
+        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+    }
+
+    /**
+     * It should remove nodes from the PHPCR session
+     */
+    public function testHandleRemove()
+    {
+        $this->removeEvent->getDocument()->willReturn($this->document);
+        $this->removeEvent->getDereference()->willReturn(false);
+        $this->node->remove()->shouldBeCalled();
+
+        $this->subscriber->handleRemove($this->removeEvent->reveal());
+    }
+
+    /**
+     * It should be able to remove properties referrering to the node being removed
+     */
+    public function testHanldeRemoveWithDereferemceProperties()
+    {
+        $this->removeEvent->getDocument()->willReturn($this->document);
+        $this->removeEvent->getDereference()->willReturn(true);
+
+        $this->node->getReferences()->willReturn(array(
+            $this->property1
+        ));
+
+        $this->property1->isMultiple()->willReturn(false);
+        $this->property1->remove()->shouldBeCalled();
+        $this->node->remove()->shouldBeCalled();
+
+        $this->subscriber->handleRemove($this->removeEvent->reveal());
+    }
+
+    /**
+     * It should be able to remove multivalued references to the node being removed
+     */
+    public function testHandleRemoveWithDereferenceMultiValued()
+    {
+        $this->removeEvent->getDocument()->willReturn($this->document);
+        $this->removeEvent->getDereference()->willReturn(true);
+
+        $this->node->getReferences()->willReturn(array(
+            $this->property1
+        ));
+
+        $this->property1->isMultiple()->willReturn(true);
+        $this->property1->getValue()->willReturn(array(
+            $this->node1->reveal(),
+            $this->node2->reveal()
+        ));
+
+        $this->node->getIdentifier()->willReturn('3333');
+        $this->node1->getIdentifier()->willReturn('7777');
+        $this->node2->getIdentifier()->willReturn('3333');
+
+        $this->property1->getParent()->willReturn(
+            $this->node2->reveal()
+        );
+        $this->property1->getName()->willReturn('hello');
+
+        $this->node2->setProperty('hello', array(
+            $this->node1->reveal()
+        ))->shouldBeCalled();
+
+        $this->node->remove()->shouldBeCalled();
+
+        $this->subscriber->handleRemove($this->removeEvent->reveal());
+    }
+}
