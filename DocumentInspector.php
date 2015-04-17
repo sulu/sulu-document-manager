@@ -45,6 +45,16 @@ class DocumentInspector
     }
 
     /**
+     * Get referrers for the document
+     *
+     * @return ReferrerCollection
+     */
+    public function getReferrers($document)
+    {
+        return $this->proxyFactory->createReferrerCollection($document);
+    }
+
+    /**
      * Return the PHPCR node for the given document
      *
      * @param object $document

@@ -87,7 +87,6 @@ class ProxyFactory
         return $proxy;
     }
 
-
     /**
      * Create a new children collection for the given document
      *
@@ -101,6 +100,26 @@ class ProxyFactory
         $locale = $this->registry->getOriginalLocaleForDocument($document);
 
         return new ChildrenCollection(
+            $node,
+            $this->dispatcher,
+            $locale
+        );
+    }
+
+    /**
+     * Create a new collection of referrers from a list of referencing items.
+     *
+     * @param object $document
+     * @param ItemInterface $items
+     *
+     * @return ChildrenCollection
+     */
+    public function createReferrerCollection($document)
+    {
+        $node = $this->registry->getNodeForDocument($document);
+        $locale = $this->registry->getOriginalLocaleForDocument($document);
+
+        return new ReferrerCollection(
             $node,
             $this->dispatcher,
             $locale
