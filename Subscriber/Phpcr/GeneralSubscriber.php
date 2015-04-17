@@ -75,6 +75,7 @@ class GeneralSubscriber implements EventSubscriberInterface
             Events::COPY => array('handleCopy', 500),
             Events::CLEAR => array('handleClear', 500),
             Events::FLUSH => array('handleFlush', 500),
+            Events::REFRESH => array('handleRefresh', 500),
         );
     }
 

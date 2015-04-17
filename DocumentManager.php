@@ -112,6 +112,12 @@ class DocumentManager
         return $event->getCopiedPath();
     }
 
+    public function reorder($document, $destId, $after = false)
+    {
+        $event = new Event\ReorderEvent($document, $destId, $after);
+        $this->eventDispatcher->dispatch(Events::REORDER, $event);
+    }
+
     /**
      * Refresh the given document with the persisted state of the node
      *

@@ -201,6 +201,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
             Events::QUERY_CREATE_BUILDER => 'handleQueryBuilderCreate',
             Events::QUERY_EXECUTE => 'handleQueryExecute',
             Events::REFRESH => 'handleRefresh',
+            Events::REORDER = 'handleReorder'
         );
     }
 
@@ -261,5 +262,10 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
     public function handleRefresh(RefreshEvent $event)
     {
         $this->refresh = true;
+    }
+
+    public function handleReorder(ReorderEvent $event)
+    {
+        $this->reorder = true;
     }
 }

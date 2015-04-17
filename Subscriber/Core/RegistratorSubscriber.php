@@ -18,6 +18,8 @@ use Sulu\Component\DocumentManager\DocumentRegistry;
 use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Event\ClearEvent;
+use Sulu\Component\DocumentManager\Event\FindEvent;
+use PHPCR\Util\UUIDHelper;
 
 /**
  * Responsible for registering and deregistering documents and PHPCR nodes
@@ -46,6 +48,9 @@ class RegistratorSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            Events::FIND => array(
+                array('handleFind', 510),
+            ),
             Events::HYDRATE => array(
                 array('handleDocumentfromRegistry', 510),
                 array('handleHydrate', 490),
@@ -57,6 +62,26 @@ class RegistratorSubscriber implements EventSubscriberInterface
             Events::REMOVE => array('handleRemove', 490),
             Events::CLEAR => array('handleClear', 500),
         );
+    }
+
+    /**
+     * If find is by UUID, check to see if the document is already loaded
+     *
+     * @param FindEvent $event
+     */
+    public function handleFind(FindEvent $event)
+    {
+        $uuid = $event->getId();
+
+        if (!UUIDHelper::isUUID($uuid)) {
+            return;
+        }
+
+        if (!$this->documentRegistry->hasNodeWithUuid($uuid)) {
+            return;
+        }
+
+        $event->setNode($this->documentRegistry->getNodeByUuid($uuid));
     }
 
     /**

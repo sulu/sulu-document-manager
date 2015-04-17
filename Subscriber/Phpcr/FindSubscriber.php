@@ -49,6 +49,7 @@ class FindSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::FIND => array('handleFind', 500),
+            Events::FIND => array('handleFind', 500),
         );
     }
 
@@ -56,7 +57,12 @@ class FindSubscriber implements EventSubscriberInterface
     {
         $aliasOrClass = $event->getAliasOrClass();
 
-        $node = $this->nodeManager->find($event->getId());
+        if (false === $event->hasNode()) {
+            $node = $this->nodeManager->find($event->getId());
+        } else {
+            $node = $event->getNode();
+        }
+
         $hydrateEvent = new HydrateEvent($node, $event->getLocale(), $event->getAliasOrClass());
         $this->eventDispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
         $document = $hydrateEvent->getDocument();
@@ -89,4 +95,5 @@ class FindSubscriber implements EventSubscriberInterface
             ));
         }
     }
+namespace Sulu\Component\DocumentManager;
 }

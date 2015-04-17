@@ -57,6 +57,11 @@ class Events
     const FIND = 'sulu_document_manager.find';
 
     /**
+     * Fired when the document manager reorder method is called
+     */
+    const REORDER = 'sulu_document_manager.reorder';
+
+    /**
      * Fired when the document manager requests that are flush to persistent storage happen
      */
     const FLUSH = 'sulu_document_manager.flush';
