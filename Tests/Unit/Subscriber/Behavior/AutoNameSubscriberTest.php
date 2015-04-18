@@ -19,9 +19,12 @@ use Sulu\Component\DocumentManager\Subscriber\Behavior\AutoNameSubscriber;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 use PHPCR\NodeInterface;
 use Prophecy\Argument;
+use Sulu\Component\DocumentManager\NameResolver;
 
 class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    const DEFAULT_LOCALE = 'en';
+
     public function setUp()
     {
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
@@ -31,24 +34,19 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->document = $this->prophesize(AutoNameBehavior::class);
         $this->parentDocument = new \stdClass;
         $this->newNode = $this->prophesize(NodeInterface::class);
+        $this->node = $this->prophesize(NodeInterface::class);
         $this->parentNode = $this->prophesize(NodeInterface::class);
         $this->metadata = $this->prophesize(Metadata::class);
         $this->parent = new \stdClass;
+        $this->documentRegistry->getDefaultLocale()->willReturn(self::DEFAULT_LOCALE);
+        $this->resolver = $this->prophesize(NameResolver::class);
 
         $this->subscriber = new AutoNameSubscriber(
             $this->documentRegistry->reveal(),
             $this->slugifier->reveal(),
-            $this->metadataFactory->reveal()
+            $this->metadataFactory->reveal(),
+            $this->resolver->reveal()
         );
-    }
-
-    /**
-     * It should return early if the event already has a node
-     */
-    public function testAlreadyHasNode()
-    {
-        $this->event->hasNode()->willReturn(true);
-        $this->subscriber->handlePersist($this->event->reveal());
     }
 
     /**
@@ -94,40 +92,59 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testAutoName()
     {
-        $this->doTestAutoName(array(), 'hai', 'hai');
+        $this->doTestAutoName('hai', 'hai', true);
+        $this->event->hasNode()->willReturn(false);
+        $this->subscriber->handlePersist($this->event->reveal());
     }
 
     /**
-     * It should assign an incremented name if a node already exists
+     * It should rename the node if the document is being saved in the default locale
      */
-    public function testAutoNameAlreadyExists()
+    public function testAlreadyHasNode()
     {
-        $this->doTestAutoName(array('hai', 'hai-1'), 'hai', 'hai-2');
+        $this->event->getNode()->willReturn($this->node->reveal());
+        $this->event->getLocale()->willReturn(self::DEFAULT_LOCALE);
+        $this->event->hasNode()->willReturn(true);
+        $this->doTestAutoName('hai-bye', 'hai-2');
+        $this->node->rename('hai-bye')->shouldBeCalled();
+        $this->node->hasNode()->willReturn(true);
+
+        $this->subscriber->handlePersist($this->event->reveal());
     }
 
-    private function doTestAutoName($existingNames, $title, $expectedName)
+    /**
+     * It should not rename the node if the document is being saved a non-default locale
+     */
+    public function testAlreadyHasNodeNonDefaultLocale()
+    {
+        $this->event->getNode()->willReturn($this->node->reveal());
+        $this->event->getLocale()->willReturn('ay');
+        $this->event->hasNode()->willReturn(true);
+        $this->doTestAutoName('hai-bye', 'hai-2');
+        $this->node->rename('hai-bye')->shouldNotBeCalled();
+        $this->node->hasNode()->willReturn(true);
+
+        $this->subscriber->handlePersist($this->event->reveal());
+    }
+
+    private function doTestAutoName($title, $expectedName, $create = false)
     {
         $phpcrType = 'sulu:test';
-        $this->event->hasNode()->willReturn(false);
         $this->document->getTitle()->willReturn($title);
         $this->document->getParent()->willReturn($this->parent);
         $this->event->getDocument()->willReturn($this->document->reveal());
         $this->slugifier->slugify($title)->willReturn($title);
-
+        $this->resolver->resolveName($this->parentNode->reveal(), $title)->willReturn($title);
         $this->documentRegistry->getNodeForDocument($this->parent)->willReturn($this->parentNode->reveal());
         $this->metadataFactory->getMetadataForClass(get_class($this->document->reveal()))->willReturn($this->metadata->reveal());
 
-        $this->parentNode->hasNode(Argument::any())->will(function ($args) use ($existingNames) {
-            $r = in_array($args[0], $existingNames);
-            return $r;
-        });
-
+        if (!$create) {
+            return;
+        }
         $this->parentNode->addNode($expectedName)->willReturn($this->newNode->reveal());
-
         $this->metadata->getPhpcrType()->willReturn($phpcrType);
         $this->newNode->addMixin($phpcrType)->shouldBeCalled();
         $this->newNode->setProperty('jcr:uuid', Argument::type('string'))->shouldBeCalled();
         $this->event->setNode($this->newNode->reveal())->shouldBeCalled();
-        $this->subscriber->handlePersist($this->event->reveal());
     }
 }

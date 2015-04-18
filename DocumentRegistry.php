@@ -41,13 +41,30 @@ class DocumentRegistry
     private $originalLocaleMap;
 
     /**
+     * @var string
+     */
+    private $defaultLocale;
+
+    /**
+     * @param $defaultLocale
+     */
+    public function __construct($defaultLocale)
+    {
+        $this->defaultLocale = $defaultLocale;
+    }
+
+    /**
      * Register a document
      *
      * @param mixed $document
      * @param NodeInterface $node
      */
-    public function registerDocument($document, NodeInterface $node, $locale)
+    public function registerDocument($document, NodeInterface $node, $locale = null)
     {
+        if (null === $locale) {
+            $locale = $this->defaultLocale;
+        }
+
         $oid = $this->getObjectIdentifier($document);
         $uuid = $node->getIdentifier();
 
@@ -58,7 +75,6 @@ class DocumentRegistry
         $this->nodeMap[$node->getIdentifier()] = $node;
         $this->nodeDocumentMap[$node->getIdentifier()] = $document;
         $this->documentLocaleMap[$oid] = $locale;
-
     }
 
     public function updateLocale($document, $locale, $originalLocale = null)
@@ -191,6 +207,16 @@ class DocumentRegistry
         $this->assertNodeExists($identifier);
 
         return $this->nodeDocumentMap[$identifier];
+    }
+
+    /**
+     * Return the default locale
+     *
+     * @return string
+     */
+    public function getDefaultLocale() 
+    {
+        return $this->defaultLocale;
     }
 
     /**

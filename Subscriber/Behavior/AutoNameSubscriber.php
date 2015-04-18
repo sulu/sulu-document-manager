@@ -13,6 +13,7 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Events;
 use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\NameResolver;
 
 /**
  * Automatically assign a name to the document based on its title
@@ -26,12 +27,14 @@ class AutoNameSubscriber implements EventSubscriberInterface
     public function __construct(
         DocumentRegistry $documentRegistry,
         SlugifierInterface $slugifier,
-        MetadataFactory $metadataFactory
+        MetadataFactory $metadataFactory,
+        NameResolver $resolver
     )
     {
         $this->documentRegistry = $documentRegistry;
         $this->slugifier = $slugifier;
         $this->metadataFactory = $metadataFactory;
+        $this->resolver = $resolver;
     }
 
     /**
@@ -41,6 +44,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::PERSIST => array('handlePersist', 480),
+            Events::MOVE => array('handleMove', 480),
         );
     }
 
@@ -49,10 +53,6 @@ class AutoNameSubscriber implements EventSubscriberInterface
      */
     public function handlePersist(PersistEvent $event)
     {
-        if ($event->hasNode()) {
-            return;
-        }
-
         $document = $event->getDocument();
 
         if (!$document instanceof AutoNameBehavior) {
@@ -81,10 +81,18 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $parentNode = $this->documentRegistry->getNodeForDocument($parentDocument);
         $metadata = $this->metadataFactory->getMetadataForClass(get_class($document));
 
-        $name = $this->resolveName($parentNode, $name);
-        $node = $this->createNode($parentNode, $metadata, $name);
+        $name = $this->resolver->resolveName($parentNode, $name);
 
-        $event->setNode($node);
+        if (false === $event->hasNode()) {
+            $node = $this->createNode($parentNode, $metadata, $name);
+            $event->setNode($node);
+            return;
+        }
+
+        $node = $event->getNode();
+        if ($event->getLocale() === $this->documentRegistry->getDefaultLocale()) {
+            $node->rename($name);
+        }
     }
 
     /**
@@ -105,23 +113,5 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $node->setProperty('jcr:uuid', UUIDHelper::generateUUID());
 
         return $node;
-    }
-
-    /**
-     */
-    private function resolveName(NodeInterface $parentNode, $name)
-    {
-        $index = 0;
-        $baseName = $name;
-        do {
-            if ($index > 0) {
-                $name = $baseName . '-' . $index;
-            }
-
-            $hasChild = $parentNode->hasNode($name);
-            $index++;
-        } while ($hasChild);
-
-        return $name;
     }
 }

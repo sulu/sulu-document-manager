@@ -20,7 +20,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->registry = new DocumentRegistry();
+        $this->registry = new DocumentRegistry('de');
         $this->node = $this->prophesize(NodeInterface::class);
         $this->node->getIdentifier()->willReturn('1234');
         $this->document = new \stdClass;
@@ -137,5 +137,13 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
         $this->registry->updateLocale($this->document, 'de', 'fr');
         $this->assertEquals('de', $this->registry->getLocaleForDocument($this->document));
         $this->assertEquals('fr', $this->registry->getOriginalLocaleForDocument($this->document));
+    }
+
+    /**
+     * It should return the default locale
+     */
+    public function testGetDefaultLocale()
+    {
+        $this->assertEquals('de', $this->registry->getDefaultLocale());
     }
 }

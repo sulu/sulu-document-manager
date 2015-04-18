@@ -51,7 +51,9 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
         $locale = $event->getLocale();
         $parentName = $this->getParentName($document);
         $path = sprintf('%s/%s', $this->basePath, $parentName);
+
         $this->nodeManager->createPath($path);
+
         $parentDocument = $this->documentManager->find($path, $locale);
         $document->setParent($parentDocument);
     }
