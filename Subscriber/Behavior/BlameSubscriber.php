@@ -19,6 +19,8 @@ use Sulu\Component\DocumentManager\PropertyEncoder;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Sulu\Component\Security\Authentication\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Sulu\Component\DocumentManager\Event\AbstractDocumentNodeEvent;
+use PHPCR\PropertyType;
 
 /**
  * Manages user blame (log who creator the document and who updated it last)
@@ -76,20 +78,23 @@ class BlameSubscriber implements EventSubscriberInterface
 
 
         $node = $event->getNode();
+        $locale = $event->getLocale();
 
-        if (!$document->getCreator()) {
-            $name = $this->encoder->localizedSystemName(self::CREATOR, $event->getLocale());
-            $node->setProperty($name, $user->getId());
+        if (!$this->getCreator($node, $locale)) {
+            $name = $this->encoder->localizedSystemName(self::CREATOR, $locale);
+            $node->setProperty($name, $user->getId(), PropertyType::LONG);
         }
 
-        $name = $this->encoder->localizedSystemName(self::CHANGER, $event->getLocale());
-        $node->setProperty($name, $user->getId());
+        $name = $this->encoder->localizedSystemName(self::CHANGER, $locale);
+        $node->setProperty($name, $user->getId(), PropertyType::LONG);
+
+        $this->handleHydrate($event);
     }
 
     /**
      * @param HydrateEvent $event
      */
-    public function handleHydrate(HydrateEvent $event)
+    public function handleHydrate(AbstractDocumentNodeEvent $event)
     {
         $document = $event->getDocument();
 
@@ -103,10 +108,7 @@ class BlameSubscriber implements EventSubscriberInterface
 
         $accessor->set(
             self::CREATOR,
-            $node->getPropertyValueWithDefault(
-                $this->encoder->localizedSystemName(self::CREATOR, $locale),
-                null
-            )
+            $this->getCreator($node, $locale)
         );
 
         $accessor->set(
@@ -115,6 +117,14 @@ class BlameSubscriber implements EventSubscriberInterface
                 $this->encoder->localizedSystemName(self::CHANGER, $locale),
                 null
             )
+        );
+    }
+
+    private function getCreator($node, $locale)
+    {
+        return $node->getPropertyValueWithDefault(
+            $this->encoder->localizedSystemName(self::CREATOR, $locale),
+            null
         );
     }
 }

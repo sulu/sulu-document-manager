@@ -101,7 +101,20 @@ class NodeManager
      */
     public function createPath($path)
     {
-        NodeHelper::createPath($this->session, $path);
+        $current = $this->session->getRootNode();
+
+        $segments = preg_split('#/#', $path, null, PREG_SPLIT_NO_EMPTY);
+        foreach ($segments as $segment) {
+            if ($current->hasNode($segment)) {
+                $current = $current->getNode($segment);
+            } else {
+                $current = $current->addNode($segment);
+                $current->addMixin('mix:referenceable');
+                $current->setProperty('jcr:uuid', UUIDHelper::generateUUID());
+            }
+        }
+
+        return $current;
     }
 
     /**
