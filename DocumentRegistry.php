@@ -46,6 +46,11 @@ class DocumentRegistry
     private $defaultLocale;
 
     /**
+     * @var array
+     */
+    private $hydrationState = array();
+
+    /**
      * @param $defaultLocale
      */
     public function __construct($defaultLocale)
@@ -120,6 +125,7 @@ class DocumentRegistry
         $this->nodeDocumentMap = array();
         $this->documentLocaleMap = array();
         $this->originalLocaleMap = array();
+        $this->hydrationState = array();
     }
 
     /**
@@ -142,6 +148,7 @@ class DocumentRegistry
         unset($this->documentNodeMap[$oid]);
         unset($this->documentLocaleMap[$oid]);
         unset($this->originalLocaleMap[$oid]);
+        unset($this->hydrationState[$oid]);
     }
 
     /**
@@ -285,5 +292,44 @@ class DocumentRegistry
                 get_class($document)
             ));
         }
+    }
+
+    /**
+     * Register that the document has been hydrated
+     *
+     * @param object $document
+     */
+    public function markDocumentAsHydrated($document, $locale)
+    {
+        $oid = spl_object_hash($document);
+        $this->hydrationState[$oid] = $locale;
+    }
+
+    public function unmarkDocumentAsHydrated($document) 
+    {
+        $oid = spl_object_hash($document);
+        unset($this->hydrationState[$oid]);
+    }
+
+    /**
+     * Return true if the document has been hydrated
+     *
+     * @param object $document
+     *
+     * @return boolean
+     */
+    public function isHydrated($document, $locale)
+    {
+        $oid = spl_object_hash($document);
+
+        if (!isset($this->hydrationState[$oid])) {
+            return false;
+        }
+
+        if ($this->hydrationState[$oid] !== $locale) {
+            return false;
+        }
+
+        return true;
     }
 }

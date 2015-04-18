@@ -64,7 +64,8 @@ class ProxyFactory
 
         // if node is already registered then just return the registered document
         if ($this->registry->hasNode($targetNode)) {
-            return $this->registry->getDocumentForNode($targetNode);
+            $document = $this->registry->getDocumentForNode($targetNode);
+            return $document;
         }
 
         $initializer = function (

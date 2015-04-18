@@ -70,8 +70,8 @@ class GeneralSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::MOVE => array('handleMove', 500),
-            Events::COPY => array('handleCopy', 500),
+            Events::MOVE => array('handleMove', 400),
+            Events::COPY => array('handleCopy', 400),
             Events::CLEAR => array('handleClear', 500),
             Events::FLUSH => array('handleFlush', 500),
             Events::REFRESH => array('handleRefresh', 500),

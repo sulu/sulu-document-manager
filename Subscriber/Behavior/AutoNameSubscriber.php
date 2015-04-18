@@ -14,27 +14,36 @@ use Sulu\Component\DocumentManager\Events;
 use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\NameResolver;
+use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\CopyEvent;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Automatically assign a name to the document based on its title
+ *
+ * TODO: Refactor MOVE auto-name handling somehow.
  */
 class AutoNameSubscriber implements EventSubscriberInterface
 {
-    private $documentRegistry;
+    private $registry;
     private $slugifier;
     private $metadataFactory;
+    private $nodeManager;
 
     public function __construct(
-        DocumentRegistry $documentRegistry,
+        DocumentRegistry $registry,
         SlugifierInterface $slugifier,
         MetadataFactory $metadataFactory,
-        NameResolver $resolver
+        NameResolver $resolver,
+        NodeManager $nodeManager
     )
     {
-        $this->documentRegistry = $documentRegistry;
+        $this->registry = $registry;
         $this->slugifier = $slugifier;
         $this->metadataFactory = $metadataFactory;
         $this->resolver = $resolver;
+        $this->nodeManager = $nodeManager;
     }
 
     /**
@@ -45,7 +54,24 @@ class AutoNameSubscriber implements EventSubscriberInterface
         return array(
             Events::PERSIST => array('handlePersist', 480),
             Events::MOVE => array('handleMove', 480),
+            Events::COPY => array('handleMove', 480),
         );
+    }
+
+    /**
+     * @param MoveEvent $event
+     */
+    public function handleMove(MoveEvent $event)
+    {
+        $this->handleMoveCopy($event);
+    }
+
+    /**
+     * @param CopyEvent
+     */
+    public function handleCopy(CopyEvent $event)
+    {
+        $this->handleMoveCopy($event);
     }
 
     /**
@@ -78,10 +104,8 @@ class AutoNameSubscriber implements EventSubscriberInterface
             ));
         }
 
-        $parentNode = $this->documentRegistry->getNodeForDocument($parentDocument);
+        $parentNode = $this->registry->getNodeForDocument($parentDocument);
         $metadata = $this->metadataFactory->getMetadataForClass(get_class($document));
-
-        $name = $this->resolver->resolveName($parentNode, $name);
 
         if (false === $event->hasNode()) {
             $node = $this->createNode($parentNode, $metadata, $name);
@@ -90,7 +114,16 @@ class AutoNameSubscriber implements EventSubscriberInterface
         }
 
         $node = $event->getNode();
-        if ($event->getLocale() === $this->documentRegistry->getDefaultLocale()) {
+
+        if ($parentNode->getNode($name)->getIdentifier() === $node->getIdentifier()) {
+            return;
+        }
+
+        $name = $this->resolver->resolveName($parentNode, $name);
+
+        $defaultLocale = $this->registry->getDefaultLocale();
+
+        if ($defaultLocale == $event->getLocale()) {
             $node->rename($name);
         }
     }
@@ -113,5 +146,30 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $node->setProperty('jcr:uuid', UUIDHelper::generateUUID());
 
         return $node;
+    }
+
+    /**
+     * Resolve the destination name on move and copy events
+     *
+     * @param Event $event
+     */
+    private function handleMoveCopy(Event $event)
+    {
+        $document = $event->getDocument();
+
+        if (!$document instanceof AutoNameBehavior) {
+            return;
+        }
+
+        $destId = $event->getDestId();
+        $node = $this->registry->getNodeForDocument($document);
+        $destNode = $this->nodeManager->find($destId);
+        $nodeName = $this->resolver->resolveName($destNode, $node->getName());
+
+        if ($nodeName === $node->getName()) {
+            return;
+        }
+
+        $node->rename($nodeName);
     }
 }
