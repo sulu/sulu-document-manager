@@ -33,8 +33,10 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->hydrateEvent->hasDocument()->willReturn(false);
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
+        $this->hydrateEvent->getLocale()->willReturn('fr');
         $this->registry->hasNode($this->node->reveal())->willReturn(true);
         $this->registry->getDocumentForNode($this->node->reveal())->willReturn($this->document);
+        $this->registry->updateLocale($this->document, 'fr', 'fr')->shouldBeCalled();
         $this->hydrateEvent->setDocument($this->document)->shouldBeCalled();
         $this->subscriber->handleDocumentFromRegistry($this->hydrateEvent->reveal());
     }
@@ -81,7 +83,23 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->hydrateEvent->getDocument()->willReturn($this->document);
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
         $this->hydrateEvent->getLocale()->willReturn('fr');
+        $this->registry->hasDocument($this->document)->willReturn(false);
         $this->registry->registerDocument($this->document, $this->node->reveal(), 'fr')->shouldBeCalled();
+
+        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+    }
+
+    /**
+     * It should not register documents on the HYDRATE event when there is already a document
+     */
+    public function testHandleRegisterHydrateAlreadyExisting()
+    {
+        $this->hydrateEvent->getDocument()->willReturn($this->document);
+        $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
+        $this->hydrateEvent->getLocale()->willReturn('fr');
+
+        $this->registry->hasDocument($this->document)->willReturn(true);
+        $this->registry->registerDocument($this->document, $this->node->reveal(), 'fr')->shouldNotBeCalled();
 
         $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
     }
@@ -94,7 +112,23 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getDocument()->willReturn($this->document);
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->persistEvent->getLocale()->willReturn('fr');
+        $this->registry->hasDocument($this->document)->willReturn(false);
         $this->registry->registerDocument($this->document, $this->node->reveal(), 'fr')->shouldBeCalled();
+
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not register on PERSIST when there is already a document
+     */
+    public function testHandleRegisterPersistAlreadyExists()
+    {
+        $this->persistEvent->getDocument()->willReturn($this->document);
+        $this->persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->persistEvent->getLocale()->willReturn('fr');
+
+        $this->registry->registerDocument($this->document, $this->node->reveal(), 'fr')->shouldNotBeCalled();
+        $this->registry->hasDocument($this->document)->willReturn(true);
 
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }

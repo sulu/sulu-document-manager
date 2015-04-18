@@ -62,6 +62,11 @@ class ProxyFactory
         $registry = $this->registry;
         $targetMetadata = $this->metadataFactory->getMetadataForPhpcrNode($targetNode);
 
+        // if node is already registered then just return the registered document
+        if ($this->registry->hasNode($targetNode)) {
+            return $this->registry->getDocumentForNode($targetNode);
+        }
+
         $initializer = function (
             LazyLoadingInterface $document,
             $method,
@@ -83,7 +88,8 @@ class ProxyFactory
         };
 
         $proxy = $this->proxyFactory->createProxy($targetMetadata->getClass(), $initializer);
-        $this->registry->registerDocument($proxy, $targetNode, $registry->getLocaleForDocument($fromDocument));
+        $locale = $registry->getLocaleForDocument($fromDocument);
+        $this->registry->registerDocument($proxy, $targetNode, $locale);
 
         return $proxy;
     }

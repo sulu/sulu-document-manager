@@ -4,6 +4,7 @@ namespace Sulu\Component\DocumentManager;
 
 use PHPCR\NodeInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 /**
  * Handles the mapping between managed documents and nodes
@@ -48,11 +49,16 @@ class DocumentRegistry
     public function registerDocument($document, NodeInterface $node, $locale)
     {
         $oid = $this->getObjectIdentifier($document);
+        $uuid = $node->getIdentifier();
+
+        $this->validateDocumentRegistration($document, $node, $oid, $uuid);
+
         $this->documentMap[$oid] = $document;
-        $this->documentNodeMap[$oid] = $node->getIdentifier();
+        $this->documentNodeMap[$oid] = $uuid;
         $this->nodeMap[$node->getIdentifier()] = $node;
         $this->nodeDocumentMap[$node->getIdentifier()] = $document;
         $this->documentLocaleMap[$oid] = $locale;
+
     }
 
     public function updateLocale($document, $locale, $originalLocale = null)
@@ -138,6 +144,7 @@ class DocumentRegistry
     }
 
     /**
+    /**
      * Return the current locale for the given document
      *
      * @param object $document
@@ -222,5 +229,35 @@ class DocumentRegistry
     private function getObjectIdentifier($document)
     {
         return spl_object_hash($document);
+    }
+
+    /**
+     * Ensure that the document is not already registered and that the node
+     * has a UUID.
+     *
+     * @param string $oid Object ID
+     * @param string $uuid Node UUID
+     */
+    private function validateDocumentRegistration($document, $node, $oid, $uuid)
+    {
+        if (null === $uuid) {
+            throw new DocumentManagerException(sprintf(
+                'Node "%s" of type "%s" has no UUID. Only referencable nodes can be registered by the document manager',
+                $node->getPath(), $node->getPrimaryNodeType()->getName()
+            ));
+        }
+
+        if (isset($this->nodeMap[$uuid])) {
+            $registeredDocument = $this->nodeDocumentMap[$uuid];
+            throw new \RuntimeException(sprintf(
+                'Document "%s" (%s) is already registered for node "%s" (%s) when trying to register document "%s" (%s)',
+                spl_object_hash($registeredDocument),
+                get_class($registeredDocument),
+                $uuid,
+                $node->getPath(),
+                $oid,
+                get_class($document)
+            ));
+        }
     }
 }

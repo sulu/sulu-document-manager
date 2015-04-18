@@ -67,7 +67,7 @@ class RemoveSubscriber implements EventSubscriberInterface
             $this->dereference($node);
         }
 
-        $this->nodeManager->remove($document->getUuid());
+        $node->remove();
     }
 
     /**

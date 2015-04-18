@@ -79,6 +79,8 @@ class RegistratorSubscriber implements EventSubscriberInterface
         }
 
         $document = $this->documentRegistry->getDocumentForNode($node);
+        $locale = $event->getLocale();
+        $this->documentRegistry->updateLocale($document, $locale, $locale);
         $event->setDocument($document);
     }
 
@@ -137,6 +139,11 @@ class RegistratorSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
         $node = $event->getNode();
+
+        if ($this->documentRegistry->hasDocument($document)) {
+            return;
+        }
+
         $this->documentRegistry->registerDocument($document, $node, $event->getLocale());
     }
 }

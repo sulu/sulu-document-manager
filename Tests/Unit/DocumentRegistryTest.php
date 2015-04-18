@@ -12,6 +12,7 @@ namespace Sulu\Component\DocumentManager\Tests\Unit;
 
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use PHPCR\NodeInterface;
+use Sulu\Component\DocumentManager\Document\UnknownDocument;
 
 class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,6 +71,19 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
             $this->node->reveal(),
             $this->registry->getNodeForDocument($this->document)
         );
+    }
+
+    /**
+     * Throw an exception if an attempt is made to re-register a document
+     *
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage is already registered
+     */
+    public function testDifferentInstanceSameNode()
+    {
+        $this->node->getPath()->willReturn('/path/to');
+        $this->registry->registerDocument(new \stdClass, $this->node->reveal(), 'fr');
+        $this->registry->registerDocument(new \stdClass, $this->node->reveal(), 'fr');
     }
 
     /**
