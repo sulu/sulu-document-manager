@@ -45,7 +45,7 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testFind()
     {
-        $this->doTestFind();
+        $this->doTestFind(array('type' => null));
     }
 
     public function provideFindWithTypeOrClass()
@@ -73,10 +73,14 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
             $this->metadata->getClass()->willReturn('stdClass');
         }
 
-        $this->doTestFind($typeOrClass);
+        $options = array(
+            'type' => $typeOrClass
+        );
+
+        $this->doTestFind($options);
     }
 
-    private function doTestFind($typeOrClass = null)
+    private function doTestFind($options)
     {
         $locale = 'fr';
         $path = '/path/to';
@@ -88,7 +92,7 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
                 $args[1]->setDocument(new \stdClass());
             });
 
-        $event = new FindEvent($path, $locale, $typeOrClass);
+        $event = new FindEvent($path, $locale, $options);
         $this->subscriber->handleFind($event);
         $this->assertInstanceOf('stdClass', $event->getDocument());
     }

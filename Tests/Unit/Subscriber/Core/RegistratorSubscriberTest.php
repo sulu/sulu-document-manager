@@ -29,16 +29,66 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
      * It should set the document on hydrate if the document for the node to
      * be hydrated is already in the registry
      */
-    public function testBeginHydrate()
+    public function testDocumentFromRegistry()
     {
         $this->hydrateEvent->hasDocument()->willReturn(false);
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
         $this->hydrateEvent->getLocale()->willReturn('fr');
         $this->registry->hasNode($this->node->reveal())->willReturn(true);
         $this->registry->getDocumentForNode($this->node->reveal())->willReturn($this->document);
-        $this->registry->updateLocale($this->document, 'fr', 'fr')->shouldBeCalled();
         $this->hydrateEvent->setDocument($this->document)->shouldBeCalled();
-        $this->subscriber->handleBeginHydrate($this->hydrateEvent->reveal());
+        $this->subscriber->handleDocumentFromRegistry($this->hydrateEvent->reveal());
+    }
+
+    /**
+     * It should set the default locale
+     */
+    public function testDefaultLocale()
+    {
+        $this->hydrateEvent->getLocale()->willReturn(null);
+        $this->registry->getDefaultLocale()->willReturn('de');
+        $this->hydrateEvent->setLocale('de')->shouldBeCalled();
+
+        $this->subscriber->handleDefaultLocale($this->hydrateEvent->reveal());
+    }
+
+    /**
+     * It should stop propagation if the document is already loaded in the requested locale
+     */
+    public function testStopPropagation()
+    {
+        $locale = 'de';
+        $originalLocale = 'de';
+
+        $this->hydrateEvent->hasDocument()->willReturn(true);
+        $this->hydrateEvent->getLocale()->willReturn($locale);
+        $this->hydrateEvent->getDocument()->willReturn($this->document);
+        $this->registry->isHydrated($this->document)->willReturn(true);
+        $this->registry->getOriginalLocaleForDocument($this->document)->willReturn($originalLocale);
+        $this->hydrateEvent->stopPropagation()->shouldBeCalled();
+
+        $this->subscriber->handleStopPropagationAndResetLocale($this->hydrateEvent->reveal());
+    }
+
+    /**
+     * It should update the locale if the requested locale is different from the loaded locale
+     */
+    public function testUpdateDocumentLocale()
+    {
+        $locale = 'de';
+        $originalLocale = 'fr';
+
+        $this->hydrateEvent->hasDocument()->willReturn(true);
+        $this->hydrateEvent->getLocale()->willReturn($locale);
+        $this->hydrateEvent->getDocument()->willReturn($this->document);
+        $this->registry->isHydrated($this->document)->willReturn(true);
+
+        $this->registry->getOriginalLocaleForDocument($this->document)->willReturn($originalLocale);
+        $this->hydrateEvent->stopPropagation()->shouldNotBeCalled();
+
+        $this->registry->updateLocale($this->document, $locale, $locale)->shouldBeCalled();
+        $this->subscriber->handleStopPropagationAndResetLocale($this->hydrateEvent->reveal());
+
     }
 
     /**
@@ -58,21 +108,21 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     /**
      * It should return early if the document has already been set
      */
-    public function testBeginHydrateAlreadySet()
+    public function testDocumentFromRegistryAlreadySet()
     {
         $this->hydrateEvent->hasDocument()->willReturn(true);
-        $this->subscriber->handleBeginHydrate($this->hydrateEvent->reveal());
+        $this->subscriber->handleDocumentFromRegistry($this->hydrateEvent->reveal());
     }
 
     /**
      * Is should return early if the node is not managed
      */
-    public function testBeginHydrateNoNode()
+    public function testDocumentFromRegistryNoNode()
     {
         $this->hydrateEvent->hasDocument()->willReturn(true);
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
         $this->registry->hasNode($this->node->reveal())->willReturn(false);
-        $this->subscriber->handleBeginHydrate($this->hydrateEvent->reveal());
+        $this->subscriber->handleDocumentFromRegistry($this->hydrateEvent->reveal());
     }
 
     /**

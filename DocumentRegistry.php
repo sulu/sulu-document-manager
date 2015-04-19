@@ -8,10 +8,6 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 /**
  * Handles the mapping between managed documents and nodes
- *
- * TODO: There is currently no rollback support -- i.e. if a document
- *       is deregistered but the PHPCR session fails to save, then the document
- *       will remain deregistered here and we will have inconsistent state.
  */
 class DocumentRegistry
 {
@@ -73,6 +69,7 @@ class DocumentRegistry
         $oid = $this->getObjectIdentifier($document);
         $uuid = $node->getIdentifier();
 
+        // do not allow nodes wihout UUIDs or reregistration of documents
         $this->validateDocumentRegistration($document, $node, $oid, $uuid);
 
         $this->documentMap[$oid] = $document;
@@ -82,6 +79,13 @@ class DocumentRegistry
         $this->documentLocaleMap[$oid] = $locale;
     }
 
+    /**
+     * Update the locale of the given document and store the originally
+     * requested locale.
+     *
+     * The originally requested locale should be reset when a HYDRATE event
+     * is caused by the user (and not internally when loading dependencies).
+     */
     public function updateLocale($document, $locale, $originalLocale = null)
     {
         $oid = $this->getObjectIdentifier($document);
@@ -295,7 +299,8 @@ class DocumentRegistry
     }
 
     /**
-     * Register that the document has been hydrated
+     * Register that the document has been hydrated and that it should
+     * not be hydrated again.
      *
      * @param object $document
      */
@@ -305,6 +310,12 @@ class DocumentRegistry
         $this->hydrationState[$oid] = true;
     }
 
+    /**
+     * Unmark the document as being hydrated. It will then be
+     * rehydrated the next time a HYDRATE event is fired for ot.
+     *
+     * @param object $document
+     */
     public function unmarkDocumentAsHydrated($document) 
     {
         $oid = spl_object_hash($document);
@@ -312,7 +323,7 @@ class DocumentRegistry
     }
 
     /**
-     * Return true if the document has been hydrated
+     * Return true if the document is a candidate for hydration/re-hydration
      *
      * @param object $document
      *

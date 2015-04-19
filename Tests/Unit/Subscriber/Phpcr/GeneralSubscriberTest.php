@@ -27,6 +27,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     const SRC_PATH = '/path/to';
     const DST_PATH = '/dest/path';
+    const DST_NAME = 'foo';
 
     public function setUp()
     {
@@ -57,9 +58,12 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->moveEvent->getDocument()->willReturn($this->document);
         $this->moveEvent->getDestId()->willReturn(self::DST_PATH);
+        $this->moveEvent->getDestName()->willReturn(self::DST_NAME);
+
         $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
         $this->node->getPath()->willReturn(self::SRC_PATH);
-        $this->nodeManager->move(self::SRC_PATH, self::DST_PATH)->shouldBeCalled();
+
+        $this->nodeManager->move(self::SRC_PATH, self::DST_PATH, self::DST_NAME)->shouldBeCalled();
 
         $this->subscriber->handleMove($this->moveEvent->reveal());
     }
@@ -71,9 +75,10 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->copyEvent->getDocument()->willReturn($this->document);
         $this->copyEvent->getDestId()->willReturn(self::DST_PATH);
+        $this->copyEvent->getDestName()->willReturn(self::DST_NAME);
         $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
         $this->node->getPath()->willReturn(self::SRC_PATH);
-        $this->nodeManager->copy(self::SRC_PATH, self::DST_PATH)->willReturn('foobar');
+        $this->nodeManager->copy(self::SRC_PATH, self::DST_PATH, self::DST_NAME)->willReturn('foobar');
         $this->copyEvent->setCopiedPath('foobar')->shouldBeCalled();
 
         $this->subscriber->handleCopy($this->copyEvent->reveal());

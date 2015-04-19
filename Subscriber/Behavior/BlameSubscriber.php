@@ -21,6 +21,8 @@ use Sulu\Component\Security\Authentication\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use PHPCR\PropertyType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 
 /**
  * Manages user blame (log who creator the document and who updated it last)
@@ -47,7 +49,15 @@ class BlameSubscriber implements EventSubscriberInterface
         return array(
             Events::PERSIST => 'handlePersist',
             Events::HYDRATE => 'handleHydrate',
+            Events::CONFIGURE_OPTIONS => 'handleOptions',
         );
+    }
+
+    public function handleOptions(ConfigureOptionsEvent $event)
+    {
+        $event->getOptions()->setDefaults(array(
+            'blame.user' => null
+        ));
     }
 
     /**
@@ -59,6 +69,32 @@ class BlameSubscriber implements EventSubscriberInterface
 
         if (!$document instanceof BlameBehavior) {
             return;
+        }
+
+        $userId = $this->getUserId($event->getOptions());
+
+        if (null === $userId) {
+            return;
+        }
+
+        $node = $event->getNode();
+        $locale = $event->getLocale();
+
+        if (!$this->getCreator($node, $locale)) {
+            $name = $this->encoder->localizedSystemName(self::CREATOR, $locale);
+            $node->setProperty($name, $userId, PropertyType::LONG);
+        }
+
+        $name = $this->encoder->localizedSystemName(self::CHANGER, $locale);
+        $node->setProperty($name, $userId, PropertyType::LONG);
+
+        $this->handleHydrate($event);
+    }
+
+    private function getUserId(array $options)
+    {
+        if ($options['blame.user']) {
+            return $options['blame.user'];
         }
 
         $token = $this->tokenStorage->getToken();
@@ -76,19 +112,7 @@ class BlameSubscriber implements EventSubscriberInterface
             ));
         }
 
-
-        $node = $event->getNode();
-        $locale = $event->getLocale();
-
-        if (!$this->getCreator($node, $locale)) {
-            $name = $this->encoder->localizedSystemName(self::CREATOR, $locale);
-            $node->setProperty($name, $user->getId(), PropertyType::LONG);
-        }
-
-        $name = $this->encoder->localizedSystemName(self::CHANGER, $locale);
-        $node->setProperty($name, $user->getId(), PropertyType::LONG);
-
-        $this->handleHydrate($event);
+        return $user->getId();
     }
 
     /**

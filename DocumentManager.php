@@ -74,7 +74,7 @@ class DocumentManager
     {
         $options = $this->getOptionsResolver(Events::FIND)->resolve($options);
 
-        $event = new Event\PersistEvent($document, $locale);
+        $event = new Event\PersistEvent($document, $locale, $options);
         $this->eventDispatcher->dispatch(Events::PERSIST, $event);
     }
 

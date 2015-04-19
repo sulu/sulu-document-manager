@@ -49,7 +49,9 @@ class RegistratorSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::HYDRATE => array(
-                array('handleBeginHydrate', 510),
+                array('handleDefaultLocale', 520),
+                array('handleDocumentFromRegistry', 510),
+                array('handlehandleStopPropagationAndResetLocale', 509),
                 array('handleHydrate', 490),
                 array('handleEndHydrate', -500),
             ),
@@ -63,19 +65,22 @@ class RegistratorSubscriber implements EventSubscriberInterface
         );
     }
 
+    public function handleDefaultLocale(HydrateEvent $event)
+    {
+        // set the default locale
+        if (null === $event->getLocale()) {
+            $event->setLocale($this->documentRegistry->getDefaultLocale());
+        }
+    }
+
     /**
      * Set the default locale for the hydration request
      * If there is already a document for the node registered, use that.
      *
      * @param HydrateEvent
      */
-    public function handleBeginHydrate(HydrateEvent $event)
+    public function handleDocumentFromRegistry(HydrateEvent $event)
     {
-        // set the default locale
-        if (null === $event->getLocale()) {
-            $event->setLocale($this->documentRegistry->getDefaultLocale());
-        }
-
         if ($event->hasDocument()) {
             return;
         }
@@ -87,10 +92,25 @@ class RegistratorSubscriber implements EventSubscriberInterface
         }
 
         $document = $this->documentRegistry->getDocumentForNode($node);
-        $locale = $event->getLocale();
 
-        $originalLocale = $this->documentRegistry->getOriginalLocaleForDocument($document);
         $event->setDocument($document);
+    }
+
+    /**
+     * Stop proppagation if the document is already loaded in the requested locale,
+     * otherwise reset the document locale to the new locale.
+     *
+     * @param HydrateEvent
+     */
+    public function handleStopPropagationAndResetLocale(HydrateEvent $event)
+    {
+        if (!$event->hasDocument()) {
+            return;
+        }
+
+        $locale = $event->getLocale();
+        $document = $event->getDocument();
+        $originalLocale = $this->documentRegistry->getOriginalLocaleForDocument($document);
 
         if (true === $this->documentRegistry->isHydrated($document) && $originalLocale === $locale) {
             $event->stopPropagation();
