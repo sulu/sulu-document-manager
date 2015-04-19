@@ -20,6 +20,7 @@ use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Event\ClearEvent;
 use Sulu\Component\DocumentManager\Event\FindEvent;
 use PHPCR\Util\UUIDHelper;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 
 /**
  * Responsible for registering and deregistering documents and PHPCR nodes
@@ -51,7 +52,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
             Events::HYDRATE => array(
                 array('handleDefaultLocale', 520),
                 array('handleDocumentFromRegistry', 510),
-                array('handlehandleStopPropagationAndResetLocale', 509),
+                array('handleStopPropagationAndResetLocale', 509),
                 array('handleHydrate', 490),
                 array('handleEndHydrate', -500),
             ),
@@ -65,6 +66,11 @@ class RegistratorSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * Set the default locale for the hydration request
+     *
+     * @param HydrateEvent
+     */
     public function handleDefaultLocale(HydrateEvent $event)
     {
         // set the default locale
@@ -74,7 +80,6 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Set the default locale for the hydration request
      * If there is already a document for the node registered, use that.
      *
      * @param HydrateEvent
@@ -120,11 +125,25 @@ class RegistratorSubscriber implements EventSubscriberInterface
         $this->documentRegistry->updateLocale($document, $locale, $locale);
     }
 
+    /**
+     * When the hydrate request has finished, mark the document has hydrated.
+     * This should be the last event listener called.
+     *
+     * @param HydrateEvent $event
+     */
     public function handleEndHydrate(HydrateEvent $event)
     {
         $this->documentRegistry->markDocumentAsHydrated($event->getDocument());
     }
 
+    /**
+     * After the persist event has ended, unmark the document from being hydrated so that
+     * it will be re-hydrated on the next request.
+     *
+     * TODO: There might be better ways to ensure that the document state is updated.
+     *
+     * @param PersistEvent $event
+     */
     public function handleEndPersist(PersistEvent $event)
     {
         $this->documentRegistry->unmarkDocumentAsHydrated($event->getDocument());
@@ -152,6 +171,8 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Register any document that has been created in the hydrate event.
+     *
      * @param HydrateEvent $event
      */
     public function handleHydrate(HydrateEvent $event)
@@ -160,6 +181,8 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Register any document that has been created in the persist event.
+     *
      * @param PersistEvent $event
      */
     public function handlePersist(PersistEvent $event)
@@ -168,7 +191,9 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param RemoveEvent
+     * Deregister removed documents
+     *
+     * @param RemoveEvent $Event
      */
     public function handleRemove(RemoveEvent $event)
     {
@@ -176,12 +201,24 @@ class RegistratorSubscriber implements EventSubscriberInterface
         $this->documentRegistry->deregisterDocument($document);
     }
 
+    /**
+     * Clear the register on the "clear" event
+     *
+     * @param ClearEvent $event
+     */
     public function handleClear(ClearEvent $event)
     {
         $this->documentRegistry->clear();
     }
 
-    private function handleRegister(Event $event)
+    /*
+     * Register the document and apparently update the locale -- 
+     *
+     * TODO: Is locale handling already done above??
+     *
+     * @param AbstractMappingEvent $event
+     */
+    private function handleRegister(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();
         $node = $event->getNode();
