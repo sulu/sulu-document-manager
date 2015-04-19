@@ -43,6 +43,23 @@ class MoveEvent extends Event
     {
         return $this->destId;
     }
-    
+
+    public function setDestName($name)
+    {
+        $this->destName = $name;
+    }
+
+    public function getDestName()
+    {
+        if (!$this->destName) {
+            throw new \RuntimeException(sprintf(
+                'No destName set in copy/move event when copying/moving document "%s" to "%s" . This should have been set by a listener',
+                spl_object_hash($this->document),
+                $this->destId
+            ));
+        }
+
+        return $this->destName;
+    }
 }
 

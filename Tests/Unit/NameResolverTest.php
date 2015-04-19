@@ -21,6 +21,7 @@ class NameResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->parentNode = $this->prophesize(NodeInterface::class);
         $this->node = $this->prophesize(NodeInterface::class);
         $this->nameResolver = new NameResolver();
     }
@@ -28,10 +29,10 @@ class NameResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * It return the requested name if the parent has no child with the requested name
      */
-    public function testGetForClass()
+    public function testResolve()
     {
-        $this->node->hasNode('foo')->willReturn(false);
-        $name = $this->nameResolver->resolveName($this->node->reveal(), 'foo');
+        $this->parentNode->hasNode('foo')->willReturn(false);
+        $name = $this->nameResolver->resolveName($this->parentNode->reveal(), 'foo');
 
         $this->assertEquals('foo', $name);
     }
@@ -39,14 +40,26 @@ class NameResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * It should increment the name if the node has a child with the requested name
      */
-    public function testGetForClassNotFound()
+    public function testResolveIncerement()
     {
-        $this->node->hasNode('foo')->willReturn(true);
-        $this->node->hasNode('foo-1')->willReturn(true);
-        $this->node->hasNode('foo-2')->willReturn(false);
+        $this->parentNode->hasNode('foo')->willReturn(true);
+        $this->parentNode->hasNode('foo-1')->willReturn(true);
+        $this->parentNode->hasNode('foo-2')->willReturn(false);
 
-        $name = $this->nameResolver->resolveName($this->node->reveal(), 'foo');
+        $name = $this->nameResolver->resolveName($this->parentNode->reveal(), 'foo');
         $this->assertEquals('foo-2', $name);
+    }
+
+    /**
+     * If child exists with requeted name, child is instance of "for node", then its fine.
+     */
+    public function testResolveSame()
+    {
+        $this->parentNode->hasNode('foo')->willReturn(true);
+        $this->parentNode->getNode('foo')->willReturn($this->node->reveal());
+
+        $name = $this->nameResolver->resolveName($this->parentNode->reveal(), 'foo', $this->node->reveal());
+        $this->assertEquals('foo', $name);
     }
 }
 

@@ -82,14 +82,14 @@ class GeneralSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
         $node = $this->documentRegistry->getNodeForDocument($document);
-        $this->nodeManager->move($node->getPath(), $event->getDestId());
+        $this->nodeManager->move($node->getPath(), $event->getDestId(), $event->getDestName());
     }
 
     public function handleCopy(CopyEvent $event)
     {
         $document = $event->getDocument();
         $node = $this->documentRegistry->getNodeForDocument($document);
-        $newPath = $this->nodeManager->copy($node->getPath(), $event->getDestId());
+        $newPath = $this->nodeManager->copy($node->getPath(), $event->getDestId(), $event->getDestName());
         $event->setCopiedPath($newPath);
     }
 

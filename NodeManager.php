@@ -63,21 +63,21 @@ class NodeManager
      * @param string $srcId
      * @param string $destId
      */
-    public function move($srcId, $destId)
+    public function move($srcId, $destId, $name)
     {
         $srcPath = $this->normalizeToPath($srcId);
         $destPath = $this->normalizeToPath($destId);
-        $destPath = $destPath . '/' . PathHelper::getNodeName($srcPath);
+        $destPath = $destPath . '/' . $name;
 
         $this->session->move($srcPath, $destPath);
     }
 
-    public function copy($srcId, $parentDestId)
+    public function copy($srcId, $destId, $name)
     {
         $workspace = $this->session->getWorkspace();
         $srcPath = $this->normalizeToPath($srcId);
-        $parentDestPath = $this->normalizeToPath($parentDestId);
-        $destPath = $parentDestPath . '/' . PathHelper::getNodeName($srcPath);
+        $parentDestPath = $this->normalizeToPath($destId);
+        $destPath = $parentDestPath . '/' . $name;
 
         $workspace->copy($srcPath, $destPath);
 

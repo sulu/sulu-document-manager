@@ -21,8 +21,12 @@ class NameResolver
      * @param NodeInterface $parentNode
      * @param mixed $name
      */
-    public function resolveName(NodeInterface $parentNode, $name)
+    public function resolveName(NodeInterface $parentNode, $name, $forNode = null)
     {
+        if ($forNode && $parentNode->hasNode($name) && $parentNode->getNode($name) == $forNode) {
+            return $name;
+        }
+
         $index = 0;
         $baseName = $name;
         do {
@@ -31,6 +35,7 @@ class NameResolver
             }
 
             $hasChild = $parentNode->hasNode($name);
+
             $index++;
         } while ($hasChild);
 

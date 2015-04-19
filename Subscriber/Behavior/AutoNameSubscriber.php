@@ -54,7 +54,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         return array(
             Events::PERSIST => array('handlePersist', 480),
             Events::MOVE => array('handleMove', 480),
-            Events::COPY => array('handleMove', 480),
+            Events::COPY => array('handleCopy', 480),
         );
     }
 
@@ -107,20 +107,21 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $parentNode = $this->registry->getNodeForDocument($parentDocument);
         $metadata = $this->metadataFactory->getMetadataForClass(get_class($document));
 
-        if (false === $event->hasNode()) {
+        $node = $event->hasNode() ? $event->getNode() : null;
+
+        $name = $this->resolver->resolveName($parentNode, $name, $node);
+
+        if (null === $node) {
             $node = $this->createNode($parentNode, $metadata, $name);
             $event->setNode($node);
             return;
         }
 
-        $node = $event->getNode();
-
-        if ($parentNode->getNode($name)->getIdentifier() === $node->getIdentifier()) {
+        if ($name === $node->getName()) {
             return;
         }
 
-        $name = $this->resolver->resolveName($parentNode, $name);
-
+        $node = $event->getNode();
         $defaultLocale = $this->registry->getDefaultLocale();
 
         if ($defaultLocale == $event->getLocale()) {
@@ -166,10 +167,6 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $destNode = $this->nodeManager->find($destId);
         $nodeName = $this->resolver->resolveName($destNode, $node->getName());
 
-        if ($nodeName === $node->getName()) {
-            return;
-        }
-
-        $node->rename($nodeName);
+        $event->setDestName($nodeName);
     }
 }
