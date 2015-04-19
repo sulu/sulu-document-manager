@@ -7,7 +7,8 @@
         "symfony-cmf/core-bundle": "~1.2",
         "ocramius/proxy-manager": "~1.0",
         "aferrandini/urlizer": "1.0.*",
-        "symfony-cmf/core-bundle": "~1.1"
+        "symfony-cmf/core-bundle": "~1.1",
+        "symfony/options-resolver": "~2.4"
     },
     "require-dev": {
         "jackalope/jackalope-doctrine-dbal": "~1.2@dev"

@@ -13,15 +13,16 @@ namespace Sulu\Component\DocumentManager\Event;
 use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 
-class PersistEvent extends AbstractDocumentNodeEvent
+class PersistEvent extends AbstractMappingEvent
 {
     /**
      * @param object $document
      */
-    public function __construct($document, $locale)
+    public function __construct($document, $locale, array $options = array())
     {
         $this->document = $document;
         $this->locale = $locale;
+        $this->options = $options;
     }
 
     /**

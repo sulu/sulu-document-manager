@@ -17,7 +17,7 @@ use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Behavior\TimestampBehavior;
 use Sulu\Component\DocumentManager\PropertyEncoder;
 use Sulu\Component\DocumentManager\Behavior\NodeNameBehavior;
-use Sulu\Component\DocumentManager\Event\AbstractDocumentNodeEvent;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 
 /**
  * Maps the node name
@@ -38,7 +38,7 @@ class NodeNameSubscriber implements EventSubscriberInterface
     /**
      * @param HydrateEvent $event
      */
-    public function handleNodeName(AbstractDocumentNodeEvent $event)
+    public function handleNodeName(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();
 

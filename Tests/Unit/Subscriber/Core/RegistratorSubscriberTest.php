@@ -29,7 +29,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
      * It should set the document on hydrate if the document for the node to
      * be hydrated is already in the registry
      */
-    public function testDocumentFromRegistry()
+    public function testBeginHydrate()
     {
         $this->hydrateEvent->hasDocument()->willReturn(false);
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
@@ -38,7 +38,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->registry->getDocumentForNode($this->node->reveal())->willReturn($this->document);
         $this->registry->updateLocale($this->document, 'fr', 'fr')->shouldBeCalled();
         $this->hydrateEvent->setDocument($this->document)->shouldBeCalled();
-        $this->subscriber->handleDocumentFromRegistry($this->hydrateEvent->reveal());
+        $this->subscriber->handleBeginHydrate($this->hydrateEvent->reveal());
     }
 
     /**
@@ -58,21 +58,21 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     /**
      * It should return early if the document has already been set
      */
-    public function testDocumentFromRegistryAlreadySet()
+    public function testBeginHydrateAlreadySet()
     {
         $this->hydrateEvent->hasDocument()->willReturn(true);
-        $this->subscriber->handleDocumentFromRegistry($this->hydrateEvent->reveal());
+        $this->subscriber->handleBeginHydrate($this->hydrateEvent->reveal());
     }
 
     /**
      * Is should return early if the node is not managed
      */
-    public function testDocumentFromRegistryNoNode()
+    public function testBeginHydrateNoNode()
     {
         $this->hydrateEvent->hasDocument()->willReturn(true);
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
         $this->registry->hasNode($this->node->reveal())->willReturn(false);
-        $this->subscriber->handleDocumentFromRegistry($this->hydrateEvent->reveal());
+        $this->subscriber->handleBeginHydrate($this->hydrateEvent->reveal());
     }
 
     /**

@@ -16,6 +16,7 @@ use Sulu\Component\DocumentManager\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPCR\Query\QueryInterface;
 use Sulu\Component\DocumentManager\Query\Query;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocumentManager
 {
@@ -35,11 +36,13 @@ class DocumentManager
      *
      * @param string $id Path or UUID
      * @param string $locale Locale
-     * @param string $aliasOrClass Document alias or class
+     * @param array $options
      */
-    public function find($id, $locale = null, $aliasOrClass = null)
+    public function find($identifier, $locale = null, array $options = array())
     {
-        $event = new Event\FindEvent($id, $locale, $aliasOrClass);
+        $options = $this->getOptionsResolver(Events::FIND)->resolve($options);
+
+        $event = new Event\FindEvent($identifier, $locale, $options);
         $this->eventDispatcher->dispatch(Events::FIND, $event);
 
         return $event->getDocument();
@@ -65,9 +68,12 @@ class DocumentManager
      *
      * @param object $document
      * @param string $locale
+     * @param array $options
      */
-    public function persist($document, $locale)
+    public function persist($document, $locale, array $options = array())
     {
+        $options = $this->getOptionsResolver(Events::FIND)->resolve($options);
+
         $event = new Event\PersistEvent($document, $locale);
         $this->eventDispatcher->dispatch(Events::PERSIST, $event);
     }
@@ -184,5 +190,18 @@ class DocumentManager
         $this->eventDispatcher->dispatch(Events::QUERY_CREATE_BUILDER, $event);
 
         return $event->getQueryBuilder();
+    }
+
+    private function getOptionsResolver($event)
+    {
+        if (isset($this->optionResolver)) {
+            return $this->optionsResolvers[$event];
+        }
+
+        $resolver = new OptionsResolver();
+        $event = new Event\ConfigureOptionsEvent($resolver);
+        $this->eventDispatcher->dispatch(Events::CONFIGURE_OPTIONS, $event);
+
+        return $resolver;
     }
 }

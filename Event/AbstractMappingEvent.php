@@ -14,7 +14,7 @@ use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 
-abstract class AbstractDocumentNodeEvent extends Event
+abstract class AbstractMappingEvent extends Event
 {
     /**
      * @var object $document
@@ -37,13 +37,9 @@ abstract class AbstractDocumentNodeEvent extends Event
     protected $accessor;
 
     /**
-     * @param object $document
+     * @var array
      */
-    public function __construct(NodeInterface $node, $locale)
-    {
-        $this->locale = $locale;
-        $this->node = $node;
-    }
+    protected $options;
 
     /**
      * @return NodeInterface
@@ -70,6 +66,8 @@ abstract class AbstractDocumentNodeEvent extends Event
     }
 
     /**
+     * TODO: Refactor this away
+     *
      * @return DocumentAccessor
      */
     public function getAccessor()
@@ -97,5 +95,13 @@ abstract class AbstractDocumentNodeEvent extends Event
     public function hasNode()
     {
         return null !== $this->node;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions() 
+    {
+        return $this->options;
     }
 }

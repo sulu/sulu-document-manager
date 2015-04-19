@@ -85,7 +85,6 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoParent()
     {
-        $this->persistEvent->hasNode()->willReturn(false);
         $this->document->getTitle()->willReturn('hai');
         $this->document->getParent()->willReturn(null);
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
@@ -97,8 +96,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testAutoName()
     {
-        $this->doTestAutoName('hai', 'hai', true);
-        $this->persistEvent->hasNode()->willReturn(false);
+        $this->doTestAutoName('hai', 'hai', true, false);
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 
@@ -109,10 +107,10 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->persistEvent->getLocale()->willReturn(self::DEFAULT_LOCALE);
-        $this->persistEvent->hasNode()->willReturn(true);
-        $this->doTestAutoName('hai-bye', 'hai-2');
+        $this->doTestAutoName('hai-bye', 'hai-2', false, true);
         $this->node->rename('hai-bye')->shouldBeCalled();
         $this->node->hasNode()->willReturn(true);
+        $this->node->getName()->willReturn('foo');
 
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
@@ -124,10 +122,10 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->persistEvent->getLocale()->willReturn('ay');
-        $this->persistEvent->hasNode()->willReturn(true);
-        $this->doTestAutoName('hai-bye', 'hai-2');
+        $this->doTestAutoName('hai-bye', 'hai-2', false, true);
         $this->node->rename('hai-bye')->shouldNotBeCalled();
         $this->node->hasNode()->willReturn(true);
+        $this->node->getName()->willReturn('foo');
 
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
@@ -143,25 +141,30 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->nodeManager->find(1234)->willReturn($this->node->reveal());
         $this->node->getName()->willReturn('foo');
         $this->resolver->resolveName($this->node->reveal(), 'foo')->willReturn('foobar');
-        $this->node->rename('foobar')->shouldBeCalled();
+        $this->moveEvent->setDestName('foobar')->shouldBeCalled();
 
         $this->subscriber->handleMove($this->moveEvent->reveal());
     }
 
-    private function doTestAutoName($title, $expectedName, $create = false)
+    private function doTestAutoName($title, $expectedName, $create = false, $hasNode = false)
     {
+        $this->persistEvent->hasNode()->willReturn($hasNode);
+        $node = $hasNode ? $this->node->reveal() : null;
+
         $phpcrType = 'sulu:test';
         $this->document->getTitle()->willReturn($title);
         $this->document->getParent()->willReturn($this->parent);
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->slugifier->slugify($title)->willReturn($title);
-        $this->resolver->resolveName($this->parentNode->reveal(), $title)->willReturn($title);
+
+        $this->resolver->resolveName($this->parentNode->reveal(), $title, $node)->willReturn($title);
         $this->documentRegistry->getNodeForDocument($this->parent)->willReturn($this->parentNode->reveal());
         $this->metadataFactory->getMetadataForClass(get_class($this->document->reveal()))->willReturn($this->metadata->reveal());
 
         if (!$create) {
             return;
         }
+
         $this->parentNode->addNode($expectedName)->willReturn($this->newNode->reveal());
         $this->metadata->getPhpcrType()->willReturn($phpcrType);
         $this->newNode->addMixin($phpcrType)->shouldBeCalled();

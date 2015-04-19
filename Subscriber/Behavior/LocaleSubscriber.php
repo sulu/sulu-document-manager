@@ -14,7 +14,7 @@ use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Behavior\LocaleBehavior;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Sulu\Component\DocumentManager\Event\AbstractDocumentNodeEvent;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 
 /**
@@ -40,7 +40,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function handleLocale(AbstractDocumentNodeEvent $event)
+    public function handleLocale(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();
 

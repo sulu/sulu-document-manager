@@ -16,21 +16,21 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 class FindEvent extends Event
 {
-    private $id;
+    private $identifier;
     private $document;
     private $locale;
-    private $aliasOrClass;
+    private $options = array();
 
-    public function __construct($id, $locale, $aliasOrClass = null)
+    public function __construct($identifier, $locale, array $options = array())
     {
-        $this->id = $id;
+        $this->identifier = $identifier;
         $this->locale = $locale;
-        $this->aliasOrClass = $aliasOrClass;
+        $this->options = $options;
     }
 
     public function getId() 
     {
-        return $this->id;
+        return $this->identifier;
     }
 
     public function getLocale() 
@@ -38,17 +38,12 @@ class FindEvent extends Event
         return $this->locale;
     }
 
-    public function getAliasOrClass() 
-    {
-        return $this->aliasOrClass;
-    }
-
     public function getDocument() 
     {
         if (!$this->document) {
             throw new DocumentManagerException(sprintf(
                 'No document has been set for the findEvent for "%s". An event listener should have done this.',
-                $this->id
+                $this->identifier
             ));
         }
 
@@ -59,5 +54,9 @@ class FindEvent extends Event
     {
         $this->document = $document;
     }
-}
 
+    public function getOptions() 
+    {
+        return $this->options;
+    }
+}

@@ -80,4 +80,9 @@ class Events
      * Fired when a PHPCR query should be executed
      */
     const QUERY_EXECUTE = 'sulu_document_manager.query.execute';
+
+    /**
+     * Enables subscribers to define options
+     */
+    const CONFIGURE_OPTIONS = 'sulu_document_manager.configure_options';
 }

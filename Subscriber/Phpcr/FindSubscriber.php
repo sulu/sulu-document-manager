@@ -50,15 +50,25 @@ class FindSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::FIND => array('handleFind', 500),
+            Events::CONFIGURE_OPTIONS => 'configureOptions',
         );
+    }
+
+    public function configureOptions($event)
+    {
+        $options = $event->getOptions();
+        $options->setDefaults(array(
+            'type' => null
+        ));
     }
 
     public function handleFind(FindEvent $event)
     {
-        $aliasOrClass = $event->getAliasOrClass();
+        $options = $event->getOptions();
+        $aliasOrClass = $options['type'];
         $node = $this->nodeManager->find($event->getId());
 
-        $hydrateEvent = new HydrateEvent($node, $event->getLocale(), $event->getAliasOrClass());
+        $hydrateEvent = new HydrateEvent($node, $event->getLocale(), $options);
         $this->eventDispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
         $document = $hydrateEvent->getDocument();
 

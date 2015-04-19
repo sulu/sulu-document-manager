@@ -22,6 +22,7 @@ use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Event\RefreshEvent;
+use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 
 class DocumentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,6 +133,26 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * It should throw an exception with invalid options
+     *
+     * @expectedException Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
+     */
+    public function testFindWithInvalidOptions()
+    {
+        $subscriber = $this->addSubscriber();
+        $this->manager->find('foo', 'bar', array('foo123' => 'bar'));
+    }
+
+    /**
+     * It should pass options
+     */
+    public function testFindWithOptions()
+    {
+        $subscriber = $this->addSubscriber();
+        $this->manager->find('foo', 'bar', array('test.foo' => 'bar'));
+    }
+
+    /**
      * It should issue a query create event
      */
     public function testQueryCreate()
@@ -201,8 +222,17 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
             Events::QUERY_CREATE_BUILDER => 'handleQueryBuilderCreate',
             Events::QUERY_EXECUTE => 'handleQueryExecute',
             Events::REFRESH => 'handleRefresh',
-            Events::REORDER => 'handleReorder'
+            Events::REORDER => 'handleReorder',
+            Events::CONFIGURE_OPTIONS => 'handleConfigureOptions'
         );
+    }
+
+    public function handleConfigureOptions(ConfigureOptionsEvent $event)
+    {
+        $options = $event->getOptions();
+        $options->setDefaults(array(
+            'test.foo' => 'bar'
+        ));
     }
 
     public function handlePersist(PersistEvent $event)

@@ -14,12 +14,12 @@ use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 
-class HydrateEvent extends AbstractDocumentNodeEvent
+class HydrateEvent extends AbstractMappingEvent
 {
     /**
      * @param object $document
      */
-    public function __construct(NodeInterface $node, $locale)
+    public function __construct(NodeInterface $node, $locale, array $options = array())
     {
         $this->locale = $locale;
         $this->node = $node;

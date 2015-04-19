@@ -19,7 +19,7 @@ use Sulu\Component\DocumentManager\PropertyEncoder;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Sulu\Component\Security\Authentication\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Sulu\Component\DocumentManager\Event\AbstractDocumentNodeEvent;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use PHPCR\PropertyType;
 
 /**
@@ -94,7 +94,7 @@ class BlameSubscriber implements EventSubscriberInterface
     /**
      * @param HydrateEvent $event
      */
-    public function handleHydrate(AbstractDocumentNodeEvent $event)
+    public function handleHydrate(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();
 
