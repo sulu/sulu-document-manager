@@ -102,7 +102,7 @@ class ProxyFactory
      *
      * @return ChildrenCollection
      */
-    public function createChildrenCollection($document)
+    public function createChildrenCollection($document, array $options = array())
     {
         $node = $this->registry->getNodeForDocument($document);
         $locale = $this->registry->getOriginalLocaleForDocument($document);
@@ -110,7 +110,8 @@ class ProxyFactory
         return new ChildrenCollection(
             $node,
             $this->dispatcher,
-            $locale
+            $locale,
+            $options
         );
     }
 

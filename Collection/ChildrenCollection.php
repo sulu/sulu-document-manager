@@ -26,14 +26,16 @@ class ChildrenCollection extends AbstractLazyCollection
     private $dispatcher;
     private $parentNode;
     private $locale;
+    private $options;
 
     private $initialized = false;
 
-    public function __construct(NodeInterface $parentNode, EventDispatcherInterface $dispatcher, $locale)
+    public function __construct(NodeInterface $parentNode, EventDispatcherInterface $dispatcher, $locale, $options = array())
     {
         $this->parentNode = $parentNode;
         $this->dispatcher = $dispatcher;
         $this->locale = $locale;
+        $this->options = $options;
     }
 
     public function current()
@@ -41,7 +43,7 @@ class ChildrenCollection extends AbstractLazyCollection
         $this->initialize();
         $childNode = $this->elements->current();
 
-        $hydrateEvent = new HydrateEvent($childNode, $this->locale);
+        $hydrateEvent = new HydrateEvent($childNode, $this->locale, $this->options);
         $this->dispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
 
         return $hydrateEvent->getDocument();

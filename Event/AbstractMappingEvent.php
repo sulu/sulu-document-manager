@@ -104,4 +104,13 @@ abstract class AbstractMappingEvent extends Event
     {
         return $this->options;
     }
+
+    public function getOption($name, $default = null)
+    {
+        if (isset($this->options[$name])) {
+            return $this->options[$name];
+        }
+
+        return $default;
+    }
 }

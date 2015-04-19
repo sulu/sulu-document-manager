@@ -53,6 +53,6 @@ class ChildrenSubscriber implements EventSubscriberInterface
         }
 
         $accessor = $event->getAccessor();
-        $accessor->set('children', $this->proxyFactory->createChildrenCollection($document));
+        $accessor->set('children', $this->proxyFactory->createChildrenCollection($document, $event->getOptions()));
     }
 }

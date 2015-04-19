@@ -88,8 +88,21 @@ class RegistratorSubscriber implements EventSubscriberInterface
 
         $document = $this->documentRegistry->getDocumentForNode($node);
         $locale = $event->getLocale();
-        $this->documentRegistry->updateLocale($document, $locale, $locale);
+
+        $originalLocale = $this->documentRegistry->getOriginalLocaleForDocument($document);
         $event->setDocument($document);
+
+        if (true === $this->documentRegistry->isHydrated($document) && $originalLocale === $locale) {
+            $event->stopPropagation();
+            return;
+        }
+
+        $this->documentRegistry->updateLocale($document, $locale, $locale);
+    }
+
+    public function handleEndHydrate(HydrateEvent $event)
+    {
+        $this->documentRegistry->markDocumentAsHydrated($event->getDocument());
     }
 
     public function handleEndPersist(PersistEvent $event)
@@ -123,11 +136,6 @@ class RegistratorSubscriber implements EventSubscriberInterface
      */
     public function handleHydrate(HydrateEvent $event)
     {
-        if ($this->documentRegistry->isHydrated($event->getDocument(), $event->getLocale())) {
-            $event->stopPropagation();
-            return;
-        }
-
         $this->handleRegister($event);
     }
 
@@ -151,11 +159,6 @@ class RegistratorSubscriber implements EventSubscriberInterface
     public function handleClear(ClearEvent $event)
     {
         $this->documentRegistry->clear();
-    }
-
-    public function handleEndHydrate(HydrateEvent $event)
-    {
-        $this->documentRegistry->markDocumentAsHydrated($event->getDocument(), $event->getLocale());
     }
 
     private function handleRegister(Event $event)

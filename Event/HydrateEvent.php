@@ -23,6 +23,7 @@ class HydrateEvent extends AbstractMappingEvent
     {
         $this->locale = $locale;
         $this->node = $node;
+        $this->options = $options;
     }
 
     /**

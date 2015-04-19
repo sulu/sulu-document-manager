@@ -299,10 +299,10 @@ class DocumentRegistry
      *
      * @param object $document
      */
-    public function markDocumentAsHydrated($document, $locale)
+    public function markDocumentAsHydrated($document)
     {
         $oid = spl_object_hash($document);
-        $this->hydrationState[$oid] = $locale;
+        $this->hydrationState[$oid] = true;
     }
 
     public function unmarkDocumentAsHydrated($document) 
@@ -318,18 +318,14 @@ class DocumentRegistry
      *
      * @return boolean
      */
-    public function isHydrated($document, $locale)
+    public function isHydrated($document)
     {
         $oid = spl_object_hash($document);
 
-        if (!isset($this->hydrationState[$oid])) {
-            return false;
+        if (isset($this->hydrationState[$oid])) {
+            return true;
         }
 
-        if ($this->hydrationState[$oid] !== $locale) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 }
