@@ -58,7 +58,7 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
         return $this->elements->valid();
     }
 
-    public function getArrayCopy()
+    public function toArray()
     {
         $copy = array();
         foreach ($this as $document) {
