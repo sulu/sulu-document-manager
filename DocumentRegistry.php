@@ -5,6 +5,7 @@ namespace Sulu\Component\DocumentManager;
 use PHPCR\NodeInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Handles the mapping between managed documents and nodes
@@ -47,11 +48,17 @@ class DocumentRegistry
     private $hydrationState = array();
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger = null;
+
+    /**
      * @param $defaultLocale
      */
-    public function __construct($defaultLocale)
+    public function __construct($defaultLocale, LoggerInterface $logger = null)
     {
         $this->defaultLocale = $defaultLocale;
+        $this->logger = $logger;
     }
 
     /**
@@ -68,6 +75,13 @@ class DocumentRegistry
 
         $oid = $this->getObjectIdentifier($document);
         $uuid = $node->getIdentifier();
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                '%-24s: %s, node: "%s" (%s), locale: "%s"',
+                __FUNCTION__, $oid, $node->getPath(), $uuid, $locale
+            ));
+        }
 
         // do not allow nodes wihout UUIDs or reregistration of documents
         $this->validateDocumentRegistration($document, $node, $oid, $uuid);
@@ -91,6 +105,13 @@ class DocumentRegistry
         $oid = $this->getObjectIdentifier($document);
         $this->originalLocaleMap[$oid] = $originalLocale;
         $this->documentLocaleMap[$oid] = $locale;
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                '%-24s: %s, locale: "%s", original locale: "%s"',
+                __FUNCTION__, $oid, $locale, $originalLocale
+            ));
+        }
     }
 
     /**
@@ -130,6 +151,13 @@ class DocumentRegistry
         $this->documentLocaleMap = array();
         $this->originalLocaleMap = array();
         $this->hydrationState = array();
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                'clear',
+                $oid, $locale, $originalLocale
+            ));
+        }
     }
 
     /**
@@ -153,6 +181,13 @@ class DocumentRegistry
         unset($this->documentLocaleMap[$oid]);
         unset($this->originalLocaleMap[$oid]);
         unset($this->hydrationState[$oid]);
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                '%-24s: %s',
+                __FUNCTION__, $oid
+            ));
+        }
     }
 
     /**
@@ -308,6 +343,13 @@ class DocumentRegistry
     {
         $oid = spl_object_hash($document);
         $this->hydrationState[$oid] = true;
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                '%-24s: %s',
+                __FUNCTION__, $oid
+            ));
+        }
     }
 
     /**
@@ -320,6 +362,13 @@ class DocumentRegistry
     {
         $oid = spl_object_hash($document);
         unset($this->hydrationState[$oid]);
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                '%-24s: %s',
+                __FUNCTION__, $oid
+            ));
+        }
     }
 
     /**
