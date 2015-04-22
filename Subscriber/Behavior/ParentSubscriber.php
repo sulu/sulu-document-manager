@@ -22,6 +22,7 @@ use Sulu\Component\DocumentManager\ProxyFactory;
 use Sulu\Component\DocumentManager\DocumentInspector;
 use Sulu\Component\DocumentManager\DocumentManager;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Event\MoveEvent;
 
 /**
  * Set the parent and children on the doucment
@@ -55,7 +56,15 @@ class ParentSubscriber implements EventSubscriberInterface
         return array(
             Events::HYDRATE => 'handleHydrate',
             Events::PERSIST => 'handleChangeParent',
+            Events::MOVE => 'handleMove',
         );
+    }
+
+    public function handleMove(MoveEvent $event)
+    {
+        $document = $event->getDocument();
+        $node = $this->inspector->getNode($event->getDocument());
+        $this->mapParent($document, $node);
     }
 
     /**
