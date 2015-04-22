@@ -63,10 +63,6 @@ class RemoveSubscriber implements EventSubscriberInterface
         $document = $event->getDocument();
         $node = $this->documentRegistry->getNodeForDocument($document);
 
-        if ($event->getDereference()) {
-            $this->dereference($node);
-        }
-
         $node->remove();
     }
 

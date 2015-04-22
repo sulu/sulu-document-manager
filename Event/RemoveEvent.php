@@ -15,16 +15,4 @@ use Symfony\Component\EventDispatcher\Event;
 
 class RemoveEvent extends AbstractDocumentEvent
 {
-    private $dereference;
-
-    public function __construct($document, $dereference)
-    {
-        parent::__construct($document);
-        $this->dereference = $dereference;
-    }
-
-    public function getDereference() 
-    {
-        return $this->dereference;
-    }
 }
