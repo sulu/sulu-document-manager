@@ -23,7 +23,7 @@ use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
-use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
+use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
 use Sulu\Component\DocumentManager\ProxyFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ProxyManager\Proxy\LazyLoadingInterface;

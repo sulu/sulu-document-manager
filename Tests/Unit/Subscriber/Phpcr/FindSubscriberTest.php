@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber;
+namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber\Phpcr;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Sulu\Component\DocumentManager\NodeManager;
@@ -65,14 +65,16 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testFindWithTypeOrClass($type, $typeOrClass, $shouldThrow)
     {
         if ($shouldThrow) {
+            $this->metadataFactory->getAliases()->willReturn(array('test1', 'test2'));
             $this->setExpectedException(DocumentManagerException::class);
         }
         if ($type === 'alias') {
             $this->metadataFactory->hasAlias($typeOrClass)->willReturn(true);
             $this->metadataFactory->getMetadataForAlias($typeOrClass)->willReturn($this->metadata);
             $this->metadata->getClass()->willReturn('stdClass');
+        } else {
+            $this->metadataFactory->hasAlias($typeOrClass)->willReturn(false);
         }
-
         $options = array(
             'type' => $typeOrClass
         );

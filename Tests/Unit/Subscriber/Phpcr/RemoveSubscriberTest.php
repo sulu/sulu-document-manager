@@ -46,62 +46,6 @@ class RemoveSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHandleRemove()
     {
         $this->removeEvent->getDocument()->willReturn($this->document);
-        $this->removeEvent->getDereference()->willReturn(false);
-        $this->node->remove()->shouldBeCalled();
-
-        $this->subscriber->handleRemove($this->removeEvent->reveal());
-    }
-
-    /**
-     * It should be able to remove properties referrering to the node being removed
-     */
-    public function testHanldeRemoveWithDereferemceProperties()
-    {
-        $this->removeEvent->getDocument()->willReturn($this->document);
-        $this->removeEvent->getDereference()->willReturn(true);
-
-        $this->node->getReferences()->willReturn(array(
-            $this->property1
-        ));
-
-        $this->property1->isMultiple()->willReturn(false);
-        $this->property1->remove()->shouldBeCalled();
-        $this->node->remove()->shouldBeCalled();
-
-        $this->subscriber->handleRemove($this->removeEvent->reveal());
-    }
-
-    /**
-     * It should be able to remove multivalued references to the node being removed
-     */
-    public function testHandleRemoveWithDereferenceMultiValued()
-    {
-        $this->removeEvent->getDocument()->willReturn($this->document);
-        $this->removeEvent->getDereference()->willReturn(true);
-
-        $this->node->getReferences()->willReturn(array(
-            $this->property1
-        ));
-
-        $this->property1->isMultiple()->willReturn(true);
-        $this->property1->getValue()->willReturn(array(
-            $this->node1->reveal(),
-            $this->node2->reveal()
-        ));
-
-        $this->node->getIdentifier()->willReturn('3333');
-        $this->node1->getIdentifier()->willReturn('7777');
-        $this->node2->getIdentifier()->willReturn('3333');
-
-        $this->property1->getParent()->willReturn(
-            $this->node2->reveal()
-        );
-        $this->property1->getName()->willReturn('hello');
-
-        $this->node2->setProperty('hello', array(
-            $this->node1->reveal()
-        ))->shouldBeCalled();
-
         $this->node->remove()->shouldBeCalled();
 
         $this->subscriber->handleRemove($this->removeEvent->reveal());
