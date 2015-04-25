@@ -1,14 +1,14 @@
 <?php
 
-namespace Sulu\Comonent\DocumentManager\Tests\Unit\Query;
+namespace Sulu\Comonent\DocumentManager\tests\Unit\Query;
 
-use PHPCR\Query\QueryResultInterface;
-use Sulu\Component\DocumentManager\Query\Query;
 use PHPCR\Query\QueryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPCR\Query\QueryResultInterface;
 use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
-use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Query\Query;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class QueryTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to return PHPCR results
+     * It should be able to return PHPCR results.
      */
     public function testExecutePhpcr()
     {
@@ -56,7 +56,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return documents by default
+     * It should return documents by default.
      */
     public function testExecuteDocument()
     {

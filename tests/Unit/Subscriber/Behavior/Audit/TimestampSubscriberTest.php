@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,17 +8,17 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit;
 
-use Sulu\Component\DocumentManager\Subscriber\Behavior\Audit\TimestampSubscriber;
-use Sulu\Component\DocumentManager\PropertyEncoder;
+use PHPCR\NodeInterface;
+use Prophecy\Argument;
+use Sulu\Component\DocumentManager\Behavior\Audit\TimestampBehavior;
+use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
-use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Behavior\Audit\TimestampBehavior;
-use Prophecy\Argument;
-use Sulu\Component\DocumentManager\DocumentAccessor;
+use Sulu\Component\DocumentManager\PropertyEncoder;
+use Sulu\Component\DocumentManager\Subscriber\Behavior\Audit\TimestampSubscriber;
 
 class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +26,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
-        $this->notImplementing = new \stdClass;
+        $this->notImplementing = new \stdClass();
         $this->encoder = $this->prophesize(PropertyEncoder::class);
         $this->node = $this->prophesize(NodeInterface::class);
         $this->accessor = $this->prophesize(DocumentAccessor::class);
@@ -38,7 +39,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if the document is not implementing the behavior
+     * It should return early if the document is not implementing the behavior.
      */
     public function testPersistNotImplementing()
     {
@@ -47,7 +48,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should assign "created" if there is created is actually null
+     * It should assign "created" if there is created is actually null.
      */
     public function testPersistCreatedWhenNull()
     {
@@ -65,7 +66,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should always assign "changed"
+     * It should always assign "changed".
      */
     public function testPersistChanged()
     {
@@ -81,7 +82,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early when not implementing
+     * It should return early when not implementing.
      */
     public function testHydrateNotImplementing()
     {
@@ -90,7 +91,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should set the created and updated fields on the document
+     * It should set the created and updated fields on the document.
      */
     public function testHydrate()
     {
@@ -111,7 +112,6 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->accessor->set('created', $this->createdDate);
         $this->accessor->set('changed', $this->createdDate);
     }
-
 }
 
 class TestDocument implements TimestampBehavior

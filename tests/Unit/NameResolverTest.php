@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -8,13 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
+namespace Sulu\Component\DocumentManager\tests\Unit;
 
-use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Exception\MetadataNotFoundException;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Document\UnknownDocument;
 use Sulu\Component\DocumentManager\NameResolver;
 
 class NameResolverTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +24,7 @@ class NameResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It return the requested name if the parent has no child with the requested name
+     * It return the requested name if the parent has no child with the requested name.
      */
     public function testResolve()
     {
@@ -38,7 +35,7 @@ class NameResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should increment the name if the node has a child with the requested name
+     * It should increment the name if the node has a child with the requested name.
      */
     public function testResolveIncerement()
     {
@@ -62,4 +59,3 @@ class NameResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $name);
     }
 }
-

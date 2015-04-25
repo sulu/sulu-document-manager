@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,21 +11,19 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Core;
 
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use Sulu\Component\DocumentManager\DocumentRegistry;
-use Symfony\Component\EventDispatcher\Event;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Event\ClearEvent;
-use Sulu\Component\DocumentManager\Event\FindEvent;
-use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
+use Sulu\Component\DocumentManager\Event\ClearEvent;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Event\RemoveEvent;
+use Sulu\Component\DocumentManager\Events;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Responsible for registering and deregistering documents and PHPCR nodes
- * with the Document Registry
+ * with the Document Registry.
  */
 class RegistratorSubscriber implements EventSubscriberInterface
 {
@@ -38,8 +37,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
      */
     public function __construct(
         DocumentRegistry $documentRegistry
-    )
-    {
+    ) {
         $this->documentRegistry = $documentRegistry;
     }
 
@@ -67,7 +65,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Set the default locale for the hydration request
+     * Set the default locale for the hydration request.
      *
      * @param HydrateEvent
      */
@@ -119,6 +117,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
 
         if (true === $this->documentRegistry->isHydrated($document) && $originalLocale === $locale) {
             $event->stopPropagation();
+
             return;
         }
 
@@ -150,11 +149,11 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * If the node for the persisted documnet is in the registry
+     * If the node for the persisted documnet is in the registry.
      *
      * @param PersistEvent
      */
-    public function handleNodeFromRegistry(PersistEvent $event) 
+    public function handleNodeFromRegistry(PersistEvent $event)
     {
         if ($event->hasNode()) {
             return;
@@ -191,7 +190,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Deregister removed documents
+     * Deregister removed documents.
      *
      * @param RemoveEvent $Event
      */
@@ -202,7 +201,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Clear the register on the "clear" event
+     * Clear the register on the "clear" event.
      *
      * @param ClearEvent $event
      */
@@ -212,7 +211,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /*
-     * Register the document and apparently update the locale -- 
+     * Register the document and apparently update the locale --
      *
      * TODO: Is locale handling already done above??
      *
@@ -226,6 +225,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
 
         if ($this->documentRegistry->hasDocument($document)) {
             $this->documentRegistry->updateLocale($document, $locale);
+
             return;
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,21 +8,20 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit;
 
-use Sulu\Component\DocumentManager\Subscriber\Behavior\Audit\BlameSubscriber;
-use Sulu\Component\DocumentManager\PropertyEncoder;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\Audit\BlameBehavior;
-use Prophecy\Argument;
 use Sulu\Component\DocumentManager\DocumentAccessor;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\PropertyEncoder;
+use Sulu\Component\DocumentManager\Subscriber\Behavior\Audit\BlameSubscriber;
+use Sulu\Component\Security\Authentication\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Sulu\Component\Security\Authentication\UserInterface;
 
 class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,13 +33,13 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
-        $this->notImplementing = new \stdClass;
+        $this->notImplementing = new \stdClass();
         $this->encoder = $this->prophesize(PropertyEncoder::class);
         $this->node = $this->prophesize(NodeInterface::class);
         $this->accessor = $this->prophesize(DocumentAccessor::class);
         $this->user = $this->prophesize(UserInterface::class);
         $this->anonymousToken = $this->prophesize(AnonymousToken::class);
-        $this->notUser = new \stdClass;
+        $this->notUser = new \stdClass();
         $this->token = $this->prophesize(TokenInterface::class);
         $this->tokenStorage = $this->prophesize(TokenStorage::class);
         $this->document = new BlameTestDocument();
@@ -53,7 +53,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if the document is not implementing the behavior
+     * It should return early if the document is not implementing the behavior.
      */
     public function testPersistNotImplementing()
     {
@@ -62,7 +62,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if the token is null
+     * It should return early if the token is null.
      */
     public function testPersistTokenIsNull()
     {
@@ -73,7 +73,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if the token is AnonymousToken
+     * It should return early if the token is AnonymousToken.
      */
     public function testPersistTokenIsAnonymous()
     {
@@ -84,7 +84,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the token is not a Sulu User
+     * It should throw an exception if the token is not a Sulu User.
      *
      * @expectedException InvalidArgumentException
      */
@@ -98,7 +98,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should assign "creator" if there is creator is actually null
+     * It should assign "creator" if there is creator is actually null.
      */
     public function testPersistCreatorWhenNull()
     {
@@ -121,7 +121,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should always assign "changer"
+     * It should always assign "changer".
      */
     public function testPersistChanger()
     {
@@ -141,7 +141,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early when not implementing
+     * It should return early when not implementing.
      */
     public function testHydrateNotImplementing()
     {
@@ -150,7 +150,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should set the creator and updated fields on the document
+     * It should set the creator and updated fields on the document.
      */
     public function testHydrate()
     {
@@ -171,7 +171,6 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->accessor->set('creator', 1);
         $this->accessor->set('changer', 2);
     }
-
 }
 
 class BlameTestDocument implements BlameBehavior

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,20 +11,14 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
+use Sulu\Component\DocumentManager\Behavior\Mapping\PathBehavior;
+use Sulu\Component\DocumentManager\DocumentInspector;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
-use PHPCR\NodeInterface;
-use ProxyManager\Proxy\LazyLoadingInterface;
-use Sulu\Component\DocumentManager\ProxyFactory;
-use Sulu\Component\DocumentManager\DocumentInspector;
-use Sulu\Component\DocumentManager\Behavior\Mapping\PathBehavior;
 
 /**
- * Set the path on the document
+ * Set the path on the document.
  */
 class PathSubscriber implements EventSubscriberInterface
 {
@@ -64,4 +59,3 @@ class PathSubscriber implements EventSubscriberInterface
         );
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,9 +11,9 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-use Sulu\Component\DocumentManager\Query\Query;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Component\DocumentManager\Query\Query;
+use Symfony\Component\EventDispatcher\Event;
 
 class QueryCreateEvent extends Event
 {
@@ -38,12 +39,12 @@ class QueryCreateEvent extends Event
         $this->query = $query;
     }
 
-    public function getLocale() 
+    public function getLocale()
     {
         return $this->locale;
     }
 
-    public function getPrimarySelector() 
+    public function getPrimarySelector()
     {
         return $this->primarySelector;
     }

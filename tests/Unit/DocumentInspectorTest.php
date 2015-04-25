@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,13 +8,13 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
 
+namespace Sulu\Component\DocumentManager\tests\Unit;
+
+use PHPCR\NodeInterface;
+use Sulu\Component\DocumentManager\DocumentInspector;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\PathSegmentRegistry;
-use Sulu\Component\DocumentManager\DocumentInspector;
-use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\ProxyFactory;
 
 class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
@@ -22,7 +23,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
         $this->pathRegistry = $this->prophesize(PathSegmentRegistry::class);
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
         $this->node = $this->prophesize(NodeInterface::class);
         $this->proxyFactory = $this->prophesize(ProxyFactory::class);
         $this->documentInspector = new DocumentInspector(
@@ -33,7 +34,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the current locale for the given document
+     * It should return the current locale for the given document.
      */
     public function testGetLocale()
     {
@@ -44,7 +45,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the document path
+     * It should return the document path.
      */
     public function testGetPath()
     {
@@ -56,7 +57,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return a PHPCR node
+     * It should return a PHPCR node.
      */
     public function testGetPhpcrNode()
     {
@@ -67,7 +68,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the depth of the document in the repository
+     * It should return the depth of the document in the repository.
      */
     public function testGetDepth()
     {
@@ -78,7 +79,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the name of the document
+     * It should return the name of the document.
      */
     public function testGetName()
     {
@@ -89,11 +90,11 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return a children
+     * It should return a children.
      */
     public function testGetChildren()
     {
-        $childrenCollection = new \stdClass;
+        $childrenCollection = new \stdClass();
         $this->proxyFactory->createChildrenCollection($this->document)->willReturn($childrenCollection);
         $this->assertEquals(
             $childrenCollection,

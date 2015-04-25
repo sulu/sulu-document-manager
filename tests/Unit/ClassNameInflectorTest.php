@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -8,11 +9,8 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
+namespace Sulu\Component\DocumentManager\tests\Unit;
 
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\ClassNameInflector;
 
 class ClassNameInflectorTest extends \PHPUnit_Framework_TestCase
@@ -25,4 +23,3 @@ class ClassNameInflectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-

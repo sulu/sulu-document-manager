@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -13,7 +14,7 @@ namespace Sulu\Component\DocumentManager\Behavior\Children;
 interface ChildrenBehavior
 {
     /**
-     * Return the children for this document
+     * Return the children for this document.
      *
      * @return ChildrenCollection
      */

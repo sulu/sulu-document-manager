@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,22 +11,17 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
-
 class CopyEvent extends MoveEvent
 {
     private $copiedPath;
 
-    public function getCopiedPath() 
+    public function getCopiedPath()
     {
         return $this->copiedPath;
     }
-    
+
     public function setCopiedPath($copiedPath)
     {
         $this->copiedPath = $copiedPath;
     }
-    
 }
-

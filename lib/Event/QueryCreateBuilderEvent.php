@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,8 +11,8 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\Query\QueryBuilder;
+use Symfony\Component\EventDispatcher\Event;
 
 class QueryCreateBuilderEvent extends Event
 {
@@ -33,4 +34,3 @@ class QueryCreateBuilderEvent extends Event
         return $this->queryBuilder;
     }
 }
-

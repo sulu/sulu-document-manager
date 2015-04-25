@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -8,11 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
+namespace Sulu\Component\DocumentManager\tests\Unit;
 
-use Sulu\Component\DocumentManager\DocumentRegistry;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Document\UnknownDocument;
+use Sulu\Component\DocumentManager\DocumentRegistry;
 
 class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,11 +23,11 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
         $this->registry = new DocumentRegistry('de');
         $this->node = $this->prophesize(NodeInterface::class);
         $this->node->getIdentifier()->willReturn('1234');
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
     }
 
     /**
-     * It should register a document and its associated PHPCR node
+     * It should register a document and its associated PHPCR node.
      */
     public function testRegisterDocument()
     {
@@ -37,7 +37,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should deregister a given document
+     * It should deregister a given document.
      *
      * @depends testRegisterDocument
      */
@@ -50,7 +50,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception when an unregistered document is deregistered
+     * It should throw an exception when an unregistered document is deregistered.
      *
      * @expectedException \RuntimeException
      */
@@ -60,7 +60,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the PHPCR node for a registered document
+     * It should return the PHPCR node for a registered document.
      *
      * @depends testRegisterDocument
      */
@@ -74,7 +74,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Throw an exception if an attempt is made to re-register a document
+     * Throw an exception if an attempt is made to re-register a document.
      *
      * @expectedException RuntimeException
      * @expectedExceptionMessage is already registered
@@ -82,12 +82,12 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     public function testDifferentInstanceSameNode()
     {
         $this->node->getPath()->willReturn('/path/to');
-        $this->registry->registerDocument(new \stdClass, $this->node->reveal(), 'fr');
-        $this->registry->registerDocument(new \stdClass, $this->node->reveal(), 'fr');
+        $this->registry->registerDocument(new \stdClass(), $this->node->reveal(), 'fr');
+        $this->registry->registerDocument(new \stdClass(), $this->node->reveal(), 'fr');
     }
 
     /**
-     * It should throw an exception if an unregistered document is passed to get node for document
+     * It should throw an exception if an unregistered document is passed to get node for document.
      *
      * @expectedException \RuntimeException
      */
@@ -97,7 +97,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return a document for a mangaed node
+     * It should return a document for a mangaed node.
      *
      * @depends testRegisterDocument
      */
@@ -109,7 +109,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should provide a method to clear the registry
+     * It should provide a method to clear the registry.
      */
     public function testClear()
     {
@@ -120,7 +120,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to determine the locale of a document
+     * It should be able to determine the locale of a document.
      */
     public function testGetLocaleForDocument()
     {
@@ -129,7 +129,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should update a document locale and store the original locale
+     * It should update a document locale and store the original locale.
      */
     public function testUpdateLocale()
     {
@@ -140,7 +140,7 @@ class DocumentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the default locale
+     * It should return the default locale.
      */
     public function testGetDefaultLocale()
     {

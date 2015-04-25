@@ -2,9 +2,6 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\PathSegmentRegistry;
-
 /**
  * This class infers information about documents, for example
  * the documents locale, webspace, path, etc.
@@ -19,15 +16,14 @@ class DocumentInspector
         DocumentRegistry $documentRegistry,
         PathSegmentRegistry $pathSegmentregistry,
         ProxyFactory $proxyFactory
-    )
-    {
+    ) {
         $this->documentRegistry = $documentRegistry;
         $this->pathSegmentRegistry = $pathSegmentregistry;
         $this->proxyFactory = $proxyFactory;
     }
 
     /**
-     * Return the parent document for the given document
+     * Return the parent document for the given document.
      *
      * @param object $document
      *
@@ -38,14 +34,14 @@ class DocumentInspector
         $parentNode = $this->getNode($document)->getParent();
 
         if (!$parentNode) {
-            return null;
+            return;
         }
 
         return $this->proxyFactory->createProxyForNode($document, $parentNode);
     }
 
     /**
-     * Get referrers for the document
+     * Get referrers for the document.
      *
      * @return ReferrerCollection
      */
@@ -55,7 +51,7 @@ class DocumentInspector
     }
 
     /**
-     * Return the PHPCR node for the given document
+     * Return the PHPCR node for the given document.
      *
      * @param object $document
      *
@@ -67,7 +63,7 @@ class DocumentInspector
     }
 
     /**
-     * Returns lazy-loading children collection for given document
+     * Returns lazy-loading children collection for given document.
      *
      * @param object $document
      *
@@ -79,7 +75,7 @@ class DocumentInspector
     }
 
     /**
-     * Return the locale for the given document
+     * Return the locale for the given document.
      *
      * @param object $document
      *
@@ -91,7 +87,7 @@ class DocumentInspector
     }
 
     /**
-     * Reutrn the original (requested) locale for the given document
+     * Reutrn the original (requested) locale for the given document.
      *
      * @param object $document
      *
@@ -103,9 +99,9 @@ class DocumentInspector
     }
 
     /**
-     * Return the depth of the given document within the content repository
+     * Return the depth of the given document within the content repository.
      *
-     * @return integer
+     * @return int
      */
     public function getDepth($document)
     {
@@ -113,7 +109,7 @@ class DocumentInspector
     }
 
     /**
-     * Return the name of the document
+     * Return the name of the document.
      *
      * @return string
      */
@@ -123,7 +119,7 @@ class DocumentInspector
     }
 
     /**
-     * Return the path for the given document
+     * Return the path for the given document.
      *
      * @param object $document
      *
@@ -137,7 +133,7 @@ class DocumentInspector
     }
 
     /**
-     * Return the UUID of the given document
+     * Return the UUID of the given document.
      *
      * @param object $document
      *

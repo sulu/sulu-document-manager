@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,21 +11,19 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Phpcr;
 
-use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
-use Sulu\Component\DocumentManager\Query\Query;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use PHPCR\SessionInterface;
-use Sulu\Component\DocumentManager\Events;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Event\ReorderEvent;
-use PHPCR\Util\UUIDHelper;
 use PHPCR\Util\PathHelper;
+use PHPCR\Util\UUIDHelper;
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
+use Sulu\Component\DocumentManager\Event\ReorderEvent;
+use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Component\DocumentManager\NodeManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Handles the document reorder operation
+ * Handles the document reorder operation.
  */
 class ReorderSubscriber implements EventSubscriberInterface
 {
@@ -52,7 +51,7 @@ class ReorderSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Handle the reorder operation
+     * Handle the reorder operation.
      *
      * @param QueryCreateEvent $event
      */
@@ -77,7 +76,7 @@ class ReorderSubscriber implements EventSubscriberInterface
     private function resolveSiblingName($siblingId, NodeInterface $parentNode, NodeInterface $node)
     {
         if (null === $siblingId) {
-            return null;
+            return;
         }
 
         $siblingPath = $siblingId;
@@ -91,7 +90,6 @@ class ReorderSubscriber implements EventSubscriberInterface
                 $node->getPath(), $siblingPath
             ));
         }
-
 
         if (null !== $siblingPath) {
             return PathHelper::getNodeName($siblingPath);

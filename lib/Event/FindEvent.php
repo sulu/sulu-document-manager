@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,9 +11,8 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Symfony\Component\EventDispatcher\Event;
 
 class FindEvent extends Event
 {
@@ -28,17 +28,17 @@ class FindEvent extends Event
         $this->options = $options;
     }
 
-    public function getId() 
+    public function getId()
     {
         return $this->identifier;
     }
 
-    public function getLocale() 
+    public function getLocale()
     {
         return $this->locale;
     }
 
-    public function getDocument() 
+    public function getDocument()
     {
         if (!$this->document) {
             throw new DocumentManagerException(sprintf(
@@ -55,7 +55,7 @@ class FindEvent extends Event
         $this->document = $document;
     }
 
-    public function getOptions() 
+    public function getOptions()
     {
         return $this->options;
     }

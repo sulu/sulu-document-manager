@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,19 +11,19 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Phpcr;
 
+use PHPCR\Query\QueryInterface;
+use PHPCR\Query\QueryManagerInterface;
+use PHPCR\SessionInterface;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
+use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
+use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Query\Query;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use PHPCR\Query\QueryManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use PHPCR\SessionInterface;
-use PHPCR\Query\QueryInterface;
-use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
-use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
-use Sulu\Component\DocumentManager\Events;
 
 /**
- * Handles creation of query and query builder objects
+ * Handles creation of query and query builder objects.
  */
 class QuerySubscriber implements EventSubscriberInterface
 {
@@ -52,7 +53,7 @@ class QuerySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Create a new Sulu Query object
+     * Create a new Sulu Query object.
      *
      * @param QueryCreateEvent $event
      */
@@ -76,7 +77,7 @@ class QuerySubscriber implements EventSubscriberInterface
 
     /**
      * TODO: We should reuse the PHPCR-ODM query builder here, see:
-     *       https://github.com/doctrine/phpcr-odm/issues/627
+     *       https://github.com/doctrine/phpcr-odm/issues/627.
      *
      * @param QueryCreateBuilderEvent $event
      */
@@ -86,7 +87,7 @@ class QuerySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Handle query execution
+     * Handle query execution.
      *
      * @param QueryExecuteEvent
      */

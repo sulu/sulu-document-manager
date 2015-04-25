@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,20 +8,16 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Behavior\FilingBehavior;
-use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
 use Sulu\Component\DocumentManager\DocumentManager;
 use Sulu\Component\DocumentManager\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
+use Sulu\Component\DocumentManager\NodeManager;
 
 /**
- * Automatically set the parnet at a pre-determined location
+ * Automatically set the parnet at a pre-determined location.
  */
 class AliasFilingSubscriber extends AbstractFilingSubscriber
 {
@@ -31,8 +28,7 @@ class AliasFilingSubscriber extends AbstractFilingSubscriber
         DocumentManager $documentManager,
         MetadataFactory $metadataFactory,
         $basePath
-    )
-    {
+    ) {
         parent::__construct($nodeManager, $documentManager, $basePath);
         $this->metadataFactory = $metadataFactory;
     }

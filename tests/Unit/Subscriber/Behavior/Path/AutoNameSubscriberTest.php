@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,21 +8,21 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
-namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Path;
 
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
-use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AutoNameSubscriber;
-use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
+namespace Sulu\Component\DocumentManager\tests\Unit\Subscriber\Behavior\Path;
+
 use PHPCR\NodeInterface;
 use Prophecy\Argument;
+use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AutoNameSubscriber;
+use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 
 class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,12 +36,12 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->moveEvent = $this->prophesize(MoveEvent::class);
         $this->document = $this->prophesize(AutoNameBehavior::class);
-        $this->parentDocument = new \stdClass;
+        $this->parentDocument = new \stdClass();
         $this->newNode = $this->prophesize(NodeInterface::class);
         $this->node = $this->prophesize(NodeInterface::class);
         $this->parentNode = $this->prophesize(NodeInterface::class);
         $this->metadata = $this->prophesize(Metadata::class);
-        $this->parent = new \stdClass;
+        $this->parent = new \stdClass();
         $this->documentRegistry->getDefaultLocale()->willReturn(self::DEFAULT_LOCALE);
         $this->resolver = $this->prophesize(NameResolver::class);
         $this->nodeManager = $this->prophesize(NodeManager::class);
@@ -55,18 +56,18 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if the document is not an instance of AutoName behavior
+     * It should return early if the document is not an instance of AutoName behavior.
      */
     public function testNotInstanceOfAutoName()
     {
-        $document = new \stdClass;
+        $document = new \stdClass();
         $this->persistEvent->hasNode()->willReturn(false);
         $this->persistEvent->getDocument()->willReturn($document);
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 
     /**
-     * It should throw an exception if the document has no title
+     * It should throw an exception if the document has no title.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\DocumentManagerException
      */
@@ -79,7 +80,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the document has no parent
+     * It should throw an exception if the document has no parent.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\DocumentManagerException
      */
@@ -92,7 +93,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should assign a name based on the documents title
+     * It should assign a name based on the documents title.
      */
     public function testAutoName()
     {
@@ -101,7 +102,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should rename the node if the document is being saved in the default locale
+     * It should rename the node if the document is being saved in the default locale.
      */
     public function testAlreadyHasNode()
     {
@@ -118,7 +119,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should not rename the node if the document is being saved a non-default locale
+     * It should not rename the node if the document is being saved a non-default locale.
      */
     public function testAlreadyHasNodeNonDefaultLocale()
     {
@@ -133,7 +134,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should ensure there is no confict when moving a node
+     * It should ensure there is no confict when moving a node.
      */
     public function testMoveConflict()
     {

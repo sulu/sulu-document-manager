@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,10 +11,9 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-use PHPCR\Query\QueryInterface;
-use Sulu\Component\DocumentManager\Query\Query;
 use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
+use Sulu\Component\DocumentManager\Query\Query;
+use Symfony\Component\EventDispatcher\Event;
 
 class QueryExecuteEvent extends Event
 {
@@ -24,7 +24,7 @@ class QueryExecuteEvent extends Event
         $this->query = $query;
     }
 
-    public function getQuery() 
+    public function getQuery()
     {
         return $this->query;
     }

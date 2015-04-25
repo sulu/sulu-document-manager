@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,13 +8,13 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager;
 
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 /**
- * Central registry of roles to namespaces
+ * Central registry of roles to namespaces.
  */
 class NamespaceRegistry
 {
@@ -28,7 +29,7 @@ class NamespaceRegistry
     }
 
     /**
-     * Return the namespace alias for the given role, e.g. "localized_content" => "lcont"
+     * Return the namespace alias for the given role, e.g. "localized_content" => "lcont".
      *
      * @return string
      */

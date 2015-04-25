@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,13 +11,12 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\Exception\MetadataNotFoundException;
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
+use Sulu\Component\DocumentManager\Exception\MetadataNotFoundException;
 
 /**
- * Simple metadata factory which uses an array
+ * Simple metadata factory which uses an array.
  */
 class MetadataFactory
 {
@@ -37,7 +37,7 @@ class MetadataFactory
     }
 
     /**
-     * Return metadata for the given alias
+     * Return metadata for the given alias.
      *
      * @param string $alias
      *
@@ -53,11 +53,12 @@ class MetadataFactory
         }
 
         $map = $this->aliasMap[$alias];
+
         return $this->getMetadata($map);
     }
 
     /**
-     * Return metadata for the given PHPCR type (e.g. sulu:page)
+     * Return metadata for the given PHPCR type (e.g. sulu:page).
      *
      * @param string $phpcrType
      *
@@ -73,15 +74,16 @@ class MetadataFactory
         }
 
         $map = $this->phpcrTypeMap[$phpcrType];
+
         return $this->getMetadata($map);
     }
 
     /**
-     * Return true if there is metadata for the given PHPCR type
+     * Return true if there is metadata for the given PHPCR type.
      *
      * @param string $phpcrType
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMetadataForPhpcrType($phpcrType)
     {
@@ -90,7 +92,7 @@ class MetadataFactory
 
     /**
      * Return metadata for the given NodeInterface or return
-     * metadata for the UnknownDocument if the node is not managed
+     * metadata for the UnknownDocument if the node is not managed.
      *
      * TODO: Migrate to using the primary type or make this a strategy
      *       to allow class determination by some other method
@@ -117,7 +119,7 @@ class MetadataFactory
     }
 
     /**
-     * Return metadata for the given class
+     * Return metadata for the given class.
      *
      * @param mixed $class
      *
@@ -135,13 +137,14 @@ class MetadataFactory
         }
 
         $map = $this->classMap[$class];
+
         return $this->getMetadata($map);
     }
 
     /**
-     * Return true if the given alias exists
+     * Return true if the given alias exists.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasAlias($alias)
     {
@@ -149,7 +152,7 @@ class MetadataFactory
     }
 
     /**
-     * Return all registered aliases
+     * Return all registered aliases.
      *
      * @return array
      */
@@ -181,7 +184,7 @@ class MetadataFactory
         return $this->getMetadata(array(
             'alias' => null,
             'class' => UnknownDocument::class,
-            'phpcr_type' => null
+            'phpcr_type' => null,
         ));
     }
 }

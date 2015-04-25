@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,15 +8,15 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber;
 
-use Sulu\Component\DocumentManager\Subscriber\Phpcr\RemoveSubscriber;
-use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use PHPCR\NodeInterface;
 use PHPCR\PropertyInterface;
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\RemoveEvent;
+use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\Subscriber\Phpcr\RemoveSubscriber;
 
 class RemoveSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,13 +25,12 @@ class RemoveSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
         $this->removeEvent = $this->prophesize(RemoveEvent::class);
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
         $this->node = $this->prophesize(NodeInterface::class);
         $this->node1 = $this->prophesize(NodeInterface::class);
         $this->node2 = $this->prophesize(NodeInterface::class);
         $this->property1 = $this->prophesize(PropertyInterface::class);
         $this->property2 = $this->prophesize(PropertyInterface::class);
-
 
         $this->subscriber = new RemoveSubscriber(
             $this->documentRegistry->reveal(),
@@ -41,7 +41,7 @@ class RemoveSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should remove nodes from the PHPCR session
+     * It should remove nodes from the PHPCR session.
      */
     public function testHandleRemove()
     {

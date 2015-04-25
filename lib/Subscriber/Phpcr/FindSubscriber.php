@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,18 +11,18 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Phpcr;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Event\FindEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
+use Sulu\Component\DocumentManager\MetadataFactory;
+use Sulu\Component\DocumentManager\NodeManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * This class is responsible for finding documents
+ * This class is responsible for finding documents.
  */
 class FindSubscriber implements EventSubscriberInterface
 {
@@ -36,8 +37,7 @@ class FindSubscriber implements EventSubscriberInterface
         MetadataFactory $metadataFactory,
         NodeManager $nodeManager,
         EventDispatcherInterface $eventDispatcher
-    )
-    {
+    ) {
         $this->metadataFactory = $metadataFactory;
         $this->nodeManager = $nodeManager;
         $this->eventDispatcher = $eventDispatcher;
@@ -58,7 +58,7 @@ class FindSubscriber implements EventSubscriberInterface
     {
         $options = $event->getOptions();
         $options->setDefaults(array(
-            'type' => null
+            'type' => null,
         ));
     }
 

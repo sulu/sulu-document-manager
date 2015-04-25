@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,14 +11,14 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
-use Sulu\Component\DocumentManager\Events;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Behavior\ChildrenBehavior;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\ProxyFactory;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Set the children on the document
+ * Set the children on the document.
  */
 class ChildrenSubscriber implements EventSubscriberInterface
 {

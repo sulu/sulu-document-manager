@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,9 +11,8 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use ProxyManager\Proxy\LazyLoadingInterface;
-use Sulu\Component\DocumentManager\ClassNameInflector;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 class DocumentAccessor
 {
@@ -27,7 +27,7 @@ class DocumentAccessor
         if ($document instanceof LazyLoadingInterface) {
             $documentClass = ClassNameInflector::getUserClassName($documentClass);
         }
-        
+
         $this->reflection = new \ReflectionClass($documentClass);
     }
 

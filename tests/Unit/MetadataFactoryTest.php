@@ -1,12 +1,11 @@
 <?php
 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
+namespace Sulu\Component\DocumentManager\tests\Unit;
 
-use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Exception\MetadataNotFoundException;
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
+use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactory;
 
 class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +28,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should retrieve metadata for a fully qualified class name
+     * It should retrieve metadata for a fully qualified class name.
      */
     public function testGetForClass()
     {
@@ -41,7 +40,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if there is no mapping for the class name
+     * It should throw an exception if there is no mapping for the class name.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\MetadataNotFoundException
      */
@@ -51,7 +50,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should retrieve metadata for a given alias
+     * It should retrieve metadata for a given alias.
      */
     public function testGetForAlias()
     {
@@ -63,7 +62,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if there is no mapping for given alias
+     * It should throw an exception if there is no mapping for given alias.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\MetadataNotFoundException
      */
@@ -73,7 +72,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should retrieve metadata for a given phpcrType
+     * It should retrieve metadata for a given phpcrType.
      */
     public function testGetForPhpcrType()
     {
@@ -94,7 +93,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if there is no mapping for given phpcrType
+     * It should throw an exception if there is no mapping for given phpcrType.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\MetadataNotFoundException
      */
@@ -104,7 +103,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It has a method to determine if an alias exists
+     * It has a method to determine if an alias exists.
      */
     public function testHasAlias()
     {
@@ -113,7 +112,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should retrieve metadata for a given PHPCR node
+     * It should retrieve metadata for a given PHPCR node.
      */
     public function testGetForPhpcrNode()
     {
@@ -131,7 +130,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should retrieve return unknown document metadata when node is unmanaged
+     * It should retrieve return unknown document metadata when node is unmanaged.
      */
     public function testGetForPhpcrNodeNoManaged()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -9,9 +10,6 @@
  */
 
 namespace Sulu\Component\DocumentManager\Event;
-
-use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 class ReorderEvent extends AbstractDocumentEvent
 {
@@ -25,15 +23,13 @@ class ReorderEvent extends AbstractDocumentEvent
         $this->after = $after;
     }
 
-    public function getDestId() 
+    public function getDestId()
     {
         return $this->destId;
     }
 
-    public function getAfter() 
+    public function getAfter()
     {
         return $this->after;
     }
 }
-
-

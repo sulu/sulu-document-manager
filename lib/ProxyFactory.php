@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,19 +11,16 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use ProxyManager\Factory\LazyLoadingGhostFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
-use Sulu\Component\DocumentManager\Behavior\ParentBehavior;
 use PHPCR\NodeInterface;
+use ProxyManager\Factory\LazyLoadingGhostFactory;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 use Sulu\Component\DocumentManager\Collection\ReferrerCollection;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Handle creation of proxies
+ * Handle creation of proxies.
  */
 class ProxyFactory
 {
@@ -65,6 +63,7 @@ class ProxyFactory
         // if node is already registered then just return the registered document
         if ($this->registry->hasNode($targetNode)) {
             $document = $this->registry->getDocumentForNode($targetNode);
+
             return $document;
         }
 
@@ -96,7 +95,7 @@ class ProxyFactory
     }
 
     /**
-     * Create a new children collection for the given document
+     * Create a new children collection for the given document.
      *
      * @param object $document
      *

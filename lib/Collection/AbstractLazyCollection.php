@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,13 +11,8 @@
 
 namespace Sulu\Component\DocumentManager\Collection;
 
-use PHPCR\Query\QueryResultInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Events;
-
 /**
- * Lazily hydrate query results
+ * Lazily hydrate query results.
  */
 abstract class AbstractLazyCollection implements \Iterator, \Countable
 {
@@ -25,6 +21,7 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
     public function count()
     {
         $this->initialize();
+
         return $this->elements->count();
     }
 
@@ -70,4 +67,3 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
 
     abstract protected function initialize();
 }
-

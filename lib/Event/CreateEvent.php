@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,18 +11,17 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class CreateEvent extends Event
 {
     /**
-     * @var object $document
+     * @var object
      */
     private $document;
 
     /**
-     * @var string $alias
+     * @var string
      */
     private $alias;
 
@@ -33,7 +33,7 @@ class CreateEvent extends Event
         $this->alias = $alias;
     }
 
-    public function getDocument() 
+    public function getDocument()
     {
         if (!$this->document) {
             throw new \RuntimeException(
@@ -50,10 +50,8 @@ class CreateEvent extends Event
         $this->document = $document;
     }
 
-    public function getAlias() 
+    public function getAlias()
     {
         return $this->alias;
     }
-    
 }
-

@@ -2,15 +2,14 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\NodeManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Automatically set the parent at a pre-determined location
+ * Automatically set the parent at a pre-determined location.
  */
 abstract class AbstractFilingSubscriber implements EventSubscriberInterface
 {
@@ -22,8 +21,7 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
         NodeManager $nodeManager,
         DocumentManager $documentManager,
         $basePath
-    )
-    {
+    ) {
         $this->nodeManager = $nodeManager;
         $this->documentManager = $documentManager;
         $this->basePath = $basePath;
@@ -58,14 +56,14 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Return true if this subscriber should be applied to the document
+     * Return true if this subscriber should be applied to the document.
      *
      * @param object $document
      */
     abstract protected function supports($document);
 
     /**
-     * Return the name of the parent document
+     * Return the name of the parent document.
      *
      * @return string
      */

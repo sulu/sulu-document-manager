@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,12 +8,12 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
 
-use PHPCR\SessionInterface;
-use PHPCR\PathNotFoundException;
+namespace Sulu\Component\DocumentManager\tests\Unit;
+
 use PHPCR\NodeInterface;
+use PHPCR\PathNotFoundException;
+use PHPCR\SessionInterface;
 use PHPCR\WorkspaceInterface;
 use Sulu\Component\DocumentManager\NodeManager;
 
@@ -44,7 +45,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to find a node1 by UUID1
+     * It should be able to find a node1 by UUID1.
      */
     public function testFindByUuid()
     {
@@ -54,7 +55,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to find a node1 by path
+     * It should be able to find a node1 by path.
      */
     public function testFindByPath()
     {
@@ -64,7 +65,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the node1 was not found
+     * It should throw an exception if the node1 was not found.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\DocumentNotFoundException
      */
@@ -75,7 +76,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to remove a document by UUID1
+     * It should be able to remove a document by UUID1.
      */
     public function testRemoveByUUid()
     {
@@ -86,7 +87,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to remove by path
+     * It should be able to remove by path.
      */
     public function testRemoveByPath()
     {
@@ -95,7 +96,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to copy a node1
+     * It should be able to copy a node1.
      */
     public function testCopy()
     {
@@ -105,13 +106,12 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
         $this->session->getNodeByIdentifier(self::UUID2)->willReturn($this->node2->reveal());
         $this->node2->getPath()->willReturn(self::PATH2);
 
-
         $this->workspace->copy(self::PATH1, self::PATH2 . '/foo')->shouldBeCalled();
         $this->manager->copy(self::UUID1, self::UUID2, 'foo');
     }
 
     /**
-     * It should be able to save the session
+     * It should be able to save the session.
      */
     public function testSave()
     {
@@ -120,7 +120,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should clear/reset the PHPCR session
+     * It should clear/reset the PHPCR session.
      */
     public function testClear()
     {

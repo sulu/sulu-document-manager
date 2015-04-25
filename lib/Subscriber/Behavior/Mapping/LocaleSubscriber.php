@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,15 +11,14 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
-use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Behavior\Mapping\LocaleBehavior;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\Event;
-use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
+use Sulu\Component\DocumentManager\Events;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Maps the locale
+ * Maps the locale.
  */
 class LocaleSubscriber implements EventSubscriberInterface
 {

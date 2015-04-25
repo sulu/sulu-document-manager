@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,20 +8,20 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber;
 
-use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Subscriber\Phpcr\GeneralSubscriber;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Event\MoveEvent;
-use Sulu\Component\DocumentManager\Event\CopyEvent;
+use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\ClearEvent;
+use Sulu\Component\DocumentManager\Event\CopyEvent;
 use Sulu\Component\DocumentManager\Event\FlushEvent;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Event\RefreshEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\RefreshEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\Subscriber\Phpcr\GeneralSubscriber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +42,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->flushEvent = $this->prophesize(FlushEvent::class);
         $this->refreshEvent = $this->prophesize(RefreshEvent::class);
 
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
         $this->node = $this->prophesize(NodeInterface::class);
 
         $this->subscriber = new GeneralSubscriber(
@@ -52,7 +53,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should move a document
+     * It should move a document.
      */
     public function testHandleMove()
     {
@@ -69,7 +70,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should copy a document
+     * It should copy a document.
      */
     public function testHandleCopy()
     {
@@ -85,7 +86,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should clear/reset the PHPCR session
+     * It should clear/reset the PHPCR session.
      */
     public function testHandleClear()
     {
@@ -94,7 +95,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should save the PHPCR session
+     * It should save the PHPCR session.
      */
     public function testHandleFlush()
     {
@@ -103,7 +104,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should refresh a document
+     * It should refresh a document.
      */
     public function testHandleRefresh()
     {

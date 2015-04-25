@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,16 +11,16 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Phpcr;
 
-use PHPCR\PropertyInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use PHPCR\NodeInterface;
+use PHPCR\PropertyInterface;
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\NodeManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Remove subscriber
+ * Remove subscriber.
  */
 class RemoveSubscriber implements EventSubscriberInterface
 {
@@ -36,8 +37,7 @@ class RemoveSubscriber implements EventSubscriberInterface
     public function __construct(
         DocumentRegistry $documentRegistry,
         NodeManager $nodeManager
-    )
-    {
+    ) {
         $this->documentRegistry = $documentRegistry;
         $this->nodeManager = $nodeManager;
     }
@@ -54,7 +54,7 @@ class RemoveSubscriber implements EventSubscriberInterface
 
     /**
      * Remove the given documents node from PHPCR session and optoinally
-     * remove any references to the node
+     * remove any references to the node.
      *
      * @param RemoveEvent $event
      */
@@ -67,7 +67,7 @@ class RemoveSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Remove references to the given node
+     * Remove references to the given node.
      *
      * @param NodeInterface $node
      */
@@ -95,6 +95,7 @@ class RemoveSubscriber implements EventSubscriberInterface
     {
         if (false === $property->isMultiple()) {
             $property->remove();
+
             return;
         }
 

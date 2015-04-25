@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -11,18 +12,18 @@
 namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\DocumentAccessor;
+use Symfony\Component\EventDispatcher\Event;
 
 abstract class AbstractMappingEvent extends Event
 {
     /**
-     * @var object $document
+     * @var object
      */
     protected $document;
 
     /**
-     * @var string $locale
+     * @var string
      */
     protected $locale;
 
@@ -44,7 +45,7 @@ abstract class AbstractMappingEvent extends Event
     /**
      * @return NodeInterface
      */
-    public function getNode() 
+    public function getNode()
     {
         return $this->node;
     }
@@ -60,13 +61,13 @@ abstract class AbstractMappingEvent extends Event
     /**
      * @return string
      */
-    public function getLocale() 
+    public function getLocale()
     {
         return $this->locale;
     }
 
     /**
-     * TODO: Refactor this away
+     * TODO: Refactor this away.
      *
      * @return DocumentAccessor
      */
@@ -82,7 +83,7 @@ abstract class AbstractMappingEvent extends Event
     }
 
     /**
-     * Return true if the document has been set
+     * Return true if the document has been set.
      */
     public function hasDocument()
     {
@@ -90,7 +91,7 @@ abstract class AbstractMappingEvent extends Event
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasNode()
     {
@@ -100,7 +101,7 @@ abstract class AbstractMappingEvent extends Event
     /**
      * @return array
      */
-    public function getOptions() 
+    public function getOptions()
     {
         return $this->options;
     }

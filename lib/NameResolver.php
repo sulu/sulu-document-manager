@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -13,7 +14,7 @@ namespace Sulu\Component\DocumentManager;
 use PHPCR\NodeInterface;
 
 /**
- * Ensures that node names are unique
+ * Ensures that node names are unique.
  */
 class NameResolver
 {

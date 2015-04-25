@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -12,7 +13,6 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Sulu\Component\DocumentManager\DocumentAccessor;
 
 class HydrateEvent extends AbstractMappingEvent
 {
@@ -54,5 +54,4 @@ class HydrateEvent extends AbstractMappingEvent
     {
         $this->locale = $locale;
     }
-    
 }

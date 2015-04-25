@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,9 +11,8 @@
 
 namespace Sulu\Component\DocumentManager\Behavior\Path;
 
-use Sulu\Component\DocumentManager\Behavior\Mapping\TitleBehavior;
 use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
-
+use Sulu\Component\DocumentManager\Behavior\Mapping\TitleBehavior;
 
 /**
  * The PHPCR nodes of objects implementing this behavior will have

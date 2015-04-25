@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,8 +8,8 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
+
+namespace Sulu\Component\DocumentManager\tests\Unit;
 
 use Sulu\Component\DocumentManager\PathSegmentRegistry;
 
@@ -23,7 +24,7 @@ class PathSegmentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should retrieve a path segment
+     * It should retrieve a path segment.
      */
     public function testGetPathSegment()
     {
@@ -32,7 +33,7 @@ class PathSegmentRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception when the given path segment role does not exist
+     * It should throw an exception when the given path segment role does not exist.
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unknown path segment "not exist". Known path segments: "base", "foobar"

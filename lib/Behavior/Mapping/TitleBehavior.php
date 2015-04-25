@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -16,14 +17,14 @@ namespace Sulu\Component\DocumentManager\Behavior\Mapping;
 interface TitleBehavior
 {
     /**
-     * Return a title
+     * Return a title.
      *
      * @return string
      */
     public function getTitle();
 
     /**
-     * Set the title
+     * Set the title.
      */
     public function setTitle($title);
 }

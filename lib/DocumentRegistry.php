@@ -3,12 +3,11 @@
 namespace Sulu\Component\DocumentManager;
 
 use PHPCR\NodeInterface;
-use ProxyManager\Proxy\LazyLoadingInterface;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Psr\Log\LoggerInterface;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 /**
- * Handles the mapping between managed documents and nodes
+ * Handles the mapping between managed documents and nodes.
  */
 class DocumentRegistry
 {
@@ -62,7 +61,7 @@ class DocumentRegistry
     }
 
     /**
-     * Register a document
+     * Register a document.
      *
      * @param mixed $document
      * @param NodeInterface $node
@@ -115,11 +114,11 @@ class DocumentRegistry
     }
 
     /**
-     * Return true if the document is managed
+     * Return true if the document is managed.
      *
      * @param object $document
      *
-     * @return boolean
+     * @return bool
      */
     public function hasDocument($document)
     {
@@ -129,10 +128,11 @@ class DocumentRegistry
     }
 
     /**
-     * Return true if the node is managed
+     * Return true if the node is managed.
      *
      * @param NodeInterface $node
-     Id* @return boolean
+     *
+     Id* @return bool
      */
     public function hasNode(NodeInterface $node)
     {
@@ -140,7 +140,7 @@ class DocumentRegistry
     }
 
     /**
-     * Clear the registry (detach all documents)
+     * Clear the registry (detach all documents).
      */
     public function clear()
     {
@@ -188,10 +188,12 @@ class DocumentRegistry
     }
 
     /**
-     * Return the node for the given managed document
+     * Return the node for the given managed document.
      *
      * @param object $document
+     *
      * @throws \RuntimeException If the node is not managed
+     *
      * @return NodeInterface
      */
     public function getNodeForDocument($document)
@@ -204,7 +206,7 @@ class DocumentRegistry
 
     /**
     /**
-     * Return the current locale for the given document
+     * Return the current locale for the given document.
      *
      * @param object $document
      *
@@ -219,7 +221,7 @@ class DocumentRegistry
     }
 
     /**
-     * Return the original locale for the document
+     * Return the original locale for the document.
      *
      * @param object $document
      *
@@ -237,11 +239,11 @@ class DocumentRegistry
         return $this->getLocaleForDocument($document);
     }
 
-
     /**
-     * Return the document for the given managed node
+     * Return the document for the given managed node.
      *
      * @param NodeInterface $node
+     *
      * @throws \RuntimeException If the node is not managed
      */
     public function getDocumentForNode(NodeInterface $node)
@@ -253,11 +255,11 @@ class DocumentRegistry
     }
 
     /**
-     * Return the default locale
+     * Return the default locale.
      *
      * @return string
      */
-    public function getDefaultLocale() 
+    public function getDefaultLocale()
     {
         return $this->defaultLocale;
     }
@@ -289,7 +291,7 @@ class DocumentRegistry
     }
 
     /**
-     * Get the spl object hash for the given object
+     * Get the spl object hash for the given object.
      *
      * @param object $document
      *
@@ -355,7 +357,7 @@ class DocumentRegistry
      *
      * @param object $document
      */
-    public function unmarkDocumentAsHydrated($document) 
+    public function unmarkDocumentAsHydrated($document)
     {
         $oid = spl_object_hash($document);
         unset($this->hydrationState[$oid]);
@@ -369,11 +371,11 @@ class DocumentRegistry
     }
 
     /**
-     * Return true if the document is a candidate for hydration/re-hydration
+     * Return true if the document is a candidate for hydration/re-hydration.
      *
      * @param object $document
      *
-     * @return boolean
+     * @return bool
      */
     public function isHydrated($document)
     {

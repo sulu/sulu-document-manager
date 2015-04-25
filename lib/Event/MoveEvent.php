@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,18 +11,17 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class MoveEvent extends Event
 {
     /**
-     * @var object $document
+     * @var object
      */
     private $document;
 
     /**
-     * @var string $destId
+     * @var string
      */
     private $destId;
 
@@ -34,12 +34,12 @@ class MoveEvent extends Event
         $this->destId = $destId;
     }
 
-    public function getDocument() 
+    public function getDocument()
     {
         return $this->document;
     }
 
-    public function getDestId() 
+    public function getDestId()
     {
         return $this->destId;
     }
@@ -62,4 +62,3 @@ class MoveEvent extends Event
         return $this->destName;
     }
 }
-

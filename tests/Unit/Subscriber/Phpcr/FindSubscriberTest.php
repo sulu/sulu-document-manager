@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -8,20 +9,20 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber\Phpcr;
+namespace Sulu\Comonent\DocumentManager\tests\Unit\Subscriber\Phpcr;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Sulu\Component\DocumentManager\NodeManager;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Subscriber\Phpcr\FindSubscriber;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Prophecy\Argument;
 use Sulu\Component\DocumentManager\Event\FindEvent;
-use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactory;
+use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\Subscriber\Phpcr\FindSubscriber;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class FindSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +42,7 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should find an existing document
+     * It should find an existing document.
      */
     public function testFind()
     {
@@ -58,7 +59,7 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should find existing document of specified type or class
+     * It should find existing document of specified type or class.
      *
      * @dataProvider provideFindWithTypeOrClass
      */
@@ -76,7 +77,7 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
             $this->metadataFactory->hasAlias($typeOrClass)->willReturn(false);
         }
         $options = array(
-            'type' => $typeOrClass
+            'type' => $typeOrClass,
         );
 
         $this->doTestFind($options);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,25 +8,24 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Audit;
 
-use Sulu\Component\DocumentManager\Events;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Behavior\BlameBehavior;
-use Sulu\Component\DocumentManager\PropertyEncoder;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-use Sulu\Component\Security\Authentication\UserInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use PHPCR\PropertyType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Sulu\Component\DocumentManager\Behavior\BlameBehavior;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\PropertyEncoder;
+use Sulu\Component\Security\Authentication\UserInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /**
- * Manages user blame (log who creator the document and who updated it last)
+ * Manages user blame (log who creator the document and who updated it last).
  */
 class BlameSubscriber implements EventSubscriberInterface
 {
@@ -56,7 +56,7 @@ class BlameSubscriber implements EventSubscriberInterface
     public function handleOptions(ConfigureOptionsEvent $event)
     {
         $event->getOptions()->setDefaults(array(
-            'blame.user' => null
+            'blame.user' => null,
         ));
     }
 

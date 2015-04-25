@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,22 +11,19 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
-use Sulu\Component\DocumentManager\Events;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
 use PHPCR\NodeInterface;
-use ProxyManager\Proxy\LazyLoadingInterface;
-use Sulu\Component\DocumentManager\ProxyFactory;
+use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
 use Sulu\Component\DocumentManager\DocumentInspector;
 use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\ProxyFactory;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Set the parent and children on the doucment
+ * Set the parent and children on the doucment.
  */
 class ParentSubscriber implements EventSubscriberInterface
 {
@@ -41,8 +39,7 @@ class ParentSubscriber implements EventSubscriberInterface
         DocumentInspector $inspector,
         DocumentManager $documentManager
 
-    )
-    {
+    ) {
         $this->proxyFactory = $proxyFactory;
         $this->inspector = $inspector;
         $this->documentManager = $documentManager;

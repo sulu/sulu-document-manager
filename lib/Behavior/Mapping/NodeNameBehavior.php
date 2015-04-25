@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -11,12 +12,12 @@
 namespace Sulu\Component\DocumentManager\Behavior\Mapping;
 
 /**
- * Populate the node name
+ * Populate the node name.
  */
 interface NodeNameBehavior
 {
     /**
-     * Return the node name
+     * Return the node name.
      *
      * NOTE: You must add a $nodeName property to your class
      *

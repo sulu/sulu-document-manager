@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,18 +8,17 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Query;
 
 use PHPCR\Query\QueryInterface;
-use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Based heavily on the PHPCR-ODM Query object
+ * Based heavily on the PHPCR-ODM Query object.
  *
  * If we can break the phpcrQuery builder from the PHPCR-ODM we should
  * also be able to break-out the PhpcrQuery object too:
@@ -40,11 +40,10 @@ class Query
 
     public function __construct(
         QueryInterface $phpcrQuery,
-        EventDispatcherInterface $dispatcher, 
+        EventDispatcherInterface $dispatcher,
         $locale = null,
         $primarySelector = null
-    )
-    {
+    ) {
         $this->phpcrQuery = $phpcrQuery;
         $this->primarySelector = $primarySelector;
         $this->dispatcher = $dispatcher;
@@ -82,59 +81,58 @@ class Query
         return $event->getResult();
     }
 
-    public function getMaxResults() 
+    public function getMaxResults()
     {
         return $this->maxResults;
     }
-    
+
     public function setMaxResults($maxResults)
     {
         $this->maxResults = $maxResults;
     }
 
-    public function getFirstResult() 
+    public function getFirstResult()
     {
         return $this->firstResult;
     }
-    
+
     public function setFirstResult($firstResult)
     {
         $this->firstResult = $firstResult;
     }
 
-    public function getHydrationMode() 
+    public function getHydrationMode()
     {
         return $this->hydrationMode;
     }
-    
+
     public function setHydrationMode($hydrationMode)
     {
         $this->hydrationMode = $hydrationMode;
     }
 
-    public function getLocale() 
+    public function getLocale()
     {
         return $this->locale;
     }
-    
+
     public function setLocale($locale)
     {
         $this->locale = $locale;
     }
 
-    public function getPrimarySelector() 
+    public function getPrimarySelector()
     {
         return $this->primarySelector;
     }
-    
+
     public function setPrimarySelector($primarySelector)
     {
         $this->primarySelector = $primarySelector;
     }
 
-    public function getPhpcrQuery() 
+    public function getPhpcrQuery()
     {
         return $this->phpcrQuery;
     }
-    
 }

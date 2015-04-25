@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,12 +11,8 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use PHPCR\Query\QueryInterface;
 use Sulu\Component\DocumentManager\Query\Query;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocumentManager
@@ -49,10 +46,12 @@ class DocumentManager
     }
 
     /**
-     * Create a new document instance for the given alias
+     * Create a new document instance for the given alias.
      *
      * @param string
+     *
      * @throws MetadataNotFoundException
+     *
      * @return object
      */
     public function create($alias)
@@ -64,7 +63,7 @@ class DocumentManager
     }
 
     /**
-     * Persist a document to a PHPCR node
+     * Persist a document to a PHPCR node.
      *
      * @param object $document
      * @param string $locale
@@ -105,7 +104,7 @@ class DocumentManager
 
     /**
      * Create a copy of the node representing the given document
-     * at the given path
+     * at the given path.
      *
      * @param object $document
      * @param string $destPath
@@ -125,7 +124,7 @@ class DocumentManager
     }
 
     /**
-     * Refresh the given document with the persisted state of the node
+     * Refresh the given document with the persisted state of the node.
      *
      * @param object $document
      */
@@ -136,7 +135,7 @@ class DocumentManager
     }
 
     /**
-     * Persist changes to the persistent storage
+     * Persist changes to the persistent storage.
      */
     public function flush()
     {
@@ -146,7 +145,7 @@ class DocumentManager
 
     /**
      * Clear the document manager, should reset the underlying PHPCR
-     * session and deregister all documents
+     * session and deregister all documents.
      */
     public function clear()
     {
@@ -155,7 +154,7 @@ class DocumentManager
     }
 
     /**
-     * Create a new query from a JCR-SQL2 query string
+     * Create a new query from a JCR-SQL2 query string.
      *
      * NOTE: This should not be used generally as it exposes the
      *       database structure and breaks abstraction. Use the domain-aware
@@ -174,7 +173,7 @@ class DocumentManager
     }
 
     /**
-     * Create a new query builder
+     * Create a new query builder.
      *
      * By default this will return the PHPCR-ODM query bulder
      *

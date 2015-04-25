@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,14 +11,12 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Sulu\Component\DocumentManager\DocumentAccessor;
 
 abstract class AbstractDocumentEvent extends Event
 {
     /**
-     * @var object $document
+     * @var object
      */
     private $document;
 
@@ -29,7 +28,7 @@ abstract class AbstractDocumentEvent extends Event
         $this->document = $document;
     }
 
-    public function getDocument() 
+    public function getDocument()
     {
         return $this->document;
     }

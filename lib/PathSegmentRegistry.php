@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,11 +8,11 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager;
 
 /**
- * Provides a centralized repository of path components
+ * Provides a centralized repository of path components.
  *
  * Note that this is not used by the document mangager itself, but
  * is a useful utility for implementors.
@@ -31,10 +32,12 @@ class PathSegmentRegistry
     }
 
     /**
-     * Return the configured named path segment
+     * Return the configured named path segment.
      *
      * @param string $name Name of path segment
+     *
      * @throws \InvalidArgumentException
+     *
      * @return string The path segment
      */
     public function getPathSegment($name)

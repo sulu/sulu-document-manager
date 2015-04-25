@@ -2,12 +2,10 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use PHPCR\Util\UUIDHelper;
-use PHPCR\SessionInterface;
-use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
 use PHPCR\RepositoryException;
-use PHPCR\Util\PathHelper;
-use PHPCR\Util\NodeHelper;
+use PHPCR\SessionInterface;
+use PHPCR\Util\UUIDHelper;
+use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
 
 /**
  * The node manager is responsible for talking to the PHPCR
@@ -23,9 +21,10 @@ class NodeManager
     }
 
     /**
-     * Find a document with the given path or UUID
+     * Find a document with the given path or UUID.
      *
      * @param string $identifier UUID or path
+     *
      * @return NodeInterface
      *
      * @throws DocumentNotFoundException
@@ -56,6 +55,7 @@ class NodeManager
         $this->normalizeToPath($identifier);
         try {
             $this->find($identifier);
+
             return true;
         } catch (DocumentNotFoundException $e) {
             return false;
@@ -63,7 +63,7 @@ class NodeManager
     }
 
     /**
-     * Remove the document with the given path or UUID
+     * Remove the document with the given path or UUID.
      *
      * @param string $identifier ID or path
      */
@@ -75,7 +75,7 @@ class NodeManager
 
     /**
      * Move the documet with the given path or ID to the path
-     * of the destination document (as a child)
+     * of the destination document (as a child).
      *
      * @param string $srcId
      * @param string $destId
@@ -112,7 +112,7 @@ class NodeManager
     }
 
     /**
-     * Create a path
+     * Create a path.
      *
      * @param mixed $path
      */
@@ -135,7 +135,7 @@ class NodeManager
     }
 
     /**
-     * Normalize the given path or ID to a path
+     * Normalize the given path or ID to a path.
      *
      * @param mixed $identifier
      */

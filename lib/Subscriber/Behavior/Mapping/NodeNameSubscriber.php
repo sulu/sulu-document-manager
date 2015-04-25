@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,19 +8,17 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
-use Sulu\Component\DocumentManager\Events;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\PropertyEncoder;
 use Sulu\Component\DocumentManager\Behavior\Mapping\NodeNameBehavior;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Events;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Maps the node name
+ * Maps the node name.
  */
 class NodeNameSubscriber implements EventSubscriberInterface
 {
@@ -30,7 +29,7 @@ class NodeNameSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::HYDRATE => 'handleNodeName',
-            Events::PERSIST=> 'handleNodeName',
+            Events::PERSIST => 'handleNodeName',
         );
     }
 

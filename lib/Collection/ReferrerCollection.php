@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,14 +11,13 @@
 
 namespace Sulu\Component\DocumentManager\Collection;
 
-use PHPCR\Query\QueryResultInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
-use PHPCR\NodeInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Lazily load documents referring to the given node
+ * Lazily load documents referring to the given node.
  */
 class ReferrerCollection extends AbstractLazyCollection
 {
@@ -55,7 +55,7 @@ class ReferrerCollection extends AbstractLazyCollection
         $references = $this->node->getReferences();
 
         // TODO: Performance: calling getParent adds overhead when the collection is
-        //       initialized, but if we don't do this, we won't know how many items are in the 
+        //       initialized, but if we don't do this, we won't know how many items are in the
         //       collection, as one node could have many referring properties.
         foreach ($references as $reference) {
             $referrerNode = $reference->getParent();
@@ -65,4 +65,3 @@ class ReferrerCollection extends AbstractLazyCollection
         $this->initialized = true;
     }
 }
-

@@ -1,18 +1,13 @@
 <?php
 
-namespace Sulu\Comonent\DocumentManager\Tests\Unit\Collection;
+namespace Sulu\Comonent\DocumentManager\tests\Unit\Collection;
 
-use PHPCR\Query\QueryResultInterface;
-use Sulu\Component\DocumentManager\Query\ResultCollection;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Events;
-use Prophecy\Argument;
-use PHPCR\Query\RowInterface;
-use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
-use Sulu\Component\DocumentManager\Collection\ReferrerCollection;
 use PHPCR\PropertyInterface;
+use Prophecy\Argument;
+use Sulu\Component\DocumentManager\Collection\ReferrerCollection;
+use Sulu\Component\DocumentManager\Events;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ReferrerCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,19 +27,19 @@ class ReferrerCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be iterable
+     * It should be iterable.
      */
     public function testIterable()
     {
         $references = new \ArrayIterator(array(
-            $this->reference->reveal()
+            $this->reference->reveal(),
         ));
         $this->node->getReferences()->willReturn($references);
         $this->reference->getParent()->willReturn($this->referrerNode->reveal());
         $this->referrerNode->getIdentifier()->willReturn('1234');
 
         $this->dispatcher->dispatch(Events::HYDRATE, Argument::type('Sulu\Component\DocumentManager\Event\HydrateEvent'))->will(function ($args) {
-            $args[1]->setDocument(new \stdClass);
+            $args[1]->setDocument(new \stdClass());
         });
 
         $results = array();

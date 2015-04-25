@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,14 +11,13 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Core;
 
-use Sulu\Component\DocumentManager\Document\UnknownDocument;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Event\CreateEvent;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\Event\CreateEvent;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactory;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Responsible for intantiating documents from PHPCR nodes and
@@ -38,8 +38,7 @@ class InstantiatorSubscriber implements EventSubscriberInterface
      */
     public function __construct(
         MetadataFactory $metadataFactory
-    )
-    {
+    ) {
         $this->metadataFactory = $metadataFactory;
     }
 
@@ -108,7 +107,7 @@ class InstantiatorSubscriber implements EventSubscriberInterface
             ));
         }
 
-        $document = new $class;
+        $document = new $class();
 
         return $document;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -11,17 +12,14 @@
 namespace Sulu\Component\DocumentManager\Behavior\Mapping;
 
 /**
- * Populate the localfce
- *
+ * Populate the localfce.
  */
 interface LocaleBehavior
 {
     /**
-     * Return the documents locale
+     * Return the documents locale.
      *
      * @return string
      */
     public function getLocale();
 }
-
-

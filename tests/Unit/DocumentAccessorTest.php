@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,8 +11,6 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Unit;
 
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 
 class DocumentAccessorTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +22,7 @@ class DocumentAccessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to set private properties
+     * It should be able to set private properties.
      */
     public function testAccessObject()
     {
@@ -32,7 +31,7 @@ class DocumentAccessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the property does not exist
+     * It should throw an exception if the property does not exist.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\DocumentManagerException
      */
@@ -46,9 +45,8 @@ class TestAccessObject
 {
     private $privateProperty;
 
-    public function getPrivateProperty() 
+    public function getPrivateProperty()
     {
         return $this->privateProperty;
     }
-    
 }

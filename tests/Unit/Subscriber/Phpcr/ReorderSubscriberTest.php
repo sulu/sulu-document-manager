@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,20 +11,11 @@
 
 namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Sulu\Component\DocumentManager\NodeManager;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Subscriber\Phpcr\FindSubscriber;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Prophecy\Argument;
-use Sulu\Component\DocumentManager\Event\FindEvent;
-use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\DocumentManager\Event\ReorderEvent;
-use Sulu\Component\DocumentManager\Subscriber\Phpcr\ReorderSubscriber;
 use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\ReorderEvent;
+use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\Subscriber\Phpcr\ReorderSubscriber;
 
 class ReorderSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,7 +44,7 @@ class ReorderSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should reorder with a UUID target
+     * It should reorder with a UUID target.
      */
     public function testReorderUuidTarget()
     {
@@ -70,7 +62,7 @@ class ReorderSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the target is not a sibling
+     * It should throw an exception if the target is not a sibling.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\DocumentManagerException
      */
@@ -90,7 +82,7 @@ class ReorderSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should order after a sibling which is not the last node
+     * It should order after a sibling which is not the last node.
      */
     public function testOrderBeforeSiblingNotLast()
     {
@@ -114,7 +106,7 @@ class ReorderSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should order after the last node
+     * It should order after the last node.
      */
     public function testOrderAfterLast()
     {

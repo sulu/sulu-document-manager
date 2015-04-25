@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -11,8 +12,8 @@
 namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\Behavior\TitleBehavior;
+use Symfony\Component\EventDispatcher\Event;
 
 class PersistEvent extends AbstractMappingEvent
 {
@@ -36,6 +37,7 @@ class PersistEvent extends AbstractMappingEvent
 
     /**
      * @return NodeInterface
+     *
      * @throws \RuntimeException
      */
     public function getNode()
@@ -57,5 +59,4 @@ class PersistEvent extends AbstractMappingEvent
 
         return $this->node;
     }
-   
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,24 +8,15 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit\Path;
 
-use Sulu\Component\DocumentManager\PropertyEncoder;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
-use Prophecy\Argument;
-use Sulu\Component\DocumentManager\DocumentAccessor;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Sulu\Component\Security\Authentication\UserInterface;
-use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AliasFilingSubscriber;
 
 class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
@@ -32,9 +24,9 @@ class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->persistEvent = $this->prophesize(PersistEvent::class);
-        $this->notImplementing = new \stdClass;
+        $this->notImplementing = new \stdClass();
         $this->document = new AliasFilingTestDocument();
-        $this->parentDocument = new \stdClass;
+        $this->parentDocument = new \stdClass();
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->documentManager = $this->prophesize(DocumentManager::class);
         $this->metadataFactory = $this->prophesize(MetadataFactory::class);
@@ -46,11 +38,10 @@ class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
             $this->metadataFactory->reveal(),
             '/base/path'
         );
-
     }
 
     /**
-     * It should return early if the document is not implementing the behavior
+     * It should return early if the document is not implementing the behavior.
      */
     public function testPersistNotImplementing()
     {
@@ -59,7 +50,7 @@ class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should set the parent document
+     * It should set the parent document.
      */
     public function testSetParentDocument()
     {
@@ -74,21 +65,19 @@ class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($this->parentDocument, $this->document->getParent());
     }
-
 }
 
 class AliasFilingTestDocument implements AliasFilingBehavior
 {
     private $parent;
 
-    public function getParent() 
+    public function getParent()
     {
         return $this->parent;
     }
-    
+
     public function setParent($parent)
     {
         $this->parent = $parent;
     }
-    
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -27,4 +28,3 @@ class ConfigureOptionsEvent extends Event
         return $this->options;
     }
 }
-

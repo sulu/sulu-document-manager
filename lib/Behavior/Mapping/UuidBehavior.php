@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -11,15 +12,14 @@
 namespace Sulu\Component\DocumentManager\Behavior\Mapping;
 
 /**
- * Populate the UUID
+ * Populate the UUID.
  */
 interface UuidBehavior
 {
     /**
-     * Return the documents UUID
+     * Return the documents UUID.
      *
      * @return string
      */
     public function getUuid();
 }
-

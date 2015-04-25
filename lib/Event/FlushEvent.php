@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -15,4 +16,3 @@ use Symfony\Component\EventDispatcher\Event;
 class FlushEvent extends Event
 {
 }
-

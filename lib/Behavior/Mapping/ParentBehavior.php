@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -11,20 +12,19 @@
 namespace Sulu\Component\DocumentManager\Behavior\Mapping;
 
 /**
- * The document has a parent document
+ * The document has a parent document.
  */
 interface ParentBehavior
 {
     /**
-     * Return the parent document for this document
+     * Return the parent document for this document.
      *
      * @return object
      */
     public function getParent();
 
     /**
-     * Set the parent document for this document
+     * Set the parent document for this document.
      */
     public function setParent($document);
 }
-

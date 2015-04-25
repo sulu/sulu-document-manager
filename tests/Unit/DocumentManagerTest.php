@@ -2,27 +2,26 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Unit;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Sulu\Component\DocumentManager\NodeManager;
 use PHPCR\NodeInterface;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\Events;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Event\RemoveEvent;
-use Sulu\Component\DocumentManager\Event\CopyEvent;
-use Sulu\Component\DocumentManager\Event\MoveEvent;
-use Sulu\Component\DocumentManager\Event\CreateEvent;
 use Sulu\Component\DocumentManager\Event\ClearEvent;
-use Sulu\Component\DocumentManager\Event\FlushEvent;
+use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
+use Sulu\Component\DocumentManager\Event\CopyEvent;
+use Sulu\Component\DocumentManager\Event\CreateEvent;
 use Sulu\Component\DocumentManager\Event\FindEvent;
-use Sulu\Component\DocumentManager\Query\Query;
-use PHPCR\Query\QueryInterface;
+use Sulu\Component\DocumentManager\Event\FlushEvent;
+use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
-use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Event\RefreshEvent;
-use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
+use Sulu\Component\DocumentManager\Event\RemoveEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\Query\Query;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DocumentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +42,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a persist event for the passed document
+     * It should issue a persist event for the passed document.
      */
     public function testPersist()
     {
@@ -53,7 +52,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a remove event
+     * It should issue a remove event.
      */
     public function testRemove()
     {
@@ -63,7 +62,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a move event
+     * It should issue a move event.
      */
     public function testMove()
     {
@@ -73,7 +72,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a copy event
+     * It should issue a copy event.
      */
     public function testCopy()
     {
@@ -83,7 +82,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a create event
+     * It should issue a create event.
      */
     public function testCreate()
     {
@@ -93,7 +92,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a refresh event
+     * It should issue a refresh event.
      */
     public function testRefresh()
     {
@@ -103,7 +102,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a clear event
+     * It should issue a clear event.
      */
     public function testClear()
     {
@@ -113,7 +112,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a flush event
+     * It should issue a flush event.
      */
     public function testFlush()
     {
@@ -123,7 +122,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a find event
+     * It should issue a find event.
      */
     public function testFind()
     {
@@ -133,7 +132,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception with invalid options
+     * It should throw an exception with invalid options.
      *
      * @expectedException Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
      */
@@ -144,7 +143,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should pass options
+     * It should pass options.
      */
     public function testFindWithOptions()
     {
@@ -153,7 +152,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a query create event
+     * It should issue a query create event.
      */
     public function testQueryCreate()
     {
@@ -164,7 +163,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should issue a query builder create event
+     * It should issue a query builder create event.
      *
      * NOT SUPPORTED
      */
@@ -223,7 +222,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
             Events::QUERY_EXECUTE => 'handleQueryExecute',
             Events::REFRESH => 'handleRefresh',
             Events::REORDER => 'handleReorder',
-            Events::CONFIGURE_OPTIONS => 'handleConfigureOptions'
+            Events::CONFIGURE_OPTIONS => 'handleConfigureOptions',
         );
     }
 
@@ -231,7 +230,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
     {
         $options = $event->getOptions();
         $options->setDefaults(array(
-            'test.foo' => 'bar'
+            'test.foo' => 'bar',
         ));
     }
 

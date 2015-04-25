@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,20 +8,20 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Comonent\DocumentManager\Tests\Unit\Subscriber;
 
+use PHPCR\Query\QueryInterface;
+use PHPCR\Query\QueryManagerInterface;
+use PHPCR\Query\QueryResultInterface;
 use PHPCR\SessionInterface;
 use PHPCR\WorkspaceInterface;
-use PHPCR\Query\QueryManagerInterface;
-use PHPCR\Query\QueryInterface;
-use Sulu\Component\DocumentManager\Subscriber\Phpcr\QuerySubscriber;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 use Sulu\Component\DocumentManager\Query\Query;
-use PHPCR\Query\QueryResultInterface;
-use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
+use Sulu\Component\DocumentManager\Subscriber\Phpcr\QuerySubscriber;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,7 +47,7 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should provide a Query object from a JCR-SQL2 string
+     * It should provide a Query object from a JCR-SQL2 string.
      */
     public function testHandleCreate()
     {
@@ -69,7 +70,7 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should provide a Query object for a PHPCR query object
+     * It should provide a Query object for a PHPCR query object.
      */
     public function testHandleCreateFromPhpcrQuery()
     {
@@ -91,7 +92,7 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should handle query execution and set the result
+     * It should handle query execution and set the result.
      */
     public function testHandleQueryExecute()
     {
@@ -115,4 +116,3 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
         $this->subscriber->handleQueryExecute($this->queryExecuteEvent->reveal());
     }
 }
-

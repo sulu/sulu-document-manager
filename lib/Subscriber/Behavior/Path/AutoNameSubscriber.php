@@ -3,24 +3,24 @@
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\DocumentManager\Events;
 use PHPCR\Util\UUIDHelper;
+use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\CopyEvent;
+use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\Event\MoveEvent;
-use Sulu\Component\DocumentManager\Event\CopyEvent;
+use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Automatically assign a name to the document based on its title
+ * Automatically assign a name to the document based on its title.
  *
  * TODO: Refactor MOVE auto-name handling somehow.
  */
@@ -37,8 +37,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         MetadataFactory $metadataFactory,
         NameResolver $resolver,
         NodeManager $nodeManager
-    )
-    {
+    ) {
         $this->registry = $registry;
         $this->slugifier = $slugifier;
         $this->metadataFactory = $metadataFactory;
@@ -86,7 +85,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         }
 
         $title = $document->getTitle();
-    
+
         if (!$title) {
             throw new DocumentManagerException(sprintf(
                 'Document of class "%s" has no title (ooid: "%s")',
@@ -114,6 +113,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         if (null === $node) {
             $node = $this->createNode($parentNode, $metadata, $name);
             $event->setNode($node);
+
             return;
         }
 
@@ -131,7 +131,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
 
     /**
      * TODO: This is a workaround for a bug in Jackalope which will be fixed in the next
-     *       release 1.2: https://github.com/jackalope/jackalope/pull/262
+     *       release 1.2: https://github.com/jackalope/jackalope/pull/262.
      */
     private function rename(NodeInterface $node, $name)
     {
@@ -147,7 +147,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Create the node, add mixin and set the UUID
+     * Create the node, add mixin and set the UUID.
      *
      * TODO: Move this to separate subscriber, it should not be related to AutoName
      *
@@ -167,7 +167,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Resolve the destination name on move and copy events
+     * Resolve the destination name on move and copy events.
      *
      * @param Event $event
      */

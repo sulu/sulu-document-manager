@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,13 +11,13 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Mapping;
 
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
-use Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping\ParentSubscriber;
-use Sulu\Component\DocumentManager\ProxyFactory;
 use Sulu\Component\DocumentManager\DocumentInspector;
 use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\ProxyFactory;
+use Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping\ParentSubscriber;
 
 class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +43,7 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if the document does not implement the ParentBehavior interface
+     * It should return early if the document does not implement the ParentBehavior interface.
      */
     public function testHydrateNotImplementing()
     {
@@ -51,7 +52,7 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should populate the documents parent property with a proxy
+     * It should populate the documents parent property with a proxy.
      */
     public function testHydrateParent()
     {
@@ -69,7 +70,7 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the node for the document is a root node
+     * It should throw an exception if the node for the document is a root node.
      *
      * @expectedException RuntimeException
      */

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -20,13 +21,14 @@ use ProxyManager\Inflector\ClassNameInflector as ProxyManagerClassNameInflector;
  */
 class ClassNameInflector
 {
-    static $inflector;
+    public static $inflector;
 
     /**
      * Return the "real" class name if the given class name is a proxy
      * class name.
      *
      * @param string $className
+     *
      * @return string
      */
     public static function getUserClassName($className)

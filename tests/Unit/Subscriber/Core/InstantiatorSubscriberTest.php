@@ -1,14 +1,14 @@
 <?php
 
-namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Core;
+namespace Sulu\Component\DocumentManager\tests\Unit\Subscriber\Core;
 
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Metadata;
 use PHPCR\NodeInterface;
+use Prophecy\Argument;
 use Sulu\Component\DocumentManager\Event\CreateEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\Subscriber\Core\InstantiatorSubscriber;
-use Prophecy\Argument;
 
 class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should create a document for a managed PHPCR node
+     * It should create a document for a managed PHPCR node.
      */
     public function testHandleHydrate()
     {
@@ -46,7 +46,7 @@ class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * If the document has already been set, do nothing
+     * If the document has already been set, do nothing.
      */
     public function testHandleHydrateDocumentAlreadySet()
     {
@@ -55,7 +55,7 @@ class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should create a new document
+     * It should create a new document.
      */
     public function testHandleCreate()
     {

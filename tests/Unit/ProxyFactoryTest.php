@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,27 +8,19 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Sulu\Component\DocumentManager\Tests\Unit;
 
-use Sulu\Component\DocumentManager\Subscriber\Behavior\TimestampSubscriber;
-use Sulu\Component\DocumentManager\PropertyEncoder;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Behavior\TimestampBehavior;
-use Prophecy\Argument;
-use Sulu\Component\DocumentManager\DocumentAccessor;
 use ProxyManager\Factory\LazyLoadingGhostFactory;
-use Sulu\Component\DocumentManager\MetadataFactory;
+use ProxyManager\Proxy\LazyLoadingInterface;
+use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
+use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\Document\UnknownDocument;
-use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
+use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\ProxyFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use ProxyManager\Proxy\LazyLoadingInterface;
-use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 
 class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +44,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should populate the documents parent property with a proxy
+     * It should populate the documents parent property with a proxy.
      */
     public function testCreateProxy()
     {
@@ -67,7 +60,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should lazy load the proxy
+     * It should lazy load the proxy.
      *
      * @depends testCreateProxy
      */
@@ -77,7 +70,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should create a children node collection
+     * It should create a children node collection.
      */
     public function testCreateChildrenCollection()
     {
@@ -86,7 +79,6 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
         $childrenCollection = $this->factory->createChildrenCollection($this->document);
 
         $this->assertInstanceOf(ChildrenCollection::class, $childrenCollection);
-
     }
 }
 
@@ -94,7 +86,7 @@ class TestProxyDocument implements ParentBehavior
 {
     private $parent;
 
-    public function getParent() 
+    public function getParent()
     {
         return $this->parent;
     }
@@ -112,4 +104,3 @@ class TestProxyDocumentProxy
         return 'Hello';
     }
 }
-

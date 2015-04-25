@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -9,9 +10,6 @@
  */
 
 namespace Sulu\Component\DocumentManager\Event;
-
-use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 class RemoveEvent extends AbstractDocumentEvent
 {

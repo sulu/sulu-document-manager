@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,21 +11,17 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Phpcr;
 
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\ClearEvent;
+use Sulu\Component\DocumentManager\Event\CopyEvent;
+use Sulu\Component\DocumentManager\Event\FlushEvent;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\RefreshEvent;
+use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\Event\FindEvent;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Event\RemoveEvent;
-use Sulu\Component\DocumentManager\Event\MoveEvent;
-use Sulu\Component\DocumentManager\Event\CopyEvent;
-use Sulu\Component\DocumentManager\Event\ClearEvent;
-use Sulu\Component\DocumentManager\Event\FlushEvent;
-use Sulu\Component\DocumentManager\Event\RefreshEvent;
 
 /**
  * This class aggregates some basic repository operations.
@@ -57,8 +54,7 @@ class GeneralSubscriber implements EventSubscriberInterface
         DocumentRegistry $documentRegistry,
         NodeManager $nodeManager,
         EventDispatcherInterface $eventDispatcher
-    )
-    {
+    ) {
         $this->documentRegistry = $documentRegistry;
         $this->nodeManager = $nodeManager;
         $this->eventDispatcher = $eventDispatcher;

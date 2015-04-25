@@ -1,13 +1,13 @@
 <?php
 
-namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Core;
+namespace Sulu\Component\DocumentManager\tests\Unit\Subscriber\Core;
 
+use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use Sulu\Component\DocumentManager\Subscriber\Core\RegistratorSubscriber;
-use PHPCR\NodeInterface;
 
 class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->node = $this->prophesize(NodeInterface::class);
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
         $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->removeEvent = $this->prophesize(RemoveEvent::class);
@@ -27,7 +27,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
 
     /**
      * It should set the document on hydrate if the document for the node to
-     * be hydrated is already in the registry
+     * be hydrated is already in the registry.
      */
     public function testDocumentFromRegistry()
     {
@@ -41,7 +41,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should set the default locale
+     * It should set the default locale.
      */
     public function testDefaultLocale()
     {
@@ -53,7 +53,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should stop propagation if the document is already loaded in the requested locale
+     * It should stop propagation if the document is already loaded in the requested locale.
      */
     public function testStopPropagation()
     {
@@ -71,7 +71,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should update the locale if the requested locale is different from the loaded locale
+     * It should update the locale if the requested locale is different from the loaded locale.
      */
     public function testUpdateDocumentLocale()
     {
@@ -88,12 +88,11 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->registry->updateLocale($this->document, $locale, $locale)->shouldBeCalled();
         $this->subscriber->handleStopPropagationAndResetLocale($this->hydrateEvent->reveal());
-
     }
 
     /**
      * It should set the node to the event on persist if the node for the document
-     * being persisted is already in the registry
+     * being persisted is already in the registry.
      */
     public function testNodeFromRegistry()
     {
@@ -106,7 +105,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if the document has already been set
+     * It should return early if the document has already been set.
      */
     public function testDocumentFromRegistryAlreadySet()
     {
@@ -115,7 +114,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Is should return early if the node is not managed
+     * Is should return early if the node is not managed.
      */
     public function testDocumentFromRegistryNoNode()
     {
@@ -126,7 +125,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should register documents on the HYDRATE event
+     * It should register documents on the HYDRATE event.
      */
     public function testHandleRegisterHydrate()
     {
@@ -140,7 +139,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should not register documents on the HYDRATE event when there is already a document
+     * It should not register documents on the HYDRATE event when there is already a document.
      */
     public function testHandleRegisterHydrateAlreadyExisting()
     {
@@ -156,7 +155,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should register documents on the PERSIST event
+     * It should register documents on the PERSIST event.
      */
     public function testHandleRegisterPersist()
     {
@@ -170,7 +169,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should not register on PERSIST when there is already a document
+     * It should not register on PERSIST when there is already a document.
      */
     public function testHandleRegisterPersistAlreadyExists()
     {
@@ -186,7 +185,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should deregister the document on the REMOVE event
+     * It should deregister the document on the REMOVE event.
      */
     public function testHandleRemove()
     {
