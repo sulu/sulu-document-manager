@@ -153,10 +153,7 @@ class DocumentRegistry
         $this->hydrationState = array();
 
         if ($this->logger) {
-            $this->logger->debug(sprintf(
-                'clear',
-                $oid, $locale, $originalLocale
-            ));
+            $this->logger->debug('clear');
         }
     }
 

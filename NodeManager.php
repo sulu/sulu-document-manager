@@ -25,35 +25,52 @@ class NodeManager
     /**
      * Find a document with the given path or UUID
      *
-     * @param string $id UUID or path
+     * @param string $identifier UUID or path
      * @return NodeInterface
      *
      * @throws DocumentNotFoundException
      */
-    public function find($id)
+    public function find($identifier)
     {
         try {
-            if (UUIDHelper::isUUID($id)) {
-                return $this->session->getNodeByIdentifier($id);
+            if (UUIDHelper::isUUID($identifier)) {
+                return $this->session->getNodeByIdentifier($identifier);
             }
 
-            return $this->session->getNode($id);
+            return $this->session->getNode($identifier);
         } catch (RepositoryException $e) {
             throw new DocumentNotFoundException(sprintf(
-                'Could not find document with ID or path "%s"', $id
+                'Could not find document with ID or path "%s"', $identifier
             ), null, $e);
+        }
+    }
+
+    /**
+     * Determine if a node exists at the specified path or if a UUID is given,
+     * then if a node with the UUID exists.
+     *
+     * @param string $identifier
+     */
+    public function has($identifier)
+    {
+        $this->normalizeToPath($identifier);
+        try {
+            $this->find($identifier);
+            return true;
+        } catch (DocumentNotFoundException $e) {
+            return false;
         }
     }
 
     /**
      * Remove the document with the given path or UUID
      *
-     * @param string $id ID or path
+     * @param string $identifier ID or path
      */
-    public function remove($id)
+    public function remove($identifier)
     {
-        $id = $this->normalizeToPath($id);
-        $this->session->removeItem($id);
+        $identifier = $this->normalizeToPath($identifier);
+        $this->session->removeItem($identifier);
     }
 
     /**
@@ -120,14 +137,14 @@ class NodeManager
     /**
      * Normalize the given path or ID to a path
      *
-     * @param mixed $id
+     * @param mixed $identifier
      */
-    private function normalizeToPath($id)
+    private function normalizeToPath($identifier)
     {
-        if (UUIDHelper::isUUID($id)) {
-            $id = $this->session->getNodeByIdentifier($id)->getPath();
+        if (UUIDHelper::isUUID($identifier)) {
+            $identifier = $this->session->getNodeByIdentifier($identifier)->getPath();
         }
 
-        return $id;
+        return $identifier;
     }
 }

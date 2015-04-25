@@ -225,7 +225,6 @@ class RegistratorSubscriber implements EventSubscriberInterface
         $locale = $event->getLocale();
 
         if ($this->documentRegistry->hasDocument($document)) {
-
             $this->documentRegistry->updateLocale($document, $locale);
             return;
         }

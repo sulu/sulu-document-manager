@@ -125,7 +125,20 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $defaultLocale = $this->registry->getDefaultLocale();
 
         if ($defaultLocale == $event->getLocale()) {
-            $node->rename($name);
+            $this->rename($node, $name);
+        }
+    }
+
+    private function rename(NodeInterface $node, $name)
+    {
+        $names = (array) $node->getParent()->getNodeNames();
+        $pos = array_search($node->getName(), $names);
+        $next = isset($names[$pos + 1]) ? $names[$pos + 1] : null;
+
+        $node->rename($name);
+
+        if ($next) {
+            $node->getParent()->orderBefore($name, $next);
         }
     }
 

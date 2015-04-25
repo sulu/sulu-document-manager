@@ -149,6 +149,16 @@ class MetadataFactory
     }
 
     /**
+     * Return all registered aliases
+     *
+     * @return array
+     */
+    public function getAliases()
+    {
+        return array_keys($this->aliasMap);
+    }
+
+    /**
      * @param array $mapping
      *
      * @return Metadata

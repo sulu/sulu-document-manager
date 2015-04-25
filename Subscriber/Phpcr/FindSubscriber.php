@@ -85,8 +85,8 @@ class FindSubscriber implements EventSubscriberInterface
             $class = $this->metadataFactory->getMetadataForAlias($aliasOrClass)->getClass();
         } elseif (!class_exists($aliasOrClass)) {
             throw new DocumentManagerException(sprintf(
-                'Unknown class specified and no alias exists for "%s"',
-                $aliasOrClass
+                'Unknown class specified and no alias exists for "%s", known aliases: "%s"',
+                $aliasOrClass, implode('", "', $this->metadataFactory->getAliases())
             ));
         } else {
             $class = $aliasOrClass;

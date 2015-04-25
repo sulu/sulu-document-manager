@@ -12,6 +12,7 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
 use Symfony\Component\EventDispatcher\Event;
+use Sulu\Component\DocumentManager\Behavior\TitleBehavior;
 
 class PersistEvent extends AbstractMappingEvent
 {
@@ -40,10 +41,18 @@ class PersistEvent extends AbstractMappingEvent
     public function getNode()
     {
         if (!$this->node) {
-            throw new \RuntimeException(
+
+            // TODO: Make this into a helper function
+            $title = spl_object_hash($this->document);
+            if ($this->document instanceof TitleBehavior) {
+                $title .= ' (' . $this->document->getTitle() . ')';
+            }
+
+            throw new \RuntimeException(sprintf(
                 'Trying to retrieve node when no node has been set. An event ' .
-                'listener should have set the node.'
-            );
+                'listener should have set the node when persisting document "%s"',
+                $title
+            ));
         }
 
         return $this->node;

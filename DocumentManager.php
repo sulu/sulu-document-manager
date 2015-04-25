@@ -82,15 +82,11 @@ class DocumentManager
      * Remove the document. The document should be unregistered
      * and the related PHPCR node should be removed from the session.
      *
-     * Optionally remove any referencing properties (or value if part of a multi
-     * value referencing property).
-     *
      * @param object $document
-     * @param boolean $dereference
      */
-    public function remove($document, $dereference = false)
+    public function remove($document)
     {
-        $event = new Event\RemoveEvent($document, $dereference);
+        $event = new Event\RemoveEvent($document);
         $this->eventDispatcher->dispatch(Events::REMOVE, $event);
     }
 
@@ -199,6 +195,8 @@ class DocumentManager
         }
 
         $resolver = new OptionsResolver();
+        $resolver->setDefault('locale', null);
+
         $event = new Event\ConfigureOptionsEvent($resolver);
         $this->eventDispatcher->dispatch(Events::CONFIGURE_OPTIONS, $event);
 
