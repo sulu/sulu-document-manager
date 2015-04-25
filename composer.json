@@ -22,6 +22,9 @@
     ],
     "minimum-stability": "dev",
     "autoload": {
-        "psr-4": { "Sulu\\Component\\DocumentManager\\": "" }
+        "psr-4": { "Sulu\\Component\\DocumentManager\\": "lib/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Sulu\\Component\\DocumentManager\\Tests\\": "tests/" }
     }
 }
