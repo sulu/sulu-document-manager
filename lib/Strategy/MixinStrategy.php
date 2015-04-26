@@ -3,9 +3,9 @@
 namespace Sulu\Component\DocumentManager\Strategy;
 
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
-use Sulu\Component\DocumentManager\MetadataFactory;
 use PHPCR\NodeInterface;
 use PHPCR\Util\UUIDHelper;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 /**
  * Manage nodes via. a jcr mixin.
@@ -13,14 +13,14 @@ use PHPCR\Util\UUIDHelper;
 class MixinStrategy implements DocumentStrategyInterface
 {
     /**
-     * @var MetadataFactory
+     * @var MetadataFactoryInterface
      */
     private $metadataFactory;
 
     /**
-     * @param MetadataFactory $metadataFactory
+     * @param MetadataFactoryInterface $metadataFactory
      */
-    public function __construct(MetadataFactory $metadataFactory)
+    public function __construct(MetadataFactoryInterface $metadataFactory)
     {
         $this->metadataFactory = $metadataFactory;
     }

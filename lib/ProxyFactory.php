@@ -33,13 +33,13 @@ class ProxyFactory
      * @param LazyLoadingGhostFactory $proxyFactory
      * @param EventDispatcherInterface $dispatcher
      * @param DocumentRegistry $registry
-     * @param MetadataFactory $metadataFactory
+     * @param MetadataFactoryInterface $metadataFactory
      */
     public function __construct(
         LazyLoadingGhostFactory $proxyFactory,
         EventDispatcherInterface $dispatcher,
         DocumentRegistry $registry,
-        MetadataFactory $metadataFactory
+        MetadataFactoryInterface $metadataFactory
     ) {
         $this->proxyFactory = $proxyFactory;
         $this->dispatcher = $dispatcher;

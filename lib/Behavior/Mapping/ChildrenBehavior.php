@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Behavior\Children;
+namespace Sulu\Component\DocumentManager\Behavior\Mapping;
 
 interface ChildrenBehavior
 {

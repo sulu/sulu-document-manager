@@ -9,23 +9,24 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager;
+namespace Sulu\Component\DocumentManager\Metadata;
 
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
 use Sulu\Component\DocumentManager\Exception\MetadataNotFoundException;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
+use Sulu\Component\DocumentManager\ClassNameInflector;
+use Sulu\Component\DocumentManager\Metadata;
 
 /**
  * Simple metadata factory which uses an array map
+ *
+ * Note that this class does not  implement the getMetadataForPhpcrNode method
+ * as that would require a circular dependency.
  */
-class MetadataFactory
+class BaseMetadataFactory implements MetadataFactoryInterface
 {
-    /**
-     * @var DocumentStrategyInterface
-     */
-    private $documentStrategy;
-
     /**
      * @var array
      */
@@ -45,8 +46,7 @@ class MetadataFactory
      * @param array $mapping
      */
     public function __construct(
-        array $mapping,
-        DocumentStrategyInterface $documentStrategy
+        array $mapping
     )
     {
         foreach ($mapping as $map) {
@@ -54,16 +54,10 @@ class MetadataFactory
             $this->classMap[$map['class']] = $map;
             $this->phpcrTypeMap[$map['phpcr_type']] = $map;
         }
-
-        $this->documentStrategy = $documentStrategy;
     }
 
     /**
-     * Return metadata for the given alias.
-     *
-     * @param string $alias
-     *
-     * @return Metadata
+     * {@inheritDoc}
      */
     public function getMetadataForAlias($alias)
     {
@@ -80,11 +74,7 @@ class MetadataFactory
     }
 
     /**
-     * Return metadata for the given PHPCR type (e.g. sulu:page).
-     *
-     * @param string $phpcrType
-     *
-     * @return Metadata
+     * {@inheritDoc}
      */
     public function getMetadataForPhpcrType($phpcrType)
     {
@@ -101,11 +91,7 @@ class MetadataFactory
     }
 
     /**
-     * Return true if there is metadata for the given PHPCR type.
-     *
-     * @param string $phpcrType
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function hasMetadataForPhpcrType($phpcrType)
     {
@@ -113,28 +99,7 @@ class MetadataFactory
     }
 
     /**
-     * Return metadata for the given NodeInterface or return
-     * metadata for the UnknownDocument if the node is not managed.
-     *
-     * @param NodeInterface $node
-     *
-     * @return object
-     */
-    public function getMetadataForPhpcrNode(NodeInterface $node)
-    {
-        if ($metadata = $this->documentStrategy->resolveMetadataForNode($node)) {
-            return $metadata;
-        }
-
-        return $this->getUnknownMetadata();
-    }
-
-    /**
-     * Return metadata for the given class.
-     *
-     * @param mixed $class
-     *
-     * @return Metadata
+     * {@inheritDoc}
      */
     public function getMetadataForClass($class)
     {
@@ -153,9 +118,7 @@ class MetadataFactory
     }
 
     /**
-     * Return true if the given alias exists.
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function hasAlias($alias)
     {
@@ -163,13 +126,21 @@ class MetadataFactory
     }
 
     /**
-     * Return all registered aliases.
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function getAliases()
     {
         return array_keys($this->aliasMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadataForPhpcrNode(NodeInterface $node)
+    {
+        throw new \BadMethodCallException(
+            'The BaseMetadataFactory does not implement this method'
+        );
     }
 
     /**
@@ -185,17 +156,5 @@ class MetadataFactory
         $metadata->setClass($mapping['class']);
 
         return $metadata;
-    }
-
-    /**
-     * @return Metadata
-     */
-    private function getUnknownMetadata()
-    {
-        return $this->getMetadata(array(
-            'alias' => null,
-            'class' => UnknownDocument::class,
-            'phpcr_type' => null,
-        ));
     }
 }

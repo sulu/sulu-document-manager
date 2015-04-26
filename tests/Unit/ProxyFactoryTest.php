@@ -21,6 +21,7 @@ use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\ProxyFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->node = $this->prophesize(NodeInterface::class);
         $this->parentNode = $this->prophesize(NodeInterface::class);
-        $this->metadataFactory = $this->prophesize(MetadataFactory::class);
+        $this->metadataFactory = $this->prophesize(MetadataFactoryInterface::class);
         $this->metadata = $this->prophesize(Metadata::class);
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
         $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);

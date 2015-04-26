@@ -13,8 +13,8 @@ namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
 use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\NodeManager;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 /**
  * Automatically set the parnet at a pre-determined location.
@@ -26,7 +26,7 @@ class AliasFilingSubscriber extends AbstractFilingSubscriber
     public function __construct(
         NodeManager $nodeManager,
         DocumentManager $documentManager,
-        MetadataFactory $metadataFactory,
+        MetadataFactoryInterface $metadataFactory,
         $basePath
     ) {
         parent::__construct($nodeManager, $documentManager, $basePath);

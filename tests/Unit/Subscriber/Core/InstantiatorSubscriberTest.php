@@ -9,6 +9,7 @@ use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\Subscriber\Core\InstantiatorSubscriber;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +19,7 @@ class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->metadataFactory = $this->prophesize(MetadataFactory::class);
+        $this->metadataFactory = $this->prophesize(MetadataFactoryInterface::class);
         $this->subscriber = new InstantiatorSubscriber(
             $this->metadataFactory->reveal()
         );

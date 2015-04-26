@@ -16,7 +16,7 @@ use Sulu\Component\DocumentManager\Event\CreateEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\MetadataFactory;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -29,15 +29,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class InstantiatorSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var MetadataFactory
+     * @var MetadataFactoryInterface
      */
     private $metadataFactory;
 
     /**
-     * @param MetadataFactory $metadataFactory
+     * @param MetadataFactoryInterface $metadataFactory
      */
     public function __construct(
-        MetadataFactory $metadataFactory
+        MetadataFactoryInterface $metadataFactory
     ) {
         $this->metadataFactory = $metadataFactory;
     }

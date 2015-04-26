@@ -14,12 +14,13 @@ use Sulu\Component\DocumentManager\Strategy\MixinStrategy;
 use Sulu\Component\DocumentManager\Metadata;
 use PHPCR\NodeInterface;
 use Prophecy\Argument;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 class MixinStrategyTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->factory = $this->prophesize(MetadataFactory::class);
+        $this->factory = $this->prophesize(MetadataFactoryInterface::class);
         $this->metadata = $this->prophesize(Metadata::class);
         $this->strategy = new MixinStrategy($this->factory->reveal());
 

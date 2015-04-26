@@ -23,6 +23,7 @@ use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Phpcr\FindSubscriber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 class FindSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +32,7 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->node = $this->prophesize(NodeInterface::class);
-        $this->metadataFactory = $this->prophesize(MetadataFactory::class);
+        $this->metadataFactory = $this->prophesize(MetadataFactoryInterface::class);
         $this->metadata = $this->prophesize(Metadata::class);
         $this->document = new \stdClass();
         $this->subscriber = new FindSubscriber(

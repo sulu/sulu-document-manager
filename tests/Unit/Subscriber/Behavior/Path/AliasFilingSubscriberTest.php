@@ -18,6 +18,7 @@ use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AliasFilingSubscriber;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +30,7 @@ class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->parentDocument = new \stdClass();
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->documentManager = $this->prophesize(DocumentManager::class);
-        $this->metadataFactory = $this->prophesize(MetadataFactory::class);
+        $this->metadataFactory = $this->prophesize(MetadataFactoryInterface::class);
         $this->metadata = $this->prophesize(Metadata::class);
 
         $this->subscriber = new AliasFilingSubscriber(

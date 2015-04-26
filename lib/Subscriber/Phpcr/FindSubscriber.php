@@ -16,7 +16,7 @@ use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
-use Sulu\Component\DocumentManager\MetadataFactory;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -31,10 +31,10 @@ class FindSubscriber implements EventSubscriberInterface
     private $nodeManager;
 
     /**
-     * @param MetadataFactory $metadataFactory
+     * @param MetadataFactoryInterface $metadataFactory
      */
     public function __construct(
-        MetadataFactory $metadataFactory,
+        MetadataFactoryInterface $metadataFactory,
         NodeManager $nodeManager,
         EventDispatcherInterface $eventDispatcher
     ) {
