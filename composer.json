@@ -11,7 +11,8 @@
         "symfony/options-resolver": "~2.4"
     },
     "require-dev": {
-        "jackalope/jackalope-doctrine-dbal": "~1.2@dev"
+        "jackalope/jackalope-doctrine-dbal": "~1.2@dev",
+        "phpunit/phpunit": "~4.5"
     },
     "license": "MIT",
     "authors": [

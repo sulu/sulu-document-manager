@@ -23,6 +23,7 @@ use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AutoNameSubscriber;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 
 class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +33,6 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
         $this->slugifier = $this->prophesize(SlugifierInterface::class);
-        $this->metadataFactory = $this->prophesize(MetadataFactory::class);
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->moveEvent = $this->prophesize(MoveEvent::class);
         $this->document = $this->prophesize(AutoNameBehavior::class);
@@ -45,13 +45,14 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->documentRegistry->getDefaultLocale()->willReturn(self::DEFAULT_LOCALE);
         $this->resolver = $this->prophesize(NameResolver::class);
         $this->nodeManager = $this->prophesize(NodeManager::class);
+        $this->strategy = $this->prophesize(DocumentStrategyInterface::class);
 
         $this->subscriber = new AutoNameSubscriber(
             $this->documentRegistry->reveal(),
             $this->slugifier->reveal(),
-            $this->metadataFactory->reveal(),
             $this->resolver->reveal(),
-            $this->nodeManager->reveal()
+            $this->nodeManager->reveal(),
+            $this->strategy->reveal()
         );
     }
 
@@ -75,19 +76,6 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent->hasNode()->willReturn(false);
         $this->document->getTitle()->willReturn(null);
-        $this->persistEvent->getDocument()->willReturn($this->document->reveal());
-        $this->subscriber->handlePersist($this->persistEvent->reveal());
-    }
-
-    /**
-     * It should throw an exception if the document has no parent.
-     *
-     * @expectedException Sulu\Component\DocumentManager\Exception\DocumentManagerException
-     */
-    public function testNoParent()
-    {
-        $this->document->getTitle()->willReturn('hai');
-        $this->document->getParent()->willReturn(null);
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
@@ -161,17 +149,13 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->slugifier->slugify($title)->willReturn($title);
 
         $this->resolver->resolveName($this->parentNode->reveal(), $title, $node)->willReturn($title);
-        $this->documentRegistry->getNodeForDocument($this->parent)->willReturn($this->parentNode->reveal());
-        $this->metadataFactory->getMetadataForClass(get_class($this->document->reveal()))->willReturn($this->metadata->reveal());
+        $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
+        $this->strategy->createNodeForDocument($this->document->reveal(), $this->parentNode->reveal(), $expectedName)->willReturn($this->newNode->reveal());
 
         if (!$create) {
             return;
         }
 
-        $this->parentNode->addNode($expectedName)->willReturn($this->newNode->reveal());
-        $this->metadata->getPhpcrType()->willReturn($phpcrType);
-        $this->newNode->addMixin($phpcrType)->shouldBeCalled();
-        $this->newNode->setProperty('jcr:uuid', Argument::type('string'))->shouldBeCalled();
         $this->persistEvent->setNode($this->newNode->reveal())->shouldBeCalled();
     }
 }

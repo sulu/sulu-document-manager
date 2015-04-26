@@ -6,11 +6,13 @@ use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 
 class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->strategy = $this->prophesize(DocumentStrategyInterface::class);
         $this->factory = new MetadataFactory(
             array(
                 array(
@@ -23,7 +25,8 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
                     'class' => 'Class\Snippet',
                     'phpcr_type' => 'sulu:snippet',
                 ),
-            )
+            ),
+            $this->strategy->reveal()
         );
     }
 
@@ -116,17 +119,12 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetForPhpcrNode()
     {
+        $expectedMetadata = $this->prophesize(Metadata::class);
         $node = $this->prophesize(NodeInterface::class);
-        $node->hasProperty('jcr:mixinTypes')->willReturn(true);
-        $node->getPropertyValue('jcr:mixinTypes')->willReturn(array(
-            'sulu:page',
-            'sulu:barbar',
-        ));
+        $this->strategy->resolveMetadataForNode($node->reveal())->willReturn($expectedMetadata->reveal());
 
         $metadata = $this->factory->getMetadataForPhpcrNode($node->reveal());
-        $this->assertEquals('page', $metadata->getAlias());
-        $this->assertEquals('Class\Page', $metadata->getClass());
-        $this->assertEquals('sulu:page', $metadata->getPhpcrType());
+        $this->assertSame($expectedMetadata->reveal(), $metadata);
     }
 
     /**

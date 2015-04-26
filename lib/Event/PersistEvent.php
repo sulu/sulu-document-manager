@@ -14,9 +14,15 @@ namespace Sulu\Component\DocumentManager\Event;
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\TitleBehavior;
 use Symfony\Component\EventDispatcher\Event;
+use Sulu\Component\DocumentManager\DocumentHelper;
 
 class PersistEvent extends AbstractMappingEvent
 {
+    /**
+     * @param NodeInterface
+     */
+    private $parentNode;
+
     /**
      * @param object $document
      */
@@ -36,6 +42,14 @@ class PersistEvent extends AbstractMappingEvent
     }
 
     /**
+     * @param NodeInterface $node
+     */
+    public function setParentNode(NodeInterface $parentNode)
+    {
+        $this->parentNode = $parentNode;
+    }
+
+    /**
      * @return NodeInterface
      *
      * @throws \RuntimeException
@@ -43,20 +57,40 @@ class PersistEvent extends AbstractMappingEvent
     public function getNode()
     {
         if (!$this->node) {
-
-            // TODO: Make this into a helper function
-            $title = spl_object_hash($this->document);
-            if ($this->document instanceof TitleBehavior) {
-                $title .= ' (' . $this->document->getTitle() . ')';
-            }
-
             throw new \RuntimeException(sprintf(
                 'Trying to retrieve node when no node has been set. An event ' .
                 'listener should have set the node when persisting document "%s"',
-                $title
+                DocumentHelper::getDebugTitle($this->document)
             ));
         }
 
         return $this->node;
     }
+
+    /**
+     * @return NodeInterface
+     *
+     * @throws \RuntimeException
+     */
+    public function getParentNode()
+    {
+        if (!$this->parentNode) {
+            throw new \RuntimeException(sprintf(
+                'Trying to retrieve parent node when no parent node has been set. An event ' .
+                'listener should have set the node when persisting document "%s"',
+                DocumentHelper::getDebugTitle($this->document)
+            ));
+        }
+
+        return $this->parentNode;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasParentNode()
+    {
+        return $this->parentNode !== null;
+    }
+    
 }

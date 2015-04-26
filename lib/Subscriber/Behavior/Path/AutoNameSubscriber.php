@@ -12,12 +12,13 @@ use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Sulu\Component\DocumentManager\DocumentHelper;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 
 /**
  * Automatically assign a name to the document based on its title.
@@ -28,21 +29,21 @@ class AutoNameSubscriber implements EventSubscriberInterface
 {
     private $registry;
     private $slugifier;
-    private $metadataFactory;
     private $nodeManager;
+    private $documentStrategy;
 
     public function __construct(
         DocumentRegistry $registry,
         SlugifierInterface $slugifier,
-        MetadataFactory $metadataFactory,
         NameResolver $resolver,
-        NodeManager $nodeManager
+        NodeManager $nodeManager,
+        DocumentStrategyInterface $documentStrategy
     ) {
         $this->registry = $registry;
         $this->slugifier = $slugifier;
-        $this->metadataFactory = $metadataFactory;
         $this->resolver = $resolver;
         $this->nodeManager = $nodeManager;
+        $this->documentStrategy = $documentStrategy;
     }
 
     /**
@@ -88,32 +89,21 @@ class AutoNameSubscriber implements EventSubscriberInterface
 
         if (!$title) {
             throw new DocumentManagerException(sprintf(
-                'Document of class "%s" has no title (ooid: "%s")',
-                get_class($document), spl_object_hash($document)
+                'Document has no title (title is required for auto name behavior): %s)',
+                DocumentHelper::getDebugTitle($document)
             ));
         }
 
         $name = $this->slugifier->slugify($title);
-        $parentDocument = $document->getParent();
 
-        if (null === $parentDocument) {
-            throw new DocumentManagerException(sprintf(
-                'Document with title "%s" has no parent, cannot automatically assing a name',
-                $title
-            ));
-        }
-
-        $parentNode = $this->registry->getNodeForDocument($parentDocument);
-        $metadata = $this->metadataFactory->getMetadataForClass(get_class($document));
+        $parentNode = $event->getParentNode();
 
         $node = $event->hasNode() ? $event->getNode() : null;
-
         $name = $this->resolver->resolveName($parentNode, $name, $node);
 
         if (null === $node) {
-            $node = $this->createNode($parentNode, $metadata, $name);
+            $node = $this->documentStrategy->createNodeForDocument($document, $parentNode, $name);
             $event->setNode($node);
-
             return;
         }
 
@@ -124,9 +114,11 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $node = $event->getNode();
         $defaultLocale = $this->registry->getDefaultLocale();
 
-        if ($defaultLocale == $event->getLocale()) {
-            $this->rename($node, $name);
+        if ($defaultLocale != $event->getLocale()) {
+            return;
         }
+
+        $this->rename($node, $name);
     }
 
     /**
@@ -144,26 +136,6 @@ class AutoNameSubscriber implements EventSubscriberInterface
         if ($next) {
             $node->getParent()->orderBefore($name, $next);
         }
-    }
-
-    /**
-     * Create the node, add mixin and set the UUID.
-     *
-     * TODO: Move this to separate subscriber, it should not be related to AutoName
-     *
-     * @param NodeInterface $parentNode
-     * @param Metadata $metadata
-     * @param mixed $name
-     */
-    private function createNode(NodeInterface $parentNode, Metadata $metadata, $name)
-    {
-        $node = $parentNode->addNode($name);
-
-        // TODO: Migrate to using primary type
-        $node->addMixin($metadata->getPhpcrType());
-        $node->setProperty('jcr:uuid', UUIDHelper::generateUUID());
-
-        return $node;
     }
 
     /**
