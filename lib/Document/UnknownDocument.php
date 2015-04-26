@@ -11,8 +11,8 @@
 
 namespace Sulu\Component\DocumentManager\Document;
 
-use Sulu\Component\DocumentManager\Behavior\NodeNameBehavior;
-use Sulu\Component\DocumentManager\Behavior\UuidBehavior;
+use Sulu\Component\DocumentManager\Behavior\Mapping\NodeNameBehavior;
+use Sulu\Component\DocumentManager\Behavior\Mapping\UuidBehavior;
 
 /**
  * This document class is used when an unmapped node is loaded.

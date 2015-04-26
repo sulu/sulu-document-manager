@@ -12,7 +12,7 @@
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Audit;
 
 use PHPCR\PropertyType;
-use Sulu\Component\DocumentManager\Behavior\BlameBehavior;
+use Sulu\Component\DocumentManager\Behavior\Audit\BlameBehavior;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;

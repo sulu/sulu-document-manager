@@ -52,7 +52,10 @@ class ParentSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::HYDRATE => 'handleHydrate',
-            Events::PERSIST => 'handleChangeParent',
+            Events::PERSIST => array(
+                array('handleChangeParent', 0),
+                array('handleSetParentNodeFromDocument', 490),
+            ),
             Events::MOVE => 'handleMove',
         );
     }
@@ -64,17 +67,40 @@ class ParentSubscriber implements EventSubscriberInterface
         $this->mapParent($document, $node);
     }
 
+    public function handleSetParentNodeFromDocument(PersistEvent $event)
+    {
+        $document = $event->getDocument();
+
+        if (!$document instanceof ParentBehavior) {
+            return;
+        }
+
+        if ($event->hasParentNode()) {
+            return;
+        }
+
+        $parentDocument = $document->getParent();
+
+        if (!$parentDocument) {
+            return;
+        }
+
+        $parentNode = $this->inspector->getNode($parentDocument);
+        $event->setParentNode($parentNode);
+    }
+
     /**
      * @param HydrateEvent $event
      */
     public function handleHydrate(HydrateEvent $event)
     {
         $document = $event->getDocument();
-        $node = $event->getNode();
 
         if (!$document instanceof ParentBehavior) {
             return;
         }
+
+        $node = $event->getNode();
 
         if ($node->getDepth() == 0) {
             throw new \RuntimeException(sprintf(
@@ -95,18 +121,8 @@ class ParentSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
 
-        if (!$document instanceof ParentBehavior) {
-            return;
-        }
-
-        $parentDocument = $document->getParent();
-
-        if (!$parentDocument) {
-            return;
-        }
-
         $node = $this->inspector->getNode($document);
-        $parentNode = $this->inspector->getNode($parentDocument);
+        $parentNode = $event->getParentNode();
 
         if ($parentNode->getPath() === $node->getParent()->getPath()) {
             return;
