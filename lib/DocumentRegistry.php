@@ -5,6 +5,7 @@ namespace Sulu\Component\DocumentManager;
 use PHPCR\NodeInterface;
 use Psr\Log\LoggerInterface;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Component\DocumentManager\DocumentHelper;
 
 /**
  * Handles the mapping between managed documents and nodes.
@@ -75,12 +76,10 @@ class DocumentRegistry
         $oid = $this->getObjectIdentifier($document);
         $uuid = $node->getIdentifier();
 
-        if ($this->logger) {
-            $this->logger->debug(sprintf(
-                '%-24s: %s, node: "%s" (%s), locale: "%s"',
-                __FUNCTION__, $oid, $node->getPath(), $uuid, $locale
-            ));
-        }
+        $this->logDocument($document, sprintf(
+            'node: "%s" (%s), locale: "%s"',
+            $node->getPath(), $uuid, $locale
+        ));
 
         // do not allow nodes wihout UUIDs or reregistration of documents
         $this->validateDocumentRegistration($document, $node, $oid, $uuid);
@@ -105,12 +104,10 @@ class DocumentRegistry
         $this->originalLocaleMap[$oid] = $originalLocale;
         $this->documentLocaleMap[$oid] = $locale;
 
-        if ($this->logger) {
-            $this->logger->debug(sprintf(
-                '%-24s: %s, locale: "%s", original locale: "%s"',
-                __FUNCTION__, $oid, $locale, $originalLocale
-            ));
-        }
+        $this->logDocument($document, sprintf(
+            'locale: "%s", original locale: "%s"',
+            $locale, $originalLocale
+        ));
     }
 
     /**
@@ -167,7 +164,7 @@ class DocumentRegistry
     {
         $oid = $this->getObjectIdentifier($document);
 
-        $this->assertDocumentExists($oid);
+        $this->assertDocumentExists($document);
 
         $nodeIdentifier = $this->documentNodeMap[$oid];
 
@@ -179,12 +176,7 @@ class DocumentRegistry
         unset($this->originalLocaleMap[$oid]);
         unset($this->hydrationState[$oid]);
 
-        if ($this->logger) {
-            $this->logger->debug(sprintf(
-                '%-24s: %s',
-                __FUNCTION__, $oid
-            ));
-        }
+        $this->logDocument($document, '');
     }
 
     /**
@@ -199,7 +191,7 @@ class DocumentRegistry
     public function getNodeForDocument($document)
     {
         $oid = $this->getObjectIdentifier($document);
-        $this->assertDocumentExists($oid);
+        $this->assertDocumentExists($document);
 
         return $this->nodeMap[$this->documentNodeMap[$oid]];
     }
@@ -215,7 +207,7 @@ class DocumentRegistry
     public function getLocaleForDocument($document)
     {
         $oid = $this->getObjectIdentifier($document);
-        $this->assertDocumentExists($oid);
+        $this->assertDocumentExists($document);
 
         return $this->documentLocaleMap[$oid];
     }
@@ -230,7 +222,7 @@ class DocumentRegistry
     public function getOriginalLocaleForDocument($document)
     {
         $oid = $this->getObjectIdentifier($document);
-        $this->assertDocumentExists($oid);
+        $this->assertDocumentExists($document);
 
         if (isset($this->originalLocaleMap[$oid])) {
             return $this->originalLocaleMap[$oid];
@@ -267,12 +259,14 @@ class DocumentRegistry
     /**
      * @param mixed $oid
      */
-    private function assertDocumentExists($oid)
+    private function assertDocumentExists($document)
     {
+        $oid = spl_object_hash($document);
+
         if (!isset($this->documentMap[$oid])) {
             throw new \RuntimeException(sprintf(
-                'Document with OID "%s" is not managed, there are "%s" managed objects,',
-                $oid, count($this->documentMap)
+                'Document "%s" with OID "%s" is not managed, there are "%s" managed objects,',
+                get_class($document), $oid, count($this->documentMap)
             ));
         }
     }
@@ -343,12 +337,7 @@ class DocumentRegistry
         $oid = spl_object_hash($document);
         $this->hydrationState[$oid] = true;
 
-        if ($this->logger) {
-            $this->logger->debug(sprintf(
-                '%-24s: %s',
-                __FUNCTION__, $oid
-            ));
-        }
+        $this->logDocument($document, '');
     }
 
     /**
@@ -362,12 +351,7 @@ class DocumentRegistry
         $oid = spl_object_hash($document);
         unset($this->hydrationState[$oid]);
 
-        if ($this->logger) {
-            $this->logger->debug(sprintf(
-                '%-24s: %s',
-                __FUNCTION__, $oid
-            ));
-        }
+        $this->logDocument($document);
     }
 
     /**
@@ -386,5 +370,28 @@ class DocumentRegistry
         }
 
         return false;
+    }
+
+    private function logDocument($document, $message = '')
+    {
+        if (!$this->logger) {
+            return;
+        }
+        $callers = debug_backtrace();
+        $fromMethod = $callers[1]['function'];
+        $caller = $callers[2]['class'];
+        $callerFunction = $callers[2]['function'];
+
+        $message = sprintf(
+            '%-24s: %s %s. Caller: %s#%s)',
+            $fromMethod,
+            $this->hasDocument($document) ? DocumentHelper::getDebugTitle($document) : spl_object_hash($document) . ' (unmanaged)',
+            $message,
+            $caller,
+            $callerFunction
+        );
+
+        $this->logger->debug($message);
+
     }
 }

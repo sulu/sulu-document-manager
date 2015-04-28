@@ -11,7 +11,7 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
-use Sulu\Component\DocumentManager\Behavior\ChildrenBehavior;
+use Sulu\Component\DocumentManager\Behavior\Mapping\ChildrenBehavior;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\ProxyFactory;
