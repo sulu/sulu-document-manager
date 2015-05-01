@@ -377,6 +377,7 @@ class DocumentRegistry
         if (!$this->logger) {
             return;
         }
+
         $callers = debug_backtrace();
         $fromMethod = $callers[1]['function'];
         $caller = $callers[2]['class'];

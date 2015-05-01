@@ -135,6 +135,12 @@ class ParentSubscriber implements EventSubscriberInterface
     {
         // TODO: performance warning: We are eagerly fetching the parent node
         $targetNode = $node->getParent();
+
+        // Do not map non-referencable parent nodes
+        if (!$targetNode->hasProperty('jcr:uuid')) {
+            return;
+        }
+
         $document->setParent($this->proxyFactory->createProxyForNode($document, $targetNode));
     }
 }

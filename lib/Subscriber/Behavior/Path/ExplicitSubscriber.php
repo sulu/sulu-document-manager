@@ -20,12 +20,13 @@ use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use PHPCR\NodeInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Populates or creates the node and/or parent node based on explicit
  * options.
  */
-class ExplicitSubscriber
+class ExplicitSubscriber implements EventSubscriberInterface
 {
     /**
      * @var DocumentStrategyInterface

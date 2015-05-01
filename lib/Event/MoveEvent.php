@@ -26,6 +26,11 @@ class MoveEvent extends Event
     private $destId;
 
     /**
+     * @var string
+     */
+    private $destName;
+
+    /**
      * @param object $document
      */
     public function __construct($document, $destId)
@@ -47,6 +52,11 @@ class MoveEvent extends Event
     public function setDestName($name)
     {
         $this->destName = $name;
+    }
+
+    public function hasDestName()
+    {
+        return null !== $this->destName;
     }
 
     public function getDestName()
