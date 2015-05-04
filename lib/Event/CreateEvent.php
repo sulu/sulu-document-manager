@@ -13,7 +13,7 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class CreateEvent extends Event
+class CreateEvent extends AbstractEvent
 {
     /**
      * @var object

@@ -14,7 +14,7 @@ namespace Sulu\Component\DocumentManager\Event;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ConfigureOptionsEvent extends Event
+class ConfigureOptionsEvent extends AbstractEvent
 {
     private $options;
 

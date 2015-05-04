@@ -13,7 +13,7 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class MoveEvent extends Event
+class MoveEvent extends AbstractEvent
 {
     /**
      * @var object
@@ -37,6 +37,19 @@ class MoveEvent extends Event
     {
         $this->document = $document;
         $this->destId = $destId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDebugMessage()
+    {
+        return sprintf(
+            'd:%s did:%s, dnam:%s',
+            $this->document ? spl_object_hash($this->document) : '<no document>',
+            $this->destId ? : '<no dest>',
+            $this->destName ? : '<no dest name>'
+        );
     }
 
     public function getDocument()

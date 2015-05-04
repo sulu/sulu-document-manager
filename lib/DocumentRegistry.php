@@ -48,17 +48,11 @@ class DocumentRegistry
     private $hydrationState = array();
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger = null;
-
-    /**
      * @param $defaultLocale
      */
-    public function __construct($defaultLocale, LoggerInterface $logger = null)
+    public function __construct($defaultLocale)
     {
         $this->defaultLocale = $defaultLocale;
-        $this->logger = $logger;
     }
 
     /**
@@ -75,11 +69,6 @@ class DocumentRegistry
 
         $oid = $this->getObjectIdentifier($document);
         $uuid = $node->getIdentifier();
-
-        $this->logDocument($document, sprintf(
-            'node: "%s" (%s), locale: "%s"',
-            $node->getPath(), $uuid, $locale
-        ));
 
         // do not allow nodes wihout UUIDs or reregistration of documents
         $this->validateDocumentRegistration($document, $node, $oid, $uuid);
@@ -103,11 +92,6 @@ class DocumentRegistry
         $oid = $this->getObjectIdentifier($document);
         $this->originalLocaleMap[$oid] = $originalLocale;
         $this->documentLocaleMap[$oid] = $locale;
-
-        $this->logDocument($document, sprintf(
-            'locale: "%s", original locale: "%s"',
-            $locale, $originalLocale
-        ));
     }
 
     /**
@@ -148,10 +132,6 @@ class DocumentRegistry
         $this->documentLocaleMap = array();
         $this->originalLocaleMap = array();
         $this->hydrationState = array();
-
-        if ($this->logger) {
-            $this->logger->debug('clear');
-        }
     }
 
     /**
@@ -175,8 +155,6 @@ class DocumentRegistry
         unset($this->documentLocaleMap[$oid]);
         unset($this->originalLocaleMap[$oid]);
         unset($this->hydrationState[$oid]);
-
-        $this->logDocument($document, '');
     }
 
     /**
@@ -336,8 +314,6 @@ class DocumentRegistry
     {
         $oid = spl_object_hash($document);
         $this->hydrationState[$oid] = true;
-
-        $this->logDocument($document, '');
     }
 
     /**
@@ -350,8 +326,6 @@ class DocumentRegistry
     {
         $oid = spl_object_hash($document);
         unset($this->hydrationState[$oid]);
-
-        $this->logDocument($document);
     }
 
     /**
@@ -370,29 +344,5 @@ class DocumentRegistry
         }
 
         return false;
-    }
-
-    private function logDocument($document, $message = '')
-    {
-        if (!$this->logger) {
-            return;
-        }
-
-        $callers = debug_backtrace();
-        $fromMethod = $callers[1]['function'];
-        $caller = $callers[2]['class'];
-        $callerFunction = $callers[2]['function'];
-
-        $message = sprintf(
-            '%-24s: %s %s. Caller: %s#%s)',
-            $fromMethod,
-            $this->hasDocument($document) ? DocumentHelper::getDebugTitle($document) : spl_object_hash($document) . ' (unmanaged)',
-            $message,
-            $caller,
-            $callerFunction
-        );
-
-        $this->logger->debug($message);
-
     }
 }

@@ -15,7 +15,7 @@ use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Query\Query;
 use Symfony\Component\EventDispatcher\Event;
 
-class QueryExecuteEvent extends Event
+class QueryExecuteEvent extends AbstractEvent
 {
     private $query;
 

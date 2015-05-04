@@ -13,7 +13,7 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-abstract class AbstractDocumentEvent extends Event
+abstract class AbstractDocumentEvent extends AbstractEvent
 {
     /**
      * @var object
@@ -31,5 +31,16 @@ abstract class AbstractDocumentEvent extends Event
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDebugMessage()
+    {
+        return sprintf(
+            'd:%s',
+            $this->document ? spl_object_hash($this->document) : '<no document>'
+        );
     }
 }

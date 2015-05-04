@@ -14,7 +14,7 @@ namespace Sulu\Component\DocumentManager\Event;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Symfony\Component\EventDispatcher\Event;
 
-class FindEvent extends Event
+class FindEvent extends AbstractEvent
 {
     private $identifier;
     private $document;
@@ -26,6 +26,16 @@ class FindEvent extends Event
         $this->identifier = $identifier;
         $this->locale = $locale;
         $this->options = $options;
+    }
+
+    public function getDebugMessage()
+    {
+        return sprintf(
+            'i:%s d:%s l:%s',
+            $this->identifier,
+            $this->document ? spl_object_hash($this->document) : '<no document>',
+            $this->locale ? : '<no locale>'
+        );
     }
 
     public function getId()

@@ -13,6 +13,6 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class FlushEvent extends Event
+class FlushEvent extends AbstractEvent
 {
 }

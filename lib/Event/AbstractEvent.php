@@ -13,6 +13,10 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class ClearEvent extends AbstractEvent
+abstract class AbstractEvent extends Event
 {
+    public function getDebugMessage()
+    {
+        return '';
+    }
 }

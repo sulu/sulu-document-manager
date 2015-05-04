@@ -15,7 +15,7 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Query\Query;
 use Symfony\Component\EventDispatcher\Event;
 
-class QueryCreateEvent extends Event
+class QueryCreateEvent extends AbstractEvent
 {
     private $innerQuery;
     private $query;

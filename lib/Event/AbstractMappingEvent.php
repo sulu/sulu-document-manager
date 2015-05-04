@@ -15,7 +15,7 @@ use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 use Symfony\Component\EventDispatcher\Event;
 
-abstract class AbstractMappingEvent extends Event
+abstract class AbstractMappingEvent extends AbstractEvent
 {
     /**
      * @var object
@@ -41,6 +41,16 @@ abstract class AbstractMappingEvent extends Event
      * @var array
      */
     protected $options;
+
+    public function getDebugMessage()
+    {
+        return sprintf(
+            'n:%s d:%s l:%s',
+            $this->node ? $this->node->getPath() : '<no node>',
+            $this->document ? spl_object_hash($this->document) : '<no document>',
+            $this->locale ? : '<no locale>'
+        );
+    }
 
     /**
      * @return NodeInterface

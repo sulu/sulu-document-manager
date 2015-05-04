@@ -23,6 +23,19 @@ class ReorderEvent extends AbstractDocumentEvent
         $this->after = $after;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getDebugMessage()
+    {
+        return sprintf(
+            'd:%s did:%s, after:%s',
+            $this->document ? spl_object_hash($this->document) : '<no document>',
+            $this->destId ? : '<no dest>',
+            $this->after ? 'true' : 'false'
+        );
+    }
+
     public function getDestId()
     {
         return $this->destId;
