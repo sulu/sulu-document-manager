@@ -52,11 +52,25 @@ class MixinStrategyTest extends \PHPUnit_Framework_TestCase
     public function testResolveMetadata()
     {
         $mixinTypes = array('foobar');
+        $this->node->hasProperty('jcr:mixinTypes')->willReturn(true);
         $this->node->getPropertyValue('jcr:mixinTypes')->willReturn($mixinTypes);
 
         $this->factory->hasMetadataForPhpcrType('foobar')->willReturn(true);
         $this->factory->getMetadataForPhpcrType('foobar')->willReturn($this->metadata->reveal());
 
-        $this->strategy->resolveMetadataForNode($this->node->reveal());
+        $result = $this->strategy->resolveMetadataForNode($this->node->reveal());
+        $this->assertSame($this->metadata->reveal(), $result);
+    }
+
+    /**
+     * It should return NULL if the document is not managed
+     */
+    public function testResolveMetadataNotManaged()
+    {
+        $mixinTypes = array('foobar');
+        $this->node->hasProperty('jcr:mixinTypes')->willReturn(false);
+        $result = $this->strategy->resolveMetadataForNode($this->node->reveal());
+
+        $this->assertNull($result);
     }
 }

@@ -62,11 +62,23 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->node->getDepth()->willReturn(2);
 
         $this->proxyFactory->createProxyForNode($this->document, $this->parentNode->reveal())->willReturn($this->parentDocument);
+        $this->parentNode->hasProperty('jcr:uuid')->willReturn(true);
 
         $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
         $this->assertSame($this->parentDocument, $this->document->getParent());
+    }
 
-        return $this->document;
+    /**
+     * It should not map the parent if the parent node has no UUID property
+     */
+    public function testHydrateParentNoUuid()
+    {
+        $this->hydrateEvent->getDocument()->willReturn($this->document);
+        $this->node->getParent()->willReturn($this->parentNode->reveal());
+        $this->node->getDepth()->willReturn(2);
+        $this->parentNode->hasProperty('jcr:uuid')->willReturn(false);
+
+        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 
     /**

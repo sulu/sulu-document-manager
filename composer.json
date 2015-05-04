@@ -1,5 +1,5 @@
 {
-    "name": "sulu-io/document-manager",
+    "name": "sulu/document-manager",
     "description": "Sulu Document Manager",
     "require": {
         "doctrine/phpcr-odm": "~1.2",

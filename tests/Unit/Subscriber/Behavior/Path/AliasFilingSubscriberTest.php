@@ -19,6 +19,7 @@ use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AliasFilingSubscriber;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
+use PHPCR\NodeInterface;
 
 class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,6 +33,7 @@ class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->documentManager = $this->prophesize(DocumentManager::class);
         $this->metadataFactory = $this->prophesize(MetadataFactoryInterface::class);
         $this->metadata = $this->prophesize(Metadata::class);
+        $this->parentNode = $this->prophesize(NodeInterface::class);
 
         $this->subscriber = new AliasFilingSubscriber(
             $this->nodeManager->reveal(),
@@ -59,12 +61,11 @@ class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getLocale()->willReturn('fr');
         $this->metadataFactory->getMetadataForClass(AliasFilingTestDocument::class)->willReturn($this->metadata->reveal());
         $this->metadata->getAlias()->willReturn('test');
-        $this->nodeManager->createPath('/base/path/test')->shouldBeCalled();
+        $this->nodeManager->createPath('/base/path/test')->willReturn($this->parentNode->reveal());
+        $this->persistEvent->setParentNode($this->parentNode->reveal())->shouldBeCalled();
         $this->documentManager->find('/base/path/test', 'fr')->willReturn($this->parentDocument);
 
         $this->subscriber->handlePersist($this->persistEvent->reveal());
-
-        $this->assertSame($this->parentDocument, $this->document->getParent());
     }
 }
 

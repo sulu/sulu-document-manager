@@ -47,6 +47,7 @@ class MixinStrategy implements DocumentStrategyInterface
         if (false === $node->hasProperty('jcr:mixinTypes')) {
             return;
         }
+
         $mixinTypes = (array) $node->getPropertyValue('jcr:mixinTypes');
 
         foreach ($mixinTypes as $mixinType) {
