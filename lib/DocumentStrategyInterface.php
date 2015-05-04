@@ -3,7 +3,6 @@
 namespace Sulu\Component\DocumentManager;
 
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Metadata;
 
 /**
  * Document strategies determine how documents are managed.

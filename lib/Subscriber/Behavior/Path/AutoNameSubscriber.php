@@ -3,22 +3,20 @@
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
-use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
+use Sulu\Component\DocumentManager\DocumentHelper;
 use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\CopyEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\DocumentHelper;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 
 /**
  * Automatically assign a name to the document based on its title.
@@ -104,6 +102,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         if (null === $node) {
             $node = $this->documentStrategy->createNodeForDocument($document, $parentNode, $name);
             $event->setNode($node);
+
             return;
         }
 

@@ -11,8 +11,8 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use Sulu\Component\DocumentManager\Behavior\Mapping\TitleBehavior;
 use Sulu\Component\DocumentManager\Behavior\Mapping\PathBehavior;
+use Sulu\Component\DocumentManager\Behavior\Mapping\TitleBehavior;
 
 class DocumentHelper
 {
@@ -30,7 +30,6 @@ class DocumentHelper
         } elseif ($document instanceof TitleBehavior && $document->getTitle()) {
             $title .= ' (' . $document->getTitle() . ')';
         }
-
 
         return $title;
     }

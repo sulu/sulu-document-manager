@@ -12,15 +12,13 @@
 namespace Sulu\Component\DocumentManager\Metadata;
 
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Document\UnknownDocument;
-use Sulu\Component\DocumentManager\Exception\MetadataNotFoundException;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
-use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\ClassNameInflector;
+use Sulu\Component\DocumentManager\Exception\MetadataNotFoundException;
 use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 /**
- * Simple metadata factory which uses an array map
+ * Simple metadata factory which uses an array map.
  *
  * Note that this class does not  implement the getMetadataForPhpcrNode method
  * as that would require a circular dependency.
@@ -47,8 +45,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
      */
     public function __construct(
         array $mapping
-    )
-    {
+    ) {
         foreach ($mapping as $map) {
             $this->aliasMap[$map['alias']] = $map;
             $this->classMap[$map['class']] = $map;

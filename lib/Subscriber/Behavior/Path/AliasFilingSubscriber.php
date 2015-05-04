@@ -13,8 +13,8 @@ namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
 use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
+use Sulu\Component\DocumentManager\NodeManager;
 
 /**
  * Automatically set the parnet at a pre-determined location.

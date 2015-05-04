@@ -11,16 +11,16 @@
 
 namespace Sulu\Component\DocumentManager\Metadata;
 
-use Sulu\Component\DocumentManager\MetadataFactoryInterface;
-use Sulu\Component\DocumentManager\Metadata;
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
+use Sulu\Component\DocumentManager\Metadata;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 /**
  * This class fully implements the MetadataFactoryInterface by composing
  * the "base" metadata factory and the document strategy, which depends also
- * upon the base metadata factory
+ * upon the base metadata factory.
  */
 class MetadataFactory implements MetadataFactoryInterface
 {
@@ -34,12 +34,10 @@ class MetadataFactory implements MetadataFactoryInterface
     public function __construct(
         MetadataFactoryInterface $metadataFactory,
         DocumentStrategyInterface $strategy
-    )
-    {
+    ) {
         $this->metadataFactory = $metadataFactory;
         $this->strategy = $strategy;
     }
-
 
     /**
      * {@inheritDoc}

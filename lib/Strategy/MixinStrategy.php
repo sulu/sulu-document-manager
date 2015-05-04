@@ -2,9 +2,9 @@
 
 namespace Sulu\Component\DocumentManager\Strategy;
 
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use PHPCR\NodeInterface;
 use PHPCR\Util\UUIDHelper;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 /**
@@ -56,6 +56,6 @@ class MixinStrategy implements DocumentStrategyInterface
             }
         }
 
-        return null;
+        return;
     }
 }

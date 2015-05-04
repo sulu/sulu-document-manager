@@ -3,10 +3,7 @@
 namespace Sulu\Component\DocumentManager;
 
 use PHPCR\NodeInterface;
-use Psr\Log\LoggerInterface;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\DocumentManager\DocumentHelper;
-
 /**
  * Handles the mapping between managed documents and nodes.
  */

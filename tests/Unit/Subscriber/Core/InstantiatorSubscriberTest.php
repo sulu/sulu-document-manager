@@ -8,8 +8,8 @@ use Sulu\Component\DocumentManager\Event\CreateEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Subscriber\Core\InstantiatorSubscriber;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
+use Sulu\Component\DocumentManager\Subscriber\Core\InstantiatorSubscriber;
 
 class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
 {

@@ -47,8 +47,8 @@ class MoveEvent extends AbstractEvent
         return sprintf(
             'd:%s did:%s, dnam:%s',
             $this->document ? spl_object_hash($this->document) : '<no document>',
-            $this->destId ? : '<no dest>',
-            $this->destName ? : '<no dest name>'
+            $this->destId ?: '<no dest>',
+            $this->destName ?: '<no dest name>'
         );
     }
 

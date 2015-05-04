@@ -12,9 +12,8 @@
 namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Behavior\TitleBehavior;
-use Symfony\Component\EventDispatcher\Event;
 use Sulu\Component\DocumentManager\DocumentHelper;
+use Symfony\Component\EventDispatcher\Event;
 
 class PersistEvent extends AbstractMappingEvent
 {
@@ -86,11 +85,10 @@ class PersistEvent extends AbstractMappingEvent
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasParentNode()
     {
         return $this->parentNode !== null;
     }
-    
 }

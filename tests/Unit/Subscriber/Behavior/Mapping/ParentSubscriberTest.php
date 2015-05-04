@@ -69,7 +69,7 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should not map the parent if the parent node has no UUID property
+     * It should not map the parent if the parent node has no UUID property.
      */
     public function testHydrateParentNoUuid()
     {

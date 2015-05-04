@@ -12,18 +12,16 @@
 namespace Sulu\Component\DocumentManager\tests\Unit\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
-use Prophecy\Argument;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\MetadataFactory;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AutoNameSubscriber;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 
 class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 {

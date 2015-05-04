@@ -2,19 +2,12 @@
 
 namespace Sulu\Comonent\DocumentManager\tests\Unit\Strategy;
 
-use PHPCR\Strategy\StrategyInterface;
-use PHPCR\Strategy\StrategyResultInterface;
-use Sulu\Component\DocumentManager\Collection\StrategyResultCollection;
-use Sulu\Component\DocumentManager\Event\StrategyExecuteEvent;
-use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\Strategy\Strategy;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\Strategy\MixinStrategy;
-use Sulu\Component\DocumentManager\Metadata;
 use PHPCR\NodeInterface;
 use Prophecy\Argument;
+use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
+use Sulu\Component\DocumentManager\Strategy\MixinStrategy;
+use Sulu\Component\DocumentManager\Strategy\Strategy;
 
 class MixinStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,14 +17,14 @@ class MixinStrategyTest extends \PHPUnit_Framework_TestCase
         $this->metadata = $this->prophesize(Metadata::class);
         $this->strategy = new MixinStrategy($this->factory->reveal());
 
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
         $this->parentNode = $this->prophesize(NodeInterface::class);
         $this->node = $this->prophesize(NodeInterface::class);
     }
 
     /**
      * It should create a PHPCR node for the given document and add the
-     * PHPCR type as a mixin and set the UUID
+     * PHPCR type as a mixin and set the UUID.
      */
     public function testExecutePhpcr()
     {
@@ -47,7 +40,7 @@ class MixinStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should resolve metadata for the given PHPCR node
+     * It should resolve metadata for the given PHPCR node.
      */
     public function testResolveMetadata()
     {
@@ -63,7 +56,7 @@ class MixinStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return NULL if the document is not managed
+     * It should return NULL if the document is not managed.
      */
     public function testResolveMetadataNotManaged()
     {

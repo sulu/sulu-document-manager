@@ -1,6 +1,6 @@
 <?php
 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
+namespace Sulu\Component\DocumentManager\tests\Unit;
 
 use Sulu\Component\DocumentManager\Behavior\Mapping\TitleBehavior;
 use Sulu\Component\DocumentManager\DocumentHelper;
@@ -9,12 +9,12 @@ class DocumentHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
         $this->titleDocument = $this->prophesize(TitleBehavior::class);
     }
 
     /**
-     * It should return a debug title for a document
+     * It should return a debug title for a document.
      */
     public function testDebugTitle()
     {
@@ -23,7 +23,7 @@ class DocumentHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should show the title for a document which implements the TitleBehavior
+     * It should show the title for a document which implements the TitleBehavior.
      */
     public function testDebugTitleWithTitle()
     {

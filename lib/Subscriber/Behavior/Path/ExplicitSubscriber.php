@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -10,17 +11,17 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
+use PHPCR\NodeInterface;
 use PHPCR\Util\PathHelper;
 use Sulu\Component\DocumentManager\DocumentHelper;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use PHPCR\NodeInterface;
+use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 /**
  * Populates or creates the node and/or parent node based on explicit
@@ -44,8 +45,7 @@ class ExplicitSubscriber implements EventSubscriberInterface
     public function __construct(
         DocumentStrategyInterface $strategy,
         NodeManager $nodeManager
-    )
-    {
+    ) {
         $this->strategy = $strategy;
         $this->nodeManager = $nodeManager;
     }
@@ -126,6 +126,7 @@ class ExplicitSubscriber implements EventSubscriberInterface
 
         if ($event->hasNode()) {
             $this->renameNode($event->getNode(), $nodeName);
+
             return;
         }
 

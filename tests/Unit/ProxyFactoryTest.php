@@ -19,9 +19,9 @@ use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\ProxyFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
 {

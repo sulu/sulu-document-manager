@@ -11,8 +11,6 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
 abstract class AbstractDocumentEvent extends AbstractEvent
 {
     /**

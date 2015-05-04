@@ -13,7 +13,6 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
 use Sulu\Component\DocumentManager\Query\Query;
-use Symfony\Component\EventDispatcher\Event;
 
 class QueryExecuteEvent extends AbstractEvent
 {

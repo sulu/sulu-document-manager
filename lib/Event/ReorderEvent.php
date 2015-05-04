@@ -31,7 +31,7 @@ class ReorderEvent extends AbstractDocumentEvent
         return sprintf(
             'd:%s did:%s, after:%s',
             $this->document ? spl_object_hash($this->document) : '<no document>',
-            $this->destId ? : '<no dest>',
+            $this->destId ?: '<no dest>',
             $this->after ? 'true' : 'false'
         );
     }

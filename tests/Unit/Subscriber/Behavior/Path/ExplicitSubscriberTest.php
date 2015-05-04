@@ -11,26 +11,20 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit\Path;
 
-use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
-use Sulu\Component\DocumentManager\DocumentManager;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
-use Sulu\Component\DocumentManager\Metadata;
-use Sulu\Component\DocumentManager\MetadataFactory;
-use Sulu\Component\DocumentManager\NodeManager;
-use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AliasFilingSubscriber;
+use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
+use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\ExplicitSubscriber;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 
 class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $this->persistEvent = $this->prophesize(PersistEvent::class);
-        $this->document = new \stdClass;
+        $this->document = new \stdClass();
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->strategy = $this->prophesize(DocumentStrategyInterface::class);
         $this->configureEvent = $this->prophesize(ConfigureOptionsEvent::class);
@@ -44,7 +38,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if both path name and node_name options are given
+     * It should throw an exception if both path name and node_name options are given.
      *
      * @expectedException Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
@@ -59,7 +53,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if both path name and parent_path options are given
+     * It should throw an exception if both path name and parent_path options are given.
      *
      * @expectedException Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
@@ -74,7 +68,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should set the parent node and create a new node when given a full path
+     * It should set the parent node and create a new node when given a full path.
      */
     public function testNewNodeFromPath()
     {
@@ -90,12 +84,11 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->hasNode()->willReturn(false);
         $this->persistEvent->setNode($this->node->reveal())->shouldBeCalled();
 
-
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 
     /**
-     * It should just set the parent if only the "parent_path" is specified
+     * It should just set the parent if only the "parent_path" is specified.
      */
     public function testSetParentNode()
     {
@@ -109,12 +102,11 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->setParentNode($this->parentNode->reveal())->shouldBeCalled();
         $this->persistEvent->getOptions()->willReturn($options);
 
-
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 
     /**
-     * It should automatically create the parent path if auto_create is specified
+     * It should automatically create the parent path if auto_create is specified.
      */
     public function testAutoCreateParent()
     {
@@ -129,13 +121,11 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->setParentNode($this->parentNode->reveal())->shouldBeCalled();
         $this->persistEvent->getOptions()->willReturn($options);
 
-
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 
-
     /**
-     * It should throw an exception if node_name is specified but no parent node is available
+     * It should throw an exception if node_name is specified but no parent node is available.
      *
      * @expectedException Sulu\Component\DocumentManager\Exception\DocumentManagerException
      */
@@ -156,7 +146,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
 
     /**
      * It should rename the node if the node is already set in the Persist event and
-     * the node name is different
+     * the node name is different.
      */
     public function testRename()
     {
@@ -180,7 +170,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should do nothing if none of the options are specified
+     * It should do nothing if none of the options are specified.
      */
     public function testDoNothing()
     {

@@ -11,15 +11,15 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit\Path;
 
+use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
 use Sulu\Component\DocumentManager\DocumentManager;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactory;
+use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Path\AliasFilingSubscriber;
-use Sulu\Component\DocumentManager\MetadataFactoryInterface;
-use PHPCR\NodeInterface;
 
 class AliasFilingSubscriberTest extends \PHPUnit_Framework_TestCase
 {

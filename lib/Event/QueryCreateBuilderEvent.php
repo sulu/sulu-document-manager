@@ -12,7 +12,6 @@
 namespace Sulu\Component\DocumentManager\Event;
 
 use Sulu\Component\DocumentManager\Query\QueryBuilder;
-use Symfony\Component\EventDispatcher\Event;
 
 class QueryCreateBuilderEvent extends AbstractEvent
 {

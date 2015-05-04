@@ -13,7 +13,6 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Query\Query;
-use Symfony\Component\EventDispatcher\Event;
 
 class QueryCreateEvent extends AbstractEvent
 {

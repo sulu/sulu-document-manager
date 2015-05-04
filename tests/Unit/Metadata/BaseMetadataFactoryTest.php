@@ -11,11 +11,9 @@
 
 namespace Sulu\Component\DocumentManager\tests\Unit\Metadata;
 
-use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\Document\UnknownDocument;
+use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\Metadata\BaseMetadataFactory;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 
 class BaseMetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {

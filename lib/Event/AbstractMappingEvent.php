@@ -13,7 +13,6 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentAccessor;
-use Symfony\Component\EventDispatcher\Event;
 
 abstract class AbstractMappingEvent extends AbstractEvent
 {
@@ -48,7 +47,7 @@ abstract class AbstractMappingEvent extends AbstractEvent
             'n:%s d:%s l:%s',
             $this->node ? $this->node->getPath() : '<no node>',
             $this->document ? spl_object_hash($this->document) : '<no document>',
-            $this->locale ? : '<no locale>'
+            $this->locale ?: '<no locale>'
         );
     }
 
