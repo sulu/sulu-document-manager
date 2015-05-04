@@ -28,13 +28,16 @@ class FindEvent extends AbstractEvent
         $this->options = $options;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getDebugMessage()
     {
         return sprintf(
             'i:%s d:%s l:%s',
             $this->identifier,
             $this->document ? spl_object_hash($this->document) : '<no document>',
-            $this->locale ?: '<no locale>'
+            $this->locale ? : '<no locale>'
         );
     }
 

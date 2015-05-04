@@ -12,7 +12,8 @@
     },
     "require-dev": {
         "jackalope/jackalope-doctrine-dbal": "~1.2@dev",
-        "phpunit/phpunit": "~4.5"
+        "phpunit/phpunit": "~4.5",
+        "monolog/monolog": "~1.0"
     },
     "license": "MIT",
     "authors": [

@@ -66,19 +66,18 @@ class ExplicitSubscriber implements EventSubscriberInterface
      */
     public function handleOptions(ConfigureOptionsEvent $event)
     {
-        $event->getOptions()->setDefaults(array(
+        $options = $event->getOptions();
+        $options->setDefaults(array(
             'path' => null,
             'node_name' => null,
             'parent_path' => null,
             'auto_create' => false,
         ));
 
-        $event->getOptions()->setAllowedTypes(array(
-            'path' => array('null', 'string'),
-            'node_name' => array('null', 'string'),
-            'parent_path' => array('null', 'string'),
-            'auto_create' => 'bool',
-        ));
+        $options->setAllowedTypes('path', array('null', 'string'));
+        $options->setAllowedTypes('node_name', array('null', 'string'));
+        $options->setAllowedTypes('parent_path', array('null', 'string'));
+        $options->setAllowedTypes('auto_create', 'bool');
     }
 
     /**

@@ -6,6 +6,7 @@ php:
   - 5.5
 
 before_script:
+  - php bin/testconsole.php jackalope:init:dbal --force
   - composer self-update
   - composer install
 
