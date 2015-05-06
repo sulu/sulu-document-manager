@@ -13,7 +13,7 @@ before_script:
 
 script: 
   - phpunit
-  - php ./vendor/bin/phpbench tests/benchmark
+  - php ./vendor/bin/phpbench tests/Bench
 
 notifications:
   slack:

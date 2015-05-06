@@ -18,9 +18,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
     const BASE_NAME = 'test';
-    const BASE_PATH = '/' . self::BASE_NAME;
+    const BASE_PATH = '/test';
 
-    private $session;
     private $container;
 
     protected function initPhpcr()
