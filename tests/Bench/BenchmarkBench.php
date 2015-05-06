@@ -23,7 +23,7 @@ class BenchmarkBench extends BaseBench
 
     /**
      * @description persist and find nodes using the Document Manager
-     * @iterations 1
+     * @iterations 4
      * @paramProvider provideNodeTotals
      * @paramProvider provideLocales
      * @beforeMethod init
