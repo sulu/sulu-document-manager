@@ -29,8 +29,8 @@ class ReorderEvent extends AbstractDocumentEvent
     public function getDebugMessage()
     {
         return sprintf(
-            'd:%s did:%s, after:%s',
-            $this->document ? spl_object_hash($this->document) : '<no document>',
+            '%s did:%s after:%s',
+            parent::getDebugMessage(),
             $this->destId ?: '<no dest>',
             $this->after ? 'true' : 'false'
         );
