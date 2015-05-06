@@ -126,7 +126,6 @@ class Bootstrap
         $nodeTypeManager = $session->getWorkspace()->getNodeTypeManager();
         if (!$nodeTypeManager->hasNodeType('mix:test')) {
             $nodeTypeManager->registerNodeTypesCnd(<<<EOT
-<
 [mix:test] > mix:referenceable mix
 EOT
             , true);

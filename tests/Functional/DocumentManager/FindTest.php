@@ -14,7 +14,7 @@ namespace Sulu\Component\DocumentManager\Tests\Functional\DocumentManager;
 use Sulu\Component\DocumentManager\Tests\Functional\BaseTestCase;
 use Sulu\Component\DocumentManager\Tests\Functional\Model\FullDocument;
 
-class FindTest extends BaseTestCase
+class DocumentManagerTest extends BaseTestCase
 {
     public function setUp()
     {

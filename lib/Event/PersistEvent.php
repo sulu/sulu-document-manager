@@ -33,6 +33,18 @@ class PersistEvent extends AbstractMappingEvent
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getDebugMessage()
+    {
+        return sprintf(
+            '%s p:%s',
+            parent::getDebugMessage(),
+            $this->parentNode ? $this->parentNode->getPath() : '<no parent node>'
+        );
+    }
+
+    /**
      * @param NodeInterface $node
      */
     public function setNode(NodeInterface $node)

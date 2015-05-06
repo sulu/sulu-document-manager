@@ -81,7 +81,7 @@ class ParentSubscriber implements EventSubscriberInterface
 
         $parentDocument = $document->getParent();
 
-        if (!$parentDocument) {
+    if (!$parentDocument) {
             return;
         }
 
