@@ -19,7 +19,7 @@ use PhpBench\BenchCase;
 abstract class BaseBench implements BenchCase
 {
     const BASE_NAME = 'test';
-    const BASE_PATH = '/' . self::BASE_NAME;
+    const BASE_PATH = '/test';
 
     private $session;
     private $container;
