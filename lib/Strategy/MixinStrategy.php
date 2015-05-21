@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Sulu.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager\Strategy;
 
 use PHPCR\NodeInterface;
@@ -45,10 +54,10 @@ class MixinStrategy implements DocumentStrategyInterface
     public function resolveMetadataForNode(NodeInterface $node)
     {
         if (false === $node->hasProperty('jcr:mixinTypes')) {
-            return;
+            return null;
         }
 
-        $mixinTypes = (array) $node->getPropertyValue('jcr:mixinTypes');
+        $mixinTypes = (array)$node->getPropertyValue('jcr:mixinTypes');
 
         foreach ($mixinTypes as $mixinType) {
             if (true == $this->metadataFactory->hasMetadataForPhpcrType($mixinType)) {
@@ -56,6 +65,6 @@ class MixinStrategy implements DocumentStrategyInterface
             }
         }
 
-        return;
+        return null;
     }
 }

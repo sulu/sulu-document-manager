@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -10,8 +10,6 @@
  */
 
 namespace Sulu\Component\DocumentManager\Event;
-
-use Symfony\Component\EventDispatcher\Event;
 
 class MoveEvent extends AbstractEvent
 {
@@ -32,6 +30,7 @@ class MoveEvent extends AbstractEvent
 
     /**
      * @param object $document
+     * @param string $destId
      */
     public function __construct($document, $destId)
     {
@@ -52,31 +51,49 @@ class MoveEvent extends AbstractEvent
         );
     }
 
+    /**
+     * @return object
+     */
     public function getDocument()
     {
         return $this->document;
     }
 
+    /**
+     * @return string
+     */
     public function getDestId()
     {
         return $this->destId;
     }
 
+    /**
+     * @param string $name
+     */
     public function setDestName($name)
     {
         $this->destName = $name;
     }
 
+    /**
+     * @return bool
+     */
     public function hasDestName()
     {
         return null !== $this->destName;
     }
 
+    /**
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
     public function getDestName()
     {
         if (!$this->destName) {
             throw new \RuntimeException(sprintf(
-                'No destName set in copy/move event when copying/moving document "%s" to "%s" . This should have been set by a listener',
+                'No destName set in copy/move event when copying/moving document "%s" to "%s". ' .
+                'This should have been set by a listener',
                 spl_object_hash($this->document),
                 $this->destId
             ));

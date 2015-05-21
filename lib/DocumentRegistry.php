@@ -1,9 +1,19 @@
 <?php
 
+/*
+ * This file is part of Sulu.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager;
 
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+
 /**
  * Handles the mapping between managed documents and nodes.
  */
@@ -12,27 +22,32 @@ class DocumentRegistry
     /**
      * @var array
      */
-    private $documentMap;
+    private $documentMap = array();
 
     /**
      * @var array
      */
-    private $documentNodeMap;
+    private $documentNodeMap = array();
 
     /**
      * @var array
      */
-    private $nodeDocumentMap;
+    private $nodeMap = array();
 
     /**
      * @var array
      */
-    private $documentLocaleMap;
+    private $nodeDocumentMap = array();
 
     /**
      * @var array
      */
-    private $originalLocaleMap;
+    private $documentLocaleMap = array();
+
+    /**
+     * @var array
+     */
+    private $originalLocaleMap = array();
 
     /**
      * @var string
@@ -57,6 +72,10 @@ class DocumentRegistry
      *
      * @param mixed $document
      * @param NodeInterface $node
+     * @param NodeInterface $node
+     * @param null|string $locale
+     *
+     * @throws DocumentManagerException
      */
     public function registerDocument($document, NodeInterface $node, $locale = null)
     {
@@ -67,7 +86,7 @@ class DocumentRegistry
         $oid = $this->getObjectIdentifier($document);
         $uuid = $node->getIdentifier();
 
-        // do not allow nodes wihout UUIDs or reregistration of documents
+        // do not allow nodes without UUIDs or reregistration of documents
         $this->validateDocumentRegistration($document, $node, $oid, $uuid);
 
         $this->documentMap[$oid] = $document;
@@ -83,6 +102,10 @@ class DocumentRegistry
      *
      * The originally requested locale should be reset when a HYDRATE event
      * is caused by the user (and not internally when loading dependencies).
+     *
+     * @param object $document
+     * @param string $locale
+     * @param null|string $originalLocale
      */
     public function updateLocale($document, $locale, $originalLocale = null)
     {
@@ -110,7 +133,7 @@ class DocumentRegistry
      *
      * @param NodeInterface $node
      *
-     Id* @return bool
+     * Id* @return bool
      */
     public function hasNode(NodeInterface $node)
     {
@@ -172,7 +195,7 @@ class DocumentRegistry
     }
 
     /**
-    /**
+     * /**
      * Return the current locale for the given document.
      *
      * @param object $document
@@ -232,7 +255,7 @@ class DocumentRegistry
     }
 
     /**
-     * @param mixed $oid
+     * @param object $document
      */
     private function assertDocumentExists($document)
     {
@@ -275,10 +298,14 @@ class DocumentRegistry
      * Ensure that the document is not already registered and that the node
      * has a UUID.
      *
-     * @param string $oid Object ID
-     * @param string $uuid Node UUID
+     * @param object $document
+     * @param NodeInterface $node
+     * @param string $oid
+     * @param string $uuid
+     *
+     * @throws DocumentManagerException
      */
-    private function validateDocumentRegistration($document, $node, $oid, $uuid)
+    private function validateDocumentRegistration($document, NodeInterface $node, $oid, $uuid)
     {
         if (null === $uuid) {
             throw new DocumentManagerException(sprintf(

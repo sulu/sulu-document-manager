@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -18,10 +18,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class DocumentManager
 {
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
+    /**
+     * @var array Cached options resolver instances
+     */
+    private $optionsResolvers = array();
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
@@ -31,9 +39,13 @@ class DocumentManager
      * Find a document by path or UUID in the given
      * locale, optionally enforcing the given type.
      *
-     * @param string $id Path or UUID
+     * @param string $identifier Path or UUID
      * @param string $locale Locale
      * @param array $options
+     *
+     * @throws Exception\DocumentManagerException
+     *
+     * @return object
      */
     public function find($identifier, $locale = null, array $options = array())
     {
@@ -50,7 +62,7 @@ class DocumentManager
      *
      * @param string
      *
-     * @throws MetadataNotFoundException
+     * @throws Exception\MetadataNotFoundException
      *
      * @return object
      */
@@ -108,6 +120,8 @@ class DocumentManager
      *
      * @param object $document
      * @param string $destPath
+     *
+     * @return string
      */
     public function copy($document, $destPath)
     {
@@ -117,6 +131,13 @@ class DocumentManager
         return $event->getCopiedPath();
     }
 
+    /**
+     * Re-Order node before or after a specific node.
+     *
+     * @param object $document
+     * @param string $destId
+     * @param bool $after
+     */
     public function reorder($document, $destId, $after = false)
     {
         $event = new Event\ReorderEvent($document, $destId, $after);
@@ -160,7 +181,8 @@ class DocumentManager
      *       database structure and breaks abstraction. Use the domain-aware
      *       query builder instead.
      *
-     * @param mixed $innertQuery Either a JCR-SQL2 string, or a PHPCR query object
+     * @param mixed $query Either a JCR-SQL2 string, or a PHPCR query object
+     * @param string $locale
      *
      * @return Query
      */
@@ -175,7 +197,7 @@ class DocumentManager
     /**
      * Create a new query builder.
      *
-     * By default this will return the PHPCR-ODM query bulder
+     * By default this will return the PHPCR-ODM query builder.
      *
      * http://doctrine-phpcr-odm.readthedocs.org/en/latest/reference/query-builder.html
      */
@@ -187,10 +209,10 @@ class DocumentManager
         return $event->getQueryBuilder();
     }
 
-    private function getOptionsResolver($event)
+    private function getOptionsResolver($eventName)
     {
-        if (isset($this->optionResolver)) {
-            return $this->optionsResolvers[$event];
+        if (isset($this->optionsResolvers[$eventName])) {
+            return $this->optionsResolvers[$eventName];
         }
 
         $resolver = new OptionsResolver();
@@ -198,6 +220,8 @@ class DocumentManager
 
         $event = new Event\ConfigureOptionsEvent($resolver);
         $this->eventDispatcher->dispatch(Events::CONFIGURE_OPTIONS, $event);
+
+        $this->optionsResolvers[$eventName] = $resolver;
 
         return $resolver;
     }

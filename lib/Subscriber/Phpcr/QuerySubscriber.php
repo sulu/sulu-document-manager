@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -15,6 +15,7 @@ use PHPCR\Query\QueryInterface;
 use PHPCR\Query\QueryManagerInterface;
 use PHPCR\SessionInterface;
 use Sulu\Component\DocumentManager\Collection\QueryResultCollection;
+use Sulu\Component\DocumentManager\Event\QueryCreateBuilderEvent;
 use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 use Sulu\Component\DocumentManager\Events;
@@ -27,12 +28,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class QuerySubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var SessionInterface
+     */
     private $session;
+
+    /**
+     * @var EventDispatcherInterface
+     */
     private $eventDispatcher;
 
     /**
      * @param SessionInterface $session
-     * @param EventDispatcher $eventDispatcher
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SessionInterface $session, EventDispatcherInterface $eventDispatcher)
     {
@@ -72,7 +80,14 @@ class QuerySubscriber implements EventSubscriberInterface
             ));
         }
 
-        $event->setQuery(new Query($phpcrQuery, $this->eventDispatcher, $event->getLocale(), $event->getPrimarySelector()));
+        $event->setQuery(
+            new Query(
+                $phpcrQuery,
+                $this->eventDispatcher,
+                $event->getLocale(),
+                $event->getPrimarySelector()
+            )
+        );
     }
 
     /**
@@ -80,6 +95,8 @@ class QuerySubscriber implements EventSubscriberInterface
      *       https://github.com/doctrine/phpcr-odm/issues/627.
      *
      * @param QueryCreateBuilderEvent $event
+     *
+     * @throws \Exception
      */
     public function handleCreateBuilder(QueryCreateBuilderEvent $event)
     {
@@ -89,7 +106,7 @@ class QuerySubscriber implements EventSubscriberInterface
     /**
      * Handle query execution.
      *
-     * @param QueryExecuteEvent
+     * @param QueryExecuteEvent $event
      */
     public function handleQueryExecute(QueryExecuteEvent $event)
     {

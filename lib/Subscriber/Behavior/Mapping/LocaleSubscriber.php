@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -15,6 +15,7 @@ use Sulu\Component\DocumentManager\Behavior\Mapping\LocaleBehavior;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -22,6 +23,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class LocaleSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var DocumentRegistry
+     */
     private $registry;
 
     public function __construct(DocumentRegistry $registry)
@@ -40,6 +44,11 @@ class LocaleSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @param AbstractMappingEvent $event
+     *
+     * @throws DocumentManagerException
+     */
     public function handleLocale(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();

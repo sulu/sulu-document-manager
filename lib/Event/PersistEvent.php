@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -13,7 +13,6 @@ namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentHelper;
-use Symfony\Component\EventDispatcher\Event;
 
 class PersistEvent extends AbstractMappingEvent
 {
@@ -24,6 +23,8 @@ class PersistEvent extends AbstractMappingEvent
 
     /**
      * @param object $document
+     * @param string $locale
+     * @param array $options
      */
     public function __construct($document, $locale, array $options = array())
     {
@@ -53,7 +54,7 @@ class PersistEvent extends AbstractMappingEvent
     }
 
     /**
-     * @param NodeInterface $node
+     * @param NodeInterface $parentNode
      */
     public function setParentNode(NodeInterface $parentNode)
     {

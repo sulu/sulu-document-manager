@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Sulu.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
@@ -25,11 +34,38 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class AutoNameSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var DocumentRegistry
+     */
     private $registry;
+
+    /**
+     * @var SlugifierInterface
+     */
     private $slugifier;
+
+    /**
+     * @var NameResolver
+     */
+    private $resolver;
+
+    /**
+     * @var NodeManager
+     */
     private $nodeManager;
+
+    /**
+     * @var DocumentStrategyInterface
+     */
     private $documentStrategy;
 
+    /**
+     * @param DocumentRegistry $registry
+     * @param SlugifierInterface $slugifier
+     * @param NameResolver $resolver
+     * @param NodeManager $nodeManager
+     * @param DocumentStrategyInterface $documentStrategy
+     */
     public function __construct(
         DocumentRegistry $registry,
         SlugifierInterface $slugifier,
@@ -65,7 +101,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param CopyEvent
+     * @param CopyEvent $event
      */
     public function handleCopy(CopyEvent $event)
     {
@@ -73,7 +109,9 @@ class AutoNameSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param HydrateEvent $event
+     * @param PersistEvent $event
+     *
+     * @throws DocumentManagerException
      */
     public function handlePersist(PersistEvent $event)
     {
@@ -126,7 +164,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
      */
     private function rename(NodeInterface $node, $name)
     {
-        $names = (array) $node->getParent()->getNodeNames();
+        $names = (array)$node->getParent()->getNodeNames();
         $pos = array_search($node->getName(), $names);
         $next = isset($names[$pos + 1]) ? $names[$pos + 1] : null;
 
@@ -140,9 +178,9 @@ class AutoNameSubscriber implements EventSubscriberInterface
     /**
      * Resolve the destination name on move and copy events.
      *
-     * @param Event $event
+     * @param MoveEvent $event
      */
-    private function handleMoveCopy(Event $event)
+    private function handleMoveCopy(MoveEvent $event)
     {
         $document = $event->getDocument();
 

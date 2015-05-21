@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -43,9 +43,8 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     /**
      * @param array $mapping
      */
-    public function __construct(
-        array $mapping
-    ) {
+    public function __construct(array $mapping)
+    {
         foreach ($mapping as $map) {
             $this->aliasMap[$map['alias']] = $map;
             $this->classMap[$map['class']] = $map;

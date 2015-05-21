@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -20,7 +20,7 @@ use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Responsible for intantiating documents from PHPCR nodes and
+ * Responsible for instantiating documents from PHPCR nodes and
  * setting the document in the event so that other listeners can
  * take further actions (such as hydrating it for example).
  *
@@ -84,6 +84,8 @@ class InstantiatorSubscriber implements EventSubscriberInterface
      * the mixins present in the PHPCR node for legacy reasons.
      *
      * @param NodeInterface $node
+     *
+     * @return object
      */
     private function getDocumentFromNode(NodeInterface $node)
     {

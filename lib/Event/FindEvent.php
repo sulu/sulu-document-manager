@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -12,15 +12,34 @@
 namespace Sulu\Component\DocumentManager\Event;
 
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Symfony\Component\EventDispatcher\Event;
 
 class FindEvent extends AbstractEvent
 {
+    /**
+     * @var string
+     */
     private $identifier;
-    private $document;
+
+    /**
+     * @var string
+     */
     private $locale;
+
+    /**
+     * @var array
+     */
     private $options = array();
 
+    /**
+     * @var object
+     */
+    private $document;
+
+    /**
+     * @param string $identifier
+     * @param string $locale
+     * @param array $options
+     */
     public function __construct($identifier, $locale, array $options = array())
     {
         $this->identifier = $identifier;
@@ -41,16 +60,26 @@ class FindEvent extends AbstractEvent
         );
     }
 
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->identifier;
     }
 
+    /**
+     * @return string
+     */
     public function getLocale()
     {
         return $this->locale;
     }
 
+    /**
+     * @return object
+     * @throws DocumentManagerException
+     */
     public function getDocument()
     {
         if (!$this->document) {
@@ -63,11 +92,17 @@ class FindEvent extends AbstractEvent
         return $this->document;
     }
 
+    /**
+     * @param object $document
+     */
     public function setDocument($document)
     {
         $this->document = $document;
     }
 
+    /**
+     * @return array
+     */
     public function getOptions()
     {
         return $this->options;

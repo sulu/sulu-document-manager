@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -12,7 +12,7 @@
 namespace Sulu\Component\DocumentManager\Behavior\Mapping;
 
 /**
- * Populate the localfce.
+ * Populate the locale.
  */
 interface LocaleBehavior
 {

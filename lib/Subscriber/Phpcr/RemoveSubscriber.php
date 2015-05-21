@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -53,7 +53,7 @@ class RemoveSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Remove the given documents node from PHPCR session and optoinally
+     * Remove the given documents node from PHPCR session and optionally
      * remove any references to the node.
      *
      * @param RemoveEvent $event
@@ -64,49 +64,5 @@ class RemoveSubscriber implements EventSubscriberInterface
         $node = $this->documentRegistry->getNodeForDocument($document);
 
         $node->remove();
-    }
-
-    /**
-     * Remove references to the given node.
-     *
-     * @param NodeInterface $node
-     */
-    private function dereference(NodeInterface $node)
-    {
-        $referrers = $node->getReferences();
-
-        foreach ($referrers as $referrer) {
-            if (!$referrer instanceof PropertyInterface) {
-                continue;
-            }
-
-            $this->dereferenceProperty($node, $referrer);
-        }
-    }
-
-    /**
-     * Remove the given property, or the value which references the node (when
-     * multi-valued).
-     *
-     * @param NodeInterface $node
-     * @param PropertyInterface $property
-     */
-    private function dereferenceProperty(NodeInterface $node, PropertyInterface $property)
-    {
-        if (false === $property->isMultiple()) {
-            $property->remove();
-
-            return;
-        }
-
-        // dereference from multi-valued referring properties
-        $values = $property->getValue();
-        foreach ($values as $i => $referencedNode) {
-            if ($referencedNode->getIdentifier() === $node->getIdentifier()) {
-                unset($values[$i]);
-            }
-        }
-
-        $property->getParent()->setProperty($property->getName(), $values);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -21,25 +21,56 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class QueryResultCollection extends AbstractLazyCollection
 {
+    /**
+     * @var EventDispatcherInterface
+     */
     private $eventDispatcher;
+
+    /**
+     * @var QueryResultInterface
+     */
     private $result;
+
+    /**
+     * @var string
+     */
     private $locale;
 
+    /**
+     * @var bool
+     */
     private $initialized = false;
+
+    /**
+     * @var null|string
+     */
     private $primarySelector = null;
 
-    public function __construct(QueryResultInterface $result, EventDispatcherInterface $eventDispatcher, $locale, $primarySelector = null)
-    {
+    /**
+     * @param QueryResultInterface $result
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param string $locale
+     * @param null|string $primarySelector
+     */
+    public function __construct(
+        QueryResultInterface $result,
+        EventDispatcherInterface $eventDispatcher,
+        $locale,
+        $primarySelector = null
+    ) {
         $this->result = $result;
         $this->eventDispatcher = $eventDispatcher;
-        $this->primarySelector = $primarySelector;
         $this->locale = $locale;
+        $this->primarySelector = $primarySelector;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function current()
     {
         $this->initialize();
-        $row = $this->elements->current();
+        $row = $this->documents->current();
         $node = $row->getNode($this->primarySelector);
 
         $hydrateEvent = new HydrateEvent($node, $this->locale);
@@ -48,13 +79,16 @@ class QueryResultCollection extends AbstractLazyCollection
         return $hydrateEvent->getDocument();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function initialize()
     {
         if (true === $this->initialized) {
             return;
         }
 
-        $this->elements = $this->result->getRows();
+        $this->documents = $this->result->getRows();
         $this->initialized = true;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -17,12 +17,21 @@ use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\NodeManager;
 
 /**
- * Automatically set the parnet at a pre-determined location.
+ * Automatically set the parent at a pre-determined location.
  */
 class AliasFilingSubscriber extends AbstractFilingSubscriber
 {
+    /**
+     * @var MetadataFactoryInterface
+     */
     private $metadataFactory;
 
+    /**
+     * @param NodeManager $nodeManager
+     * @param DocumentManager $documentManager
+     * @param MetadataFactoryInterface $metadataFactory
+     * @param string $basePath
+     */
     public function __construct(
         NodeManager $nodeManager,
         DocumentManager $documentManager,
@@ -33,11 +42,21 @@ class AliasFilingSubscriber extends AbstractFilingSubscriber
         $this->metadataFactory = $metadataFactory;
     }
 
+    /**
+     * @param object $document
+     *
+     * @return bool
+     */
     protected function supports($document)
     {
         return $document instanceof AliasFilingBehavior;
     }
 
+    /**
+     * @param $document
+     *
+     * @return string
+     */
     protected function getParentName($document)
     {
         return $this->metadataFactory->getMetadataForClass(get_class($document))->getAlias();

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -30,6 +30,10 @@ class NamespaceRegistry
 
     /**
      * Return the namespace alias for the given role, e.g. "localized_content" => "lcont".
+     *
+     * @param $role
+     *
+     * @throws DocumentManagerException
      *
      * @return string
      */

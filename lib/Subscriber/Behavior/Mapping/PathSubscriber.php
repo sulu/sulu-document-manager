@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -22,6 +22,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class PathSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var DocumentInspector
+     */
     private $documentInspector;
 
     /**
