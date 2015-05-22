@@ -56,7 +56,7 @@ class DebugEventDispatcher extends ContainerAwareEventDispatcher
 
         foreach ($listeners as $listener) {
             list($listenerInstance, $methodName) = $listener;
-            $name = $this->getDebugClassName($listenerInstance);
+            $name = get_class($listenerInstance);
 
             $listenerStopwatch = $this->stopwatch->start($name . '->' . $methodName, 'document_manager_listener');
 
@@ -78,17 +78,5 @@ class DebugEventDispatcher extends ContainerAwareEventDispatcher
         if ($eventStopwatch->isStarted()) {
             $eventStopwatch->stop();
         }
-    }
-
-    private function getDebugClassName($subscriber)
-    {
-        $className = get_class($subscriber);
-        $parts = explode('\\', $className);
-        $last = array_pop($parts);
-        $parts = array_map(function ($part) {
-            return substr($part, 0, 1);
-        }, $parts);
-
-        return implode('\\', $parts) . '\\' . $last;
     }
 }
