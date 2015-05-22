@@ -13,7 +13,7 @@ before_script:
 
 script: 
   - phpunit
-  - ! 'php ./vendor/bin/phpbench run tests/Bench/BenchmarkBench.php --report=''{"name": "console_table", "aggregate_iterations": true}'''
+  - ! 'php ./vendor/bin/phpbench run tests/Bench/BenchmarkBench.php --report=''{"name": "console_table", "aggregate_iterations": true, "memory": true, "revolutions": true}'''
 
 notifications:
   slack:
