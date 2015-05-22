@@ -15,7 +15,7 @@ use ProxyManager\Inflector\ClassNameInflector as ProxyManagerClassNameInflector;
 
 /**
  * This is a hack to statically use the ClassNameInflector to
- * retrieve the "real" class-names for proxy objects.
+ * retrieve the "real" class names for proxy objects.
  *
  * TODO: This should be a service dependency not a static class
  */

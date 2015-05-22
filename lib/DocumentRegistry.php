@@ -133,7 +133,7 @@ class DocumentRegistry
      *
      * @param NodeInterface $node
      *
-     * Id* @return bool
+     * @return bool
      */
     public function hasNode(NodeInterface $node)
     {
@@ -195,7 +195,6 @@ class DocumentRegistry
     }
 
     /**
-     * /**
      * Return the current locale for the given document.
      *
      * @param object $document
