@@ -63,6 +63,14 @@ class ProxyFactory
         // if node is already registered then just return the registered document
         if ($this->registry->hasNode($targetNode)) {
             $document = $this->registry->getDocumentForNode($targetNode);
+            $locale = $registry->getOriginalLocaleForDocument($fromDocument);
+
+            // If the parent is not loaded in the correct locale, reload it in the correct locale.
+            if ($registry->getOriginalLocaleForDocument($document) !== $locale) {
+                $hydrateEvent = new HydrateEvent($targetNode, $locale);
+                $hydrateEvent->setDocument($document);
+                $this->dispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
+            }
 
             return $document;
         }
