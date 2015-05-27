@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -11,13 +11,14 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Audit;
 
+use PHPCR\NodeInterface;
 use PHPCR\PropertyType;
 use Sulu\Component\DocumentManager\Behavior\Audit\BlameBehavior;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\PropertyEncoder;
 use Sulu\Component\Security\Authentication\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -32,9 +33,20 @@ class BlameSubscriber implements EventSubscriberInterface
     const CREATOR = 'creator';
     const CHANGER = 'changer';
 
+    /**
+     * @var PropertyEncoder
+     */
     private $encoder;
+
+    /**
+     * @var TokenStorage
+     */
     private $tokenStorage;
 
+    /**
+     * @param PropertyEncoder $encoder
+     * @param TokenStorage $tokenStorage
+     */
     public function __construct(PropertyEncoder $encoder, TokenStorage $tokenStorage)
     {
         $this->encoder = $encoder;
@@ -53,6 +65,9 @@ class BlameSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @param ConfigureOptionsEvent $event
+     */
     public function handleOptions(ConfigureOptionsEvent $event)
     {
         $event->getOptions()->setDefaults(array(
@@ -100,7 +115,7 @@ class BlameSubscriber implements EventSubscriberInterface
         $token = $this->tokenStorage->getToken();
 
         if (null === $token || $token instanceof AnonymousToken) {
-            return;
+            return null;
         }
 
         $user = $token->getUser();
@@ -116,7 +131,9 @@ class BlameSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param HydrateEvent $event
+     * @param AbstractMappingEvent $event
+     *
+     * @throws DocumentManagerException
      */
     public function handleHydrate(AbstractMappingEvent $event)
     {
@@ -144,7 +161,7 @@ class BlameSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function getCreator($node, $locale)
+    private function getCreator(NodeInterface $node, $locale)
     {
         return $node->getPropertyValueWithDefault(
             $this->encoder->localizedSystemName(self::CREATOR, $locale),

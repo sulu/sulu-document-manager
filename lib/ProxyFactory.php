@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -24,9 +24,24 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class ProxyFactory
 {
+    /**
+     * @var LazyLoadingGhostFactory
+     */
     private $proxyFactory;
+
+    /**
+     * @var EventDispatcherInterface
+     */
     private $dispatcher;
+
+    /**
+     * @var DocumentRegistry
+     */
     private $registry;
+
+    /**
+     * @var MetadataFactoryInterface
+     */
     private $metadataFactory;
 
     /**
@@ -53,6 +68,11 @@ class ProxyFactory
      *
      * TODO: We only pass the document here in order to correctly evaluate its locale
      *       later. I wonder if it necessary.
+     *
+     * @param object $fromDocument
+     * @param NodeInterface $targetNode
+     *
+     * @return \ProxyManager\Proxy\GhostObjectInterface
      */
     public function createProxyForNode($fromDocument, NodeInterface $targetNode)
     {
@@ -75,12 +95,7 @@ class ProxyFactory
             return $document;
         }
 
-        $initializer = function (
-            LazyLoadingInterface $document,
-            $method,
-            array $parameters,
-            &$initializer
-        ) use (
+        $initializer = function (LazyLoadingInterface $document, $method, array $parameters, &$initializer) use (
             $fromDocument,
             $targetNode,
             $eventDispatcher,
@@ -125,10 +140,9 @@ class ProxyFactory
     /**
      * Create a new collection of referrers from a list of referencing items.
      *
-     * @param object $document
-     * @param ItemInterface $items
+     * @param $document
      *
-     * @return ChildrenCollection
+     * @return ReferrerCollection
      */
     public function createReferrerCollection($document)
     {

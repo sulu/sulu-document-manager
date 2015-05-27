@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -12,12 +12,13 @@
 namespace Sulu\Component\DocumentManager\Event;
 
 use PHPCR\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 class HydrateEvent extends AbstractMappingEvent
 {
     /**
-     * @param object $document
+     * @param NodeInterface $node
+     * @param string $locale
+     * @param array $options
      */
     public function __construct(NodeInterface $node, $locale, array $options = array())
     {
@@ -28,6 +29,8 @@ class HydrateEvent extends AbstractMappingEvent
 
     /**
      * @return object
+     *
+     * @throws \RuntimeException
      */
     public function getDocument()
     {
@@ -50,6 +53,9 @@ class HydrateEvent extends AbstractMappingEvent
         $this->accessor = null;
     }
 
+    /**
+     * @param string $locale
+     */
     public function setLocale($locale)
     {
         $this->locale = $locale;

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -41,6 +41,7 @@ class ExplicitSubscriber implements EventSubscriberInterface
 
     /**
      * @param DocumentStrategyInterface $strategy
+     * @param NodeManager $nodeManager
      */
     public function __construct(
         DocumentStrategyInterface $strategy,
@@ -82,6 +83,8 @@ class ExplicitSubscriber implements EventSubscriberInterface
 
     /**
      * @param PersistEvent $event
+     *
+     * @throws DocumentManagerException
      */
     public function handlePersist(PersistEvent $event)
     {
@@ -110,7 +113,7 @@ class ExplicitSubscriber implements EventSubscriberInterface
             if (!$event->hasParentNode()) {
                 throw new DocumentManagerException(sprintf(
                     'The "node_name" option can only be used either with the "parent_path" option ' .
-                    'or when a parent node has been established by a previoew subscriber. ' .
+                    'or when a parent node has been established by a previous subscriber. ' .
                     'When persisting document: %s',
                     DocumentHelper::getDebugTitle($document)
                 ));

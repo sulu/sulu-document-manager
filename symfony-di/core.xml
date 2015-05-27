@@ -1,25 +1,26 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+
         <!-- Core -->
         <service id="sulu_document_manager.event_dispatcher.debug" class="Sulu\Component\DocumentManager\EventDispatcher\DebugEventDispatcher" public="false">
-            <argument type="service" id="service_container" />
-            <argument type="service" id="debug.stopwatch" />
-            <argument type="service" id="logger" />
-            <tag name="monolog.logger" channel="sulu_document_manager" />
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="debug.stopwatch"/>
+            <argument type="service" id="logger"/>
+            <tag name="monolog.logger" channel="sulu_document_manager"/>
         </service>
 
         <service id="sulu_document_manager.event_dispatcher.standard" class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher" public="false">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="sulu_document_manager.document_manager" class="Sulu\Component\DocumentManager\DocumentManager">
-            <argument type="service" id="sulu_document_manager.event_dispatcher" />
-            <argument type="service" id="sulu_document_manager.node_manager" />
+            <argument type="service" id="sulu_document_manager.event_dispatcher"/>
+            <argument type="service" id="sulu_document_manager.node_manager"/>
         </service>
 
         <service id="sulu_document_manager.document_registry" class="Sulu\Component\DocumentManager\DocumentRegistry" public="false">
@@ -27,7 +28,7 @@
         </service>
 
         <service id="sulu_document_manager.node_manager" class="Sulu\Component\DocumentManager\NodeManager" public="false">
-            <argument type="service" id="doctrine_phpcr.default_session" />
+            <argument type="service" id="doctrine_phpcr.default_session"/>
         </service>
 
         <service id="sulu_document_manager.metadata_factory.base" class="Sulu\Component\DocumentManager\Metadata\BaseMetadataFactory" public="false">
@@ -35,8 +36,8 @@
         </service>
 
         <service id="sulu_document_manager.metadata_factory" class="Sulu\Component\DocumentManager\Metadata\MetadataFactory" public="false">
-            <argument type="service" id="sulu_document_manager.metadata_factory.base" />
-            <argument type="service" id="sulu_document_manager.document_strategy" />
+            <argument type="service" id="sulu_document_manager.metadata_factory.base"/>
+            <argument type="service" id="sulu_document_manager.document_strategy"/>
         </service>
 
         <service id="sulu_document_manager.slugifier" class="Symfony\Cmf\Bundle\CoreBundle\Slugifier\CallbackSlugifier" public="false">
@@ -48,13 +49,13 @@
         </service>
 
         <service id="sulu_document_manager.property_encoder" class="Sulu\Component\DocumentManager\PropertyEncoder" public="false">
-            <argument type="service" id="sulu_document_manager.namespace_registry" />
+            <argument type="service" id="sulu_document_manager.namespace_registry"/>
         </service>
 
-        <service id="sulu_document_manager.name_resolver" class="Sulu\Component\DocumentManager\NameResolver" public="false" />
+        <service id="sulu_document_manager.name_resolver" class="Sulu\Component\DocumentManager\NameResolver" public="false"/>
 
         <service id="sulu_document_manager.document_strategy" class="Sulu\Component\DocumentManager\Strategy\MixinStrategy">
-            <argument type="service" id="sulu_document_manager.metadata_factory.base" />
+            <argument type="service" id="sulu_document_manager.metadata_factory.base"/>
         </service>
 
         <!-- Utilities -->
@@ -64,20 +65,20 @@
         </service>
 
         <service id="sulu_document_manager.document_inspector" class="Sulu\Component\DocumentManager\DocumentInspector">
-            <argument type="service" id="sulu_document_manager.document_registry" />
-            <argument type="service" id="sulu_document_manager.path_segment_registry" />
-            <argument type="service" id="sulu_document_manager.proxy_factory" />
+            <argument type="service" id="sulu_document_manager.document_registry"/>
+            <argument type="service" id="sulu_document_manager.path_segment_registry"/>
+            <argument type="service" id="sulu_document_manager.proxy_factory"/>
         </service>
 
         <!-- Proxy manager -->
         <service id="sulu_document_manager.proxy_factory" class="Sulu\Component\DocumentManager\ProxyFactory">
-            <argument type="service" id="sulu_document_manager.proxy_manager.factory.ghost" />
-            <argument type="service" id="sulu_document_manager.event_dispatcher" />
-            <argument type="service" id="sulu_document_manager.document_registry" />
-            <argument type="service" id="sulu_document_manager.metadata_factory" />
+            <argument type="service" id="sulu_document_manager.proxy_manager.factory.ghost"/>
+            <argument type="service" id="sulu_document_manager.event_dispatcher"/>
+            <argument type="service" id="sulu_document_manager.document_registry"/>
+            <argument type="service" id="sulu_document_manager.metadata_factory"/>
         </service>
 
-        <service id="sulu_document_manager.proxy_manager.factory.ghost" class="ProxyManager\Factory\LazyLoadingGhostFactory" />
+        <service id="sulu_document_manager.proxy_manager.factory.ghost" class="ProxyManager\Factory\LazyLoadingGhostFactory"/>
 
     </services>
 

@@ -1,7 +1,17 @@
 <?php
 
+/*
+ * This file is part of Sulu.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager;
 
+use PHPCR\NodeInterface;
 use PHPCR\RepositoryException;
 use PHPCR\SessionInterface;
 use PHPCR\Util\UUIDHelper;
@@ -13,8 +23,14 @@ use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
  */
 class NodeManager
 {
+    /**
+     * @var SessionInterface
+     */
     private $session;
 
+    /**
+     * @param SessionInterface $session
+     */
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
@@ -49,6 +65,8 @@ class NodeManager
      * then if a node with the UUID exists.
      *
      * @param string $identifier
+     *
+     * @return bool
      */
     public function has($identifier)
     {
@@ -74,21 +92,32 @@ class NodeManager
     }
 
     /**
-     * Move the documet with the given path or ID to the path
+     * Move the document with the given path or ID to the path
      * of the destination document (as a child).
      *
      * @param string $srcId
      * @param string $destId
+     * @param string $name
      */
     public function move($srcId, $destId, $name)
     {
         $srcPath = $this->normalizeToPath($srcId);
-        $destPath = $this->normalizeToPath($destId);
-        $destPath = $destPath . '/' . $name;
+        $parentDestPath = $this->normalizeToPath($destId);
+        $destPath = $parentDestPath . '/' . $name;
 
         $this->session->move($srcPath, $destPath);
     }
 
+    /**
+     * Copy the document with the given path or ID to the path
+     * of the destination document (as a child).
+     *
+     * @param string $srcId
+     * @param string $destId
+     * @param string $name
+     *
+     * @return string
+     */
     public function copy($srcId, $destId, $name)
     {
         $workspace = $this->session->getWorkspace();
@@ -101,11 +130,17 @@ class NodeManager
         return $destPath;
     }
 
+    /**
+     * Save all pending changes currently recorded in this Session.
+     */
     public function save()
     {
         $this->session->save();
     }
 
+    /**
+     * Clear the current session.
+     */
     public function clear()
     {
         $this->session->refresh(false);
@@ -114,7 +149,9 @@ class NodeManager
     /**
      * Create a path.
      *
-     * @param mixed $path
+     * @param string $path
+     *
+     * @return NodeInterface
      */
     public function createPath($path)
     {
@@ -137,7 +174,9 @@ class NodeManager
     /**
      * Normalize the given path or ID to a path.
      *
-     * @param mixed $identifier
+     * @param string $identifier
+     *
+     * @return string
      */
     private function normalizeToPath($identifier)
     {

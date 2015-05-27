@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -13,8 +13,8 @@ namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
 use Sulu\Component\DocumentManager\Behavior\Mapping\NodeNameBehavior;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -34,7 +34,9 @@ class NodeNameSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param HydrateEvent $event
+     * @param AbstractMappingEvent $event
+     *
+     * @throws DocumentManagerException
      */
     public function handleNodeName(AbstractMappingEvent $event)
     {

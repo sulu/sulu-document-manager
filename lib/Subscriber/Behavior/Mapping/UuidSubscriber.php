@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -14,6 +14,7 @@ namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 use Sulu\Component\DocumentManager\Behavior\Mapping\UuidBehavior;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -28,10 +29,15 @@ class UuidSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::HYDRATE => 'handleUuid',
-            Events::PERSIST => array('handleUuid', '0'),
+            Events::PERSIST => array('handleUuid', 0),
         );
     }
 
+    /**
+     * @param AbstractMappingEvent $event
+     *
+     * @throws DocumentManagerException
+     */
     public function handleUuid(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();

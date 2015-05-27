@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -11,17 +11,26 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConfigureOptionsEvent extends AbstractEvent
 {
+    /**
+     * @var OptionsResolver
+     */
     private $options;
 
-    public function __construct(OptionsResolverInterface $options)
+    /**
+     * @param OptionsResolver $options
+     */
+    public function __construct(OptionsResolver $options)
     {
         $this->options = $options;
     }
 
+    /**
+     * @return OptionsResolver
+     */
     public function getOptions()
     {
         return $this->options;

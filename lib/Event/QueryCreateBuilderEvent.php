@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -11,17 +11,28 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Query\QueryBuilder;
 
 class QueryCreateBuilderEvent extends AbstractEvent
 {
+    /**
+     * @var
+     */
     private $queryBuilder;
 
+    /**
+     * @param QueryBuilder $queryBuilder
+     */
     public function setQueryBuilder(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
     }
 
+    /**
+     * @return mixed
+     * @throws DocumentManagerException
+     */
     public function getQueryBuilder()
     {
         if (!$this->queryBuilder) {

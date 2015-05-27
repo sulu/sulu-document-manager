@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -15,7 +15,6 @@ use PHPCR\NodeInterface;
 use PHPCR\Util\PathHelper;
 use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\ReorderEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
@@ -27,17 +26,24 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ReorderSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var NodeManager
+     */
     private $nodeManager;
+
+    /**
+     * @var DocumentRegistry
+     */
     private $documentRegistry;
 
     /**
      * @param NodeManager $nodeManager
-     * @param EventDispatcher  $eventDispatcher
+     * @param DocumentRegistry $documentRegistry
      */
     public function __construct(NodeManager $nodeManager, DocumentRegistry $documentRegistry)
     {
-        $this->documentRegistry = $documentRegistry;
         $this->nodeManager = $nodeManager;
+        $this->documentRegistry = $documentRegistry;
     }
 
     /**
@@ -53,7 +59,9 @@ class ReorderSubscriber implements EventSubscriberInterface
     /**
      * Handle the reorder operation.
      *
-     * @param QueryCreateEvent $event
+     * @param ReorderEvent $event
+     *
+     * @throws DocumentManagerException
      */
     public function handleReorder(ReorderEvent $event)
     {
@@ -76,7 +84,7 @@ class ReorderSubscriber implements EventSubscriberInterface
     private function resolveSiblingName($siblingId, NodeInterface $parentNode, NodeInterface $node)
     {
         if (null === $siblingId) {
-            return;
+            return null;
         }
 
         $siblingPath = $siblingId;
@@ -103,7 +111,7 @@ class ReorderSubscriber implements EventSubscriberInterface
      * node before the sibling after the target sibling. If the node should be the
      * last sibling, then the target sibling should be NULL.
      *
-     * @param NodeInterface $node
+     * @param NodeInterface $parentNode
      * @param string $siblingName
      *
      * @return string

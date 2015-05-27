@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -18,7 +18,6 @@ use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use Sulu\Component\DocumentManager\Events;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -67,7 +66,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
     /**
      * Set the default locale for the hydration request.
      *
-     * @param HydrateEvent
+     * @param HydrateEvent $event
      */
     public function handleDefaultLocale(HydrateEvent $event)
     {
@@ -80,7 +79,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
     /**
      * If there is already a document for the node registered, use that.
      *
-     * @param HydrateEvent
+     * @param HydrateEvent $event
      */
     public function handleDocumentFromRegistry(HydrateEvent $event)
     {
@@ -100,10 +99,10 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Stop proppagation if the document is already loaded in the requested locale,
+     * Stop propagation if the document is already loaded in the requested locale,
      * otherwise reset the document locale to the new locale.
      *
-     * @param HydrateEvent
+     * @param HydrateEvent $event
      */
     public function handleStopPropagationAndResetLocale(HydrateEvent $event)
     {
@@ -149,9 +148,9 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * If the node for the persisted documnet is in the registry.
+     * If the node for the persisted document is in the registry.
      *
-     * @param PersistEvent
+     * @param PersistEvent $event
      */
     public function handleNodeFromRegistry(PersistEvent $event)
     {
@@ -192,7 +191,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
     /**
      * Deregister removed documents.
      *
-     * @param RemoveEvent $Event
+     * @param RemoveEvent $event
      */
     public function handleRemove(RemoveEvent $event)
     {

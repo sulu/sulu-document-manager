@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -13,13 +13,22 @@ namespace Sulu\Component\DocumentManager\Event;
 
 class CopyEvent extends MoveEvent
 {
+    /**
+     * @var string
+     */
     private $copiedPath;
 
+    /**
+     * @return string
+     */
     public function getCopiedPath()
     {
         return $this->copiedPath;
     }
 
+    /**
+     * @param string $copiedPath
+     */
     public function setCopiedPath($copiedPath)
     {
         $this->copiedPath = $copiedPath;

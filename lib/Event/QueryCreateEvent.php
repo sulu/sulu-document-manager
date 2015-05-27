@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -16,11 +16,31 @@ use Sulu\Component\DocumentManager\Query\Query;
 
 class QueryCreateEvent extends AbstractEvent
 {
+    /**
+     * @var string
+     */
     private $innerQuery;
+
+    /**
+     * @var Query
+     */
     private $query;
+
+    /**
+     * @var string
+     */
     private $locale;
+
+    /**
+     * @var null|string
+     */
     private $primarySelector;
 
+    /**
+     * @param string $innerQuery
+     * @param string $locale
+     * @param null|string $primarySelector
+     */
     public function __construct($innerQuery, $locale, $primarySelector = null)
     {
         $this->innerQuery = $innerQuery;
@@ -28,26 +48,43 @@ class QueryCreateEvent extends AbstractEvent
         $this->primarySelector = $primarySelector;
     }
 
+    /**
+     * @return string
+     */
     public function getInnerQuery()
     {
         return $this->innerQuery;
     }
 
+    /**
+     * @param Query $query
+     */
     public function setQuery(Query $query)
     {
         $this->query = $query;
     }
 
+    /**
+     * @return string
+     */
     public function getLocale()
     {
         return $this->locale;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPrimarySelector()
     {
         return $this->primarySelector;
     }
 
+    /**
+     * @return mixed
+     *
+     * @throws DocumentManagerException
+     */
     public function getQuery()
     {
         if (!$this->query) {

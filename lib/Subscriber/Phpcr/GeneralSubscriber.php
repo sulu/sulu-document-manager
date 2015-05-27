@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -46,7 +46,7 @@ class GeneralSubscriber implements EventSubscriberInterface
     private $nodeManager;
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
@@ -74,6 +74,9 @@ class GeneralSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @param MoveEvent $event
+     */
     public function handleMove(MoveEvent $event)
     {
         $document = $event->getDocument();
@@ -81,6 +84,9 @@ class GeneralSubscriber implements EventSubscriberInterface
         $this->nodeManager->move($node->getPath(), $event->getDestId(), $event->getDestName());
     }
 
+    /**
+     * @param CopyEvent $event
+     */
     public function handleCopy(CopyEvent $event)
     {
         $document = $event->getDocument();
@@ -89,6 +95,9 @@ class GeneralSubscriber implements EventSubscriberInterface
         $event->setCopiedPath($newPath);
     }
 
+    /**
+     * @param RefreshEvent $event
+     */
     public function handleRefresh(RefreshEvent $event)
     {
         $document = $event->getDocument();
@@ -104,11 +113,17 @@ class GeneralSubscriber implements EventSubscriberInterface
         $this->eventDispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
     }
 
+    /**
+     * @param ClearEvent $event
+     */
     public function handleClear(ClearEvent $event)
     {
         $this->nodeManager->clear();
     }
 
+    /**
+     * @param FlushEvent $event
+     */
     public function handleFlush(FlushEvent $event)
     {
         $this->nodeManager->save();

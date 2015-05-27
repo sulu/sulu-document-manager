@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -16,9 +16,19 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 class DocumentAccessor
 {
+    /**
+     * @var object
+     */
     private $document;
+
+    /**
+     * @var \ReflectionClass
+     */
     private $reflection;
 
+    /**
+     * @param $document
+     */
     public function __construct($document)
     {
         $this->document = $document;
@@ -31,6 +41,12 @@ class DocumentAccessor
         $this->reflection = new \ReflectionClass($documentClass);
     }
 
+    /**
+     * @param string $field
+     * @param mixed $value
+     *
+     * @throws DocumentManagerException
+     */
     public function set($field, $value)
     {
         if (!$this->has($field)) {
@@ -45,6 +61,11 @@ class DocumentAccessor
         $property->setValue($this->document, $value);
     }
 
+    /**
+     * @param $field
+     *
+     * @return bool
+     */
     public function has($field)
     {
         return $this->reflection->hasProperty($field);

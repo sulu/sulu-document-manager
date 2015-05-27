@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Sulu.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use Sulu\Component\DocumentManager\DocumentManager;
@@ -13,10 +22,26 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 abstract class AbstractFilingSubscriber implements EventSubscriberInterface
 {
-    private $basePath;
+    /**
+     * @var NodeManager
+     */
     private $nodeManager;
+
+    /**
+     * @var DocumentManager
+     */
     private $documentManager;
 
+    /**
+     * @var string
+     */
+    private $basePath;
+
+    /**
+     * @param NodeManager $nodeManager
+     * @param DocumentManager $documentManager
+     * @param string $basePath
+     */
     public function __construct(
         NodeManager $nodeManager,
         DocumentManager $documentManager,
@@ -61,6 +86,8 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
 
     /**
      * Return the name of the parent document.
+     *
+     * @param $document
      *
      * @return string
      */

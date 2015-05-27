@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -61,6 +61,8 @@ interface MetadataFactoryInterface
 
     /**
      * Return true if the given alias exists.
+     *
+     * @param string $alias
      *
      * @return bool
      */

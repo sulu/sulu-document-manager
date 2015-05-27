@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -18,6 +18,8 @@ class DocumentHelper
 {
     /**
      * Return a debug title for the document for use in exception messages.
+     *
+     * @param $document
      *
      * @return string
      */

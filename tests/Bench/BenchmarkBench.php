@@ -12,7 +12,7 @@
 namespace Sulu\Component\DocumentManager\Tests\Bench;
 
 use PhpBench\BenchCase;
-use PhpBench\BenchIteration;
+use PhpBench\Benchmark\Iteration;
 
 class BenchmarkBench extends BaseBench
 {
@@ -28,7 +28,7 @@ class BenchmarkBench extends BaseBench
      * @paramProvider provideLocales
      * @beforeMethod init
      */
-    public function benchCreatePersist(BenchIteration $iteration)
+    public function benchCreatePersist(Iteration $iteration)
     {
         $manager = $this->getDocumentManager();
         $locales = $iteration->getParameter('locales');
@@ -52,7 +52,7 @@ class BenchmarkBench extends BaseBench
      * @paramProvider provideLocales
      * @beforeMethod init
      */
-    public function benchCreatePersistPhpcr(BenchIteration $iteration)
+    public function benchCreatePersistPhpcr(Iteration $iteration)
     {
         $session = $this->getSession();
         $baseNode = $session->getNode(self::BASE_PATH);

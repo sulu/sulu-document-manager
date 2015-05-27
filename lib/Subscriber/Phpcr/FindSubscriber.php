@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -11,6 +11,7 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Phpcr;
 
+use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\FindEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Events;
@@ -26,12 +27,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class FindSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var MetadataFactoryInterface
+     */
     private $metadataFactory;
-    private $eventDispatcher;
+
+    /**
+     * @var NodeManager
+     */
     private $nodeManager;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @param MetadataFactoryInterface $metadataFactory
+     * @param NodeManager $nodeManager
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         MetadataFactoryInterface $metadataFactory,
@@ -54,7 +68,10 @@ class FindSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function configureOptions($event)
+    /**
+     * @param ConfigureOptionsEvent $event
+     */
+    public function configureOptions(ConfigureOptionsEvent $event)
     {
         $options = $event->getOptions();
         $options->setDefaults(array(
@@ -62,6 +79,12 @@ class FindSubscriber implements EventSubscriberInterface
         ));
     }
 
+    /**
+     * @param FindEvent $event
+     *
+     * @throws DocumentManagerException
+     * @throws DocumentNotFoundException
+     */
     public function handleFind(FindEvent $event)
     {
         $options = $event->getOptions();

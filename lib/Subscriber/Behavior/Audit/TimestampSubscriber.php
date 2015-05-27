@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -27,6 +27,9 @@ class TimestampSubscriber implements EventSubscriberInterface
     const CREATED = 'created';
     const CHANGED = 'changed';
 
+    /**
+     * @var PropertyEncoder
+     */
     private $encoder;
 
     public function __construct(PropertyEncoder $encoder)

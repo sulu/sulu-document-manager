@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -15,12 +15,15 @@ use ProxyManager\Inflector\ClassNameInflector as ProxyManagerClassNameInflector;
 
 /**
  * This is a hack to statically use the ClassNameInflector to
- * retireve the "real" classnames for proxy objects.
+ * retrieve the "real" class names for proxy objects.
  *
  * TODO: This should be a service dependency not a static class
  */
 class ClassNameInflector
 {
+    /**
+     * @var ProxyManagerClassNameInflector
+     */
     public static $inflector;
 
     /**

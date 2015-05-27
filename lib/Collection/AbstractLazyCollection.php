@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -16,45 +16,71 @@ namespace Sulu\Component\DocumentManager\Collection;
  */
 abstract class AbstractLazyCollection implements \Iterator, \Countable
 {
-    protected $elements;
+    /**
+     * @var \Iterator
+     */
+    protected $documents;
 
+    /**
+     * {@inheritDoc}
+     */
     public function count()
     {
         $this->initialize();
 
-        return $this->elements->count();
+        return $this->documents->count();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     abstract public function current();
 
+    /**
+     * {@inheritDoc}
+     */
     public function key()
     {
         $this->initialize();
 
-        return $this->elements->key();
+        return $this->documents->key();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function next()
     {
         $this->initialize();
 
-        return $this->elements->next();
+        $this->documents->next();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function rewind()
     {
         $this->initialize();
 
-        return $this->elements->rewind();
+        $this->documents->rewind();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function valid()
     {
         $this->initialize();
 
-        return $this->elements->valid();
+        return $this->documents->valid();
     }
 
+    /**
+     * Returns a array of all documents in the collection.
+     *
+     * @return array
+     */
     public function toArray()
     {
         $copy = array();
@@ -65,5 +91,8 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
         return $copy;
     }
 
+    /**
+     * Initialize the collection documents.
+     */
     abstract protected function initialize();
 }

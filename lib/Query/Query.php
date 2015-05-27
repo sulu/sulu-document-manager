@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -30,14 +30,42 @@ class Query
     const HYDRATE_DOCUMENT = 'document';
     const HYDRATE_PHPCR = 'phpcr_node';
 
-    private $hydrationMode;
-    private $locale;
-    private $dispatcher;
-    private $primarySelector;
+    /**
+     * @var QueryInterface
+     */
     private $phpcrQuery;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
+     * @var null|string
+     */
+    private $primarySelector;
+
+    /**
+     * @var null|string
+     */
+    private $locale;
+
+    /**
+     * @var int
+     */
     private $maxResults;
+
+    /**
+     * @var int
+     */
     private $firstResult;
 
+    /**
+     * @param QueryInterface $phpcrQuery
+     * @param EventDispatcherInterface $dispatcher
+     * @param null|string $locale
+     * @param null|string $primarySelector
+     */
     public function __construct(
         QueryInterface $phpcrQuery,
         EventDispatcherInterface $dispatcher,
@@ -45,11 +73,18 @@ class Query
         $primarySelector = null
     ) {
         $this->phpcrQuery = $phpcrQuery;
-        $this->primarySelector = $primarySelector;
         $this->dispatcher = $dispatcher;
         $this->locale = $locale;
+        $this->primarySelector = $primarySelector;
     }
 
+    /**
+     * @param array $parameters
+     * @param string $hydrationMode
+     *
+     * @return mixed|\PHPCR\Query\QueryResultInterface
+     * @throws DocumentManagerException
+     */
     public function execute(array $parameters = array(), $hydrationMode = self::HYDRATE_DOCUMENT)
     {
         if (null !== $this->maxResults) {
@@ -81,56 +116,73 @@ class Query
         return $event->getResult();
     }
 
+    /**
+     * @return int
+     */
     public function getMaxResults()
     {
         return $this->maxResults;
     }
 
+    /**
+     * @param int $maxResults
+     */
     public function setMaxResults($maxResults)
     {
         $this->maxResults = $maxResults;
     }
 
+    /**
+     * @return int
+     */
     public function getFirstResult()
     {
         return $this->firstResult;
     }
 
+    /**
+     * @param int $firstResult
+     */
     public function setFirstResult($firstResult)
     {
         $this->firstResult = $firstResult;
     }
 
-    public function getHydrationMode()
-    {
-        return $this->hydrationMode;
-    }
-
-    public function setHydrationMode($hydrationMode)
-    {
-        $this->hydrationMode = $hydrationMode;
-    }
-
+    /**
+     * @return null|string
+     */
     public function getLocale()
     {
         return $this->locale;
     }
 
+    /**
+     * @param string $locale
+     */
     public function setLocale($locale)
     {
         $this->locale = $locale;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPrimarySelector()
     {
         return $this->primarySelector;
     }
 
+    /**
+     * @param string $primarySelector
+     */
     public function setPrimarySelector($primarySelector)
     {
         $this->primarySelector = $primarySelector;
     }
 
+    /**
+     * @return QueryInterface
+     */
     public function getPhpcrQuery()
     {
         return $this->phpcrQuery;

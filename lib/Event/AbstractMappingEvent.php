@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -32,7 +32,7 @@ abstract class AbstractMappingEvent extends AbstractEvent
     protected $node;
 
     /**
-     * @var AccessorClass
+     * @var DocumentAccessor
      */
     protected $accessor;
 
@@ -41,6 +41,9 @@ abstract class AbstractMappingEvent extends AbstractEvent
      */
     protected $options;
 
+    /**
+     * {@inheritDoc}
+     */
     public function getDebugMessage()
     {
         return sprintf(
@@ -115,6 +118,12 @@ abstract class AbstractMappingEvent extends AbstractEvent
         return $this->options;
     }
 
+    /**
+     * @param string $name
+     * @param null|mixed $default
+     *
+     * @return mixed
+     */
     public function getOption($name, $default = null)
     {
         if (isset($this->options[$name])) {

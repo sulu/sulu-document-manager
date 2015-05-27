@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -25,6 +25,8 @@ interface ParentBehavior
 
     /**
      * Set the parent document for this document.
+     *
+     * @param object $document
      */
     public function setParent($document);
 }

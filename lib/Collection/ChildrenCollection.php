@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -23,25 +23,56 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class ChildrenCollection extends AbstractLazyCollection
 {
+    /**
+     * @var EventDispatcherInterface
+     */
     private $dispatcher;
+
+    /**
+     * @var NodeInterface
+     */
     private $parentNode;
+
+    /**
+     * @var string
+     */
     private $locale;
+
+    /**
+     * @var array
+     */
     private $options;
 
+    /**
+     * @var bool
+     */
     private $initialized = false;
 
-    public function __construct(NodeInterface $parentNode, EventDispatcherInterface $dispatcher, $locale, $options = array())
-    {
+    /**
+     * @param NodeInterface $parentNode
+     * @param EventDispatcherInterface $dispatcher
+     * @param string $locale
+     * @param array $options
+     */
+    public function __construct(
+        NodeInterface $parentNode,
+        EventDispatcherInterface $dispatcher,
+        $locale,
+        $options = array()
+    ) {
         $this->parentNode = $parentNode;
         $this->dispatcher = $dispatcher;
         $this->locale = $locale;
         $this->options = $options;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function current()
     {
         $this->initialize();
-        $childNode = $this->elements->current();
+        $childNode = $this->documents->current();
 
         $hydrateEvent = new HydrateEvent($childNode, $this->locale, $this->options);
         $this->dispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
@@ -49,13 +80,16 @@ class ChildrenCollection extends AbstractLazyCollection
         return $hydrateEvent->getDocument();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function initialize()
     {
         if (true === $this->initialized) {
             return;
         }
 
-        $this->elements = $this->parentNode->getNodes();
+        $this->documents = $this->parentNode->getNodes();
         $this->initialized = true;
     }
 }

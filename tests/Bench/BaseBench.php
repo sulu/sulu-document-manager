@@ -14,9 +14,9 @@ namespace Sulu\Component\DocumentManager\Tests\Bench;
 use Sulu\Component\DocumentManager\Tests\Bootstrap;
 use Sulu\Component\DocumentManager\Subscriber\Behavior;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use PhpBench\BenchCase;
+use PhpBench\Benchmark;
 
-abstract class BaseBench implements BenchCase
+abstract class BaseBench implements Benchmark
 {
     const BASE_NAME = 'test';
     const BASE_PATH = '/test';

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -13,9 +13,21 @@ namespace Sulu\Component\DocumentManager\Event;
 
 class ReorderEvent extends AbstractDocumentEvent
 {
+    /**
+     * @var string
+     */
     private $destId;
+
+    /**
+     * @var bool
+     */
     private $after;
 
+    /**
+     * @param object $document
+     * @param string $destId
+     * @param bool $after
+     */
     public function __construct($document, $destId, $after)
     {
         parent::__construct($document);
@@ -36,11 +48,17 @@ class ReorderEvent extends AbstractDocumentEvent
         );
     }
 
+    /**
+     * @return string
+     */
     public function getDestId()
     {
         return $this->destId;
     }
 
+    /**
+     * @return bool
+     */
     public function getAfter()
     {
         return $this->after;

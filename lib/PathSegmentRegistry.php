@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -14,13 +14,16 @@ namespace Sulu\Component\DocumentManager;
 /**
  * Provides a centralized repository of path components.
  *
- * Note that this is not used by the document mangager itself, but
+ * Note that this is not used by the document manager itself, but
  * is a useful utility for implementors.
  *
  * TODO: Move this class to somewhere more appropriate
  */
 class PathSegmentRegistry
 {
+    /**
+     * @var array
+     */
     private $pathSegments;
 
     /**

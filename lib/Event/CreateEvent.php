@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -10,8 +10,6 @@
  */
 
 namespace Sulu\Component\DocumentManager\Event;
-
-use Symfony\Component\EventDispatcher\Event;
 
 class CreateEvent extends AbstractEvent
 {
@@ -33,6 +31,10 @@ class CreateEvent extends AbstractEvent
         $this->alias = $alias;
     }
 
+    /**
+     * @return object
+     * @throws \RuntimeException
+     */
     public function getDocument()
     {
         if (!$this->document) {
@@ -45,11 +47,17 @@ class CreateEvent extends AbstractEvent
         return $this->document;
     }
 
+    /**
+     * @param object $document
+     */
     public function setDocument($document)
     {
         $this->document = $document;
     }
 
+    /**
+     * @return string
+     */
     public function getAlias()
     {
         return $this->alias;

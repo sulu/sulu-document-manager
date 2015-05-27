@@ -1,6 +1,17 @@
 <?php
 
+/*
+ * This file is part of Sulu.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager;
+
+use PHPCR\NodeInterface;
 
 /**
  * This class infers information about documents, for example
@@ -8,17 +19,33 @@ namespace Sulu\Component\DocumentManager;
  */
 class DocumentInspector
 {
+    /**
+     * @var DocumentRegistry
+     */
     protected $documentRegistry;
+
+    /**
+     * @var PathSegmentRegistry
+     */
     protected $pathSegmentRegistry;
+
+    /**
+     * @var ProxyFactory
+     */
     protected $proxyFactory;
 
+    /**
+     * @param DocumentRegistry $documentRegistry
+     * @param PathSegmentRegistry $pathSegmentRegistry
+     * @param ProxyFactory $proxyFactory
+     */
     public function __construct(
         DocumentRegistry $documentRegistry,
-        PathSegmentRegistry $pathSegmentregistry,
+        PathSegmentRegistry $pathSegmentRegistry,
         ProxyFactory $proxyFactory
     ) {
         $this->documentRegistry = $documentRegistry;
-        $this->pathSegmentRegistry = $pathSegmentregistry;
+        $this->pathSegmentRegistry = $pathSegmentRegistry;
         $this->proxyFactory = $proxyFactory;
     }
 
@@ -27,14 +54,14 @@ class DocumentInspector
      *
      * @param object $document
      *
-     * @return object
+     * @return object|null
      */
     public function getParent($document)
     {
         $parentNode = $this->getNode($document)->getParent();
 
         if (!$parentNode) {
-            return;
+            return null;
         }
 
         return $this->proxyFactory->createProxyForNode($document, $parentNode);
@@ -43,7 +70,9 @@ class DocumentInspector
     /**
      * Get referrers for the document.
      *
-     * @return ReferrerCollection
+     * @param object $document
+     *
+     * @return Collection\ReferrerCollection
      */
     public function getReferrers($document)
     {
@@ -66,8 +95,9 @@ class DocumentInspector
      * Returns lazy-loading children collection for given document.
      *
      * @param object $document
+     * @param array $options
      *
-     * @return ChildrenCollection
+     * @return Collection\ChildrenCollection
      */
     public function getChildren($document, array $options = array())
     {
@@ -87,7 +117,7 @@ class DocumentInspector
     }
 
     /**
-     * Reutrn the original (requested) locale for the given document.
+     * Return the original (requested) locale for the given document.
      *
      * @param object $document
      *
@@ -101,6 +131,8 @@ class DocumentInspector
     /**
      * Return the depth of the given document within the content repository.
      *
+     * @param $document
+     *
      * @return int
      */
     public function getDepth($document)
@@ -110,6 +142,8 @@ class DocumentInspector
 
     /**
      * Return the name of the document.
+     *
+     * @param $document
      *
      * @return string
      */

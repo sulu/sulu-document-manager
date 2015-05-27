@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -23,16 +23,29 @@ use Sulu\Component\DocumentManager\ProxyFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Set the parent and children on the doucment.
+ * Set the parent and children on the document.
  */
 class ParentSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var ProxyFactory
+     */
     private $proxyFactory;
+
+    /**
+     * @var DocumentInspector
+     */
     private $inspector;
+
+    /**
+     * @var DocumentManager
+     */
     private $documentManager;
 
     /**
      * @param ProxyFactory $proxyFactory
+     * @param DocumentInspector $inspector
+     * @param DocumentManager $documentManager
      */
     public function __construct(
         ProxyFactory $proxyFactory,
@@ -60,6 +73,9 @@ class ParentSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @param MoveEvent $event
+     */
     public function handleMove(MoveEvent $event)
     {
         $document = $event->getDocument();
@@ -67,6 +83,9 @@ class ParentSubscriber implements EventSubscriberInterface
         $this->mapParent($document, $node);
     }
 
+    /**
+     * @param PersistEvent $event
+     */
     public function handleSetParentNodeFromDocument(PersistEvent $event)
     {
         $document = $event->getDocument();
@@ -81,7 +100,7 @@ class ParentSubscriber implements EventSubscriberInterface
 
         $parentDocument = $document->getParent();
 
-    if (!$parentDocument) {
+        if (!$parentDocument) {
             return;
         }
 
@@ -136,7 +155,7 @@ class ParentSubscriber implements EventSubscriberInterface
         // TODO: performance warning: We are eagerly fetching the parent node
         $targetNode = $node->getParent();
 
-        // Do not map non-referencable parent nodes
+        // Do not map non-referenceable parent nodes
         if (!$targetNode->hasProperty('jcr:uuid')) {
             return;
         }

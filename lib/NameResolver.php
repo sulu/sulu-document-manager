@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -20,7 +20,10 @@ class NameResolver
 {
     /**
      * @param NodeInterface $parentNode
-     * @param mixed $name
+     * @param string $name
+     * @param null|NodeInterface $forNode
+     *
+     * @return string
      */
     public function resolveName(NodeInterface $parentNode, $name, $forNode = null)
     {
