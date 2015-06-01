@@ -127,4 +127,16 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
         $this->session->refresh(false)->shouldBeCalled();
         $this->manager->clear();
     }
+
+    /**
+     * It should purge the workspace
+     */
+    public function testPurgeWorkspace()
+    {
+        $this->session->getRootNode()->willReturn($this->node1->reveal());
+        $this->node1->getProperties()->willReturn(array());
+        $this->node1->getNodes()->willReturn(array());
+
+        $this->manager->purgeWorkspace();
+    }
 }

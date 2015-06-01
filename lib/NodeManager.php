@@ -16,6 +16,7 @@ use PHPCR\RepositoryException;
 use PHPCR\SessionInterface;
 use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
+use PHPCR\Util\NodeHelper;
 
 /**
  * The node manager is responsible for talking to the PHPCR
@@ -169,6 +170,14 @@ class NodeManager
         }
 
         return $current;
+    }
+
+    /**
+     * Purge the workspace.
+     */
+    public function purgeWorkspace()
+    {
+        NodeHelper::purgeWorkspace($this->session);
     }
 
     /**
