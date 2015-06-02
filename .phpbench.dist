@@ -1,0 +1,14 @@
+<?php
+
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$config = new PhpBench\Configuration();
+$config->setPath(__DIR__ . '/tests/Bench');
+$config->addReport(array(
+    'name' => 'console_table',
+    'aggregate_iterations' => true,
+    'avg_rps' => true,
+    'deviation' => false,
+));
+
+return $config;
