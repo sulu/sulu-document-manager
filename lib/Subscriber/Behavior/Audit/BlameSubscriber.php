@@ -61,17 +61,17 @@ class BlameSubscriber implements EventSubscriberInterface
         return array(
             Events::PERSIST => 'handlePersist',
             Events::HYDRATE => 'handleHydrate',
-            Events::CONFIGURE_OPTIONS => 'handleOptions',
+            Events::CONFIGURE_OPTIONS => 'configureOptions',
         );
     }
 
     /**
      * @param ConfigureOptionsEvent $event
      */
-    public function handleOptions(ConfigureOptionsEvent $event)
+    public function configureOptions(ConfigureOptionsEvent $event)
     {
         $event->getOptions()->setDefaults(array(
-            'blame.user' => null,
+            'user' => null,
         ));
     }
 

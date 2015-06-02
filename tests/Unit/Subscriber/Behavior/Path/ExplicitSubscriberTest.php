@@ -185,7 +185,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new OptionsResolver();
         $this->configureEvent->getOptions()->willReturn($resolver);
-        $this->subscriber->handleOptions($this->configureEvent->reveal());
+        $this->subscriber->configureOptions($this->configureEvent->reveal());
 
         return $resolver->resolve($options);
     }

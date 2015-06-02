@@ -58,14 +58,14 @@ class ExplicitSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::PERSIST => array('handlePersist', 485),
-            Events::CONFIGURE_OPTIONS => 'handleOptions',
+            Events::CONFIGURE_OPTIONS => 'configureOptions',
         );
     }
 
     /**
      * @param ConfigureOptionsEvent $event
      */
-    public function handleOptions(ConfigureOptionsEvent $event)
+    public function configureOptions(ConfigureOptionsEvent $event)
     {
         $options = $event->getOptions();
         $options->setDefaults(array(
