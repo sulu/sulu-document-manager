@@ -108,8 +108,8 @@ class BlameSubscriber implements EventSubscriberInterface
 
     private function getUserId(array $options)
     {
-        if ($options['blame.user']) {
-            return $options['blame.user'];
+        if ($options['user']) {
+            return $options['user'];
         }
 
         $token = $this->tokenStorage->getToken();
