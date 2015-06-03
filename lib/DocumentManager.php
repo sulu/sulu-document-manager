@@ -11,11 +11,10 @@
 
 namespace Sulu\Component\DocumentManager;
 
-use Sulu\Component\DocumentManager\Query\Query;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DocumentManager
+class DocumentManager implements DocumentManagerInterface
 {
     /**
      * @var EventDispatcherInterface
@@ -36,16 +35,7 @@ class DocumentManager
     }
 
     /**
-     * Find a document by path or UUID in the given
-     * locale, optionally enforcing the given type.
-     *
-     * @param string $identifier Path or UUID
-     * @param string $locale Locale
-     * @param array $options
-     *
-     * @throws Exception\DocumentManagerException
-     *
-     * @return object
+     * {@inheritdoc}
      */
     public function find($identifier, $locale = null, array $options = array())
     {
@@ -58,13 +48,7 @@ class DocumentManager
     }
 
     /**
-     * Create a new document instance for the given alias.
-     *
-     * @param string
-     *
-     * @throws Exception\MetadataNotFoundException
-     *
-     * @return object
+     * {@inheritdoc}
      */
     public function create($alias)
     {
@@ -75,11 +59,7 @@ class DocumentManager
     }
 
     /**
-     * Persist a document to a PHPCR node.
-     *
-     * @param object $document
-     * @param string $locale
-     * @param array $options
+     * {@inheritdoc}
      */
     public function persist($document, $locale, array $options = array())
     {
@@ -90,10 +70,7 @@ class DocumentManager
     }
 
     /**
-     * Remove the document. The document should be unregistered
-     * and the related PHPCR node should be removed from the session.
-     *
-     * @param object $document
+     * {@inheritdoc}
      */
     public function remove($document)
     {
@@ -102,11 +79,7 @@ class DocumentManager
     }
 
     /**
-     * Move the PHPCR node to which the document is mapped to be
-     * a child of the node at the given path or UUID.
-     *
-     * @param object $document
-     * @param string $destId Path or UUID
+     * {@inheritdoc}
      */
     public function move($document, $destId)
     {
@@ -115,13 +88,7 @@ class DocumentManager
     }
 
     /**
-     * Create a copy of the node representing the given document
-     * at the given path.
-     *
-     * @param object $document
-     * @param string $destPath
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function copy($document, $destPath)
     {
@@ -132,11 +99,7 @@ class DocumentManager
     }
 
     /**
-     * Re-Order node before or after a specific node.
-     *
-     * @param object $document
-     * @param string $destId
-     * @param bool $after
+     * {@inheritdoc}
      */
     public function reorder($document, $destId, $after = false)
     {
@@ -145,9 +108,7 @@ class DocumentManager
     }
 
     /**
-     * Refresh the given document with the persisted state of the node.
-     *
-     * @param object $document
+     * {@inheritdoc}
      */
     public function refresh($document)
     {
@@ -156,7 +117,7 @@ class DocumentManager
     }
 
     /**
-     * Persist changes to the persistent storage.
+     * {@inheritdoc}
      */
     public function flush()
     {
@@ -165,8 +126,7 @@ class DocumentManager
     }
 
     /**
-     * Clear the document manager, should reset the underlying PHPCR
-     * session and deregister all documents.
+     * {@inheritdoc}
      */
     public function clear()
     {
@@ -175,16 +135,7 @@ class DocumentManager
     }
 
     /**
-     * Create a new query from a JCR-SQL2 query string.
-     *
-     * NOTE: This should not be used generally as it exposes the
-     *       database structure and breaks abstraction. Use the domain-aware
-     *       query builder instead.
-     *
-     * @param mixed $query Either a JCR-SQL2 string, or a PHPCR query object
-     * @param string $locale
-     *
-     * @return Query
+     * {@inheritdoc}
      */
     public function createQuery($query, $locale = null)
     {
@@ -195,11 +146,7 @@ class DocumentManager
     }
 
     /**
-     * Create a new query builder.
-     *
-     * By default this will return the PHPCR-ODM query builder.
-     *
-     * http://doctrine-phpcr-odm.readthedocs.org/en/latest/reference/query-builder.html
+     * {@inheritdoc}
      */
     public function createQueryBuilder()
     {
@@ -209,6 +156,9 @@ class DocumentManager
         return $event->getQueryBuilder();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     private function getOptionsResolver($eventName)
     {
         if (isset($this->optionsResolvers[$eventName])) {

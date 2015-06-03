@@ -12,6 +12,7 @@
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\DocumentManagerInterface;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\NodeManager;
@@ -28,7 +29,7 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
     private $nodeManager;
 
     /**
-     * @var DocumentManager
+     * @var DocumentManagerInterface
      */
     private $documentManager;
 
@@ -39,12 +40,12 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
 
     /**
      * @param NodeManager $nodeManager
-     * @param DocumentManager $documentManager
+     * @param DocumentManagerInterface $documentManager
      * @param string $basePath
      */
     public function __construct(
         NodeManager $nodeManager,
-        DocumentManager $documentManager,
+        DocumentManagerInterface $documentManager,
         $basePath
     ) {
         $this->nodeManager = $nodeManager;
