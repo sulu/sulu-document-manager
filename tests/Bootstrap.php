@@ -9,19 +9,16 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Tests;
+namespace Sulu\Component\DocumentManager\tests;
 
 use Jackalope\RepositoryFactoryDoctrineDBAL;
-use PHPCR\SessionInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
-use Sulu\Component\DocumentManager\EventDispatcher\DebugEventDispatcher;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use PHPCR\SessionInterface;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 
 class Bootstrap
 {
@@ -35,21 +32,19 @@ class Bootstrap
 
         $container = new ContainerBuilder();
         $container->set('doctrine_phpcr.default_session', self::createSession());
-        $stopwatch = new Stopwatch();
         $logger = new Logger('test');
-        $logger->pushHandler(new StreamHandler($logDir .'/test.log'));
+        $logger->pushHandler(new StreamHandler($logDir . '/test.log'));
 
-        //$dispatcher = new DebugEventDispatcher($container, $stopwatch, $logger);
         $dispatcher = new ContainerAwareEventDispatcher($container);
         $container->set('sulu_document_manager.event_dispatcher', $dispatcher);
 
         $config = array(
             'sulu_document_manager.default_locale' => 'en',
-            'sulu_document_manager.mapping'=> array(
+            'sulu_document_manager.mapping' => array(
                 'full' => array(
                     'alias' => 'full',
                     'phpcr_type' => 'mix:test',
-                    'class' => 'Sulu\Component\DocumentManager\Tests\Functional\Model\FullDocument'
+                    'class' => 'Sulu\Component\DocumentManager\Tests\Functional\Model\FullDocument',
                 ),
             ),
             'sulu_document_manager.namespace_mapping' => array(
@@ -77,13 +72,13 @@ class Bootstrap
     }
 
     /**
-     * Create a new PHPCR session
+     * Create a new PHPCR session.
      *
      * @return SessionInterface
      */
     public static function createSession()
     {
-        $transportName = getenv('SULU_DM_TRANSPORT') ? : 'jackalope-doctrine-dbal';
+        $transportName = getenv('SULU_DM_TRANSPORT') ?: 'jackalope-doctrine-dbal';
 
         switch ($transportName) {
             case 'jackalope-doctrine-dbal':
@@ -104,7 +99,7 @@ class Bootstrap
             'host' => 'localhost',
             'user' => 'admin',
             'password' => 'admin',
-            'path' => __DIR__ . '/../data/test.sqlite'
+            'path' => __DIR__ . '/../data/test.sqlite',
         ));
 
         return $connection;

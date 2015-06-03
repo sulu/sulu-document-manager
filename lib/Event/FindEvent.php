@@ -56,7 +56,7 @@ class FindEvent extends AbstractEvent
             'i:%s d:%s l:%s',
             $this->identifier,
             $this->document ? spl_object_hash($this->document) : '<no document>',
-            $this->locale ? : '<no locale>'
+            $this->locale ?: '<no locale>'
         );
     }
 
@@ -78,6 +78,7 @@ class FindEvent extends AbstractEvent
 
     /**
      * @return object
+     *
      * @throws DocumentManagerException
      */
     public function getDocument()

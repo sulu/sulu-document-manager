@@ -1,9 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Sulu CMS.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager;
 
 /**
- * The path builder provides a way to create paths from templates
+ * The path builder provides a way to create paths from templates.
  */
 class PathBuilder
 {
@@ -40,9 +49,10 @@ class PathBuilder
      * @see Sulu\Component\DocumentManager\PathSegmentRegistry
      *
      * @param array $segments
+     *
      * @return string
      */
-    public function build($segments)
+    public function build(array $segments)
     {
         $results = array();
         foreach ($segments as $segment) {
@@ -64,7 +74,7 @@ class PathBuilder
     private function buildSegment($segment)
     {
         if (empty($segment) || $segment == '/') {
-            return null;
+            return;
         }
 
         if (substr($segment, 0, 1) == '%') {

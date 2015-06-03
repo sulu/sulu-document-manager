@@ -61,7 +61,7 @@ class DocumentInspector
         $parentNode = $this->getNode($document)->getParent();
 
         if (!$parentNode) {
-            return null;
+            return;
         }
 
         return $this->proxyFactory->createProxyForNode($document, $parentNode);

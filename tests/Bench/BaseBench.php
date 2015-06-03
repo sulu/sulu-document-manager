@@ -11,17 +11,14 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Bench;
 
-use Sulu\Component\DocumentManager\Tests\Bootstrap;
-use Sulu\Component\DocumentManager\Subscriber\Behavior;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use PhpBench\Benchmark;
+use Sulu\Component\DocumentManager\Tests\Bootstrap;
 
 abstract class BaseBench implements Benchmark
 {
     const BASE_NAME = 'test';
     const BASE_PATH = '/test';
 
-    private $session;
     private $container;
 
     protected function initPhpcr()
@@ -50,6 +47,7 @@ abstract class BaseBench implements Benchmark
     protected function getSession()
     {
         $session = $this->getContainer()->get('doctrine_phpcr.default_session');
+
         return $session;
     }
 
@@ -58,4 +56,3 @@ abstract class BaseBench implements Benchmark
         return $this->getContainer()->get('sulu_document_manager.document_manager');
     }
 }
-

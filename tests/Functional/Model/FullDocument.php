@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sulu CMS.
  *
@@ -48,7 +49,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getNodeName() 
+    public function getNodeName()
     {
         return $this->nodeName;
     }
@@ -56,7 +57,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getCreated() 
+    public function getCreated()
     {
         return $this->created;
     }
@@ -64,7 +65,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getChanged() 
+    public function getChanged()
     {
         return $this->changed;
     }
@@ -72,7 +73,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getCreator() 
+    public function getCreator()
     {
         return $this->creator;
     }
@@ -80,7 +81,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getChanger() 
+    public function getChanger()
     {
         return $this->changer;
     }
@@ -88,7 +89,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getParent() 
+    public function getParent()
     {
         return $this->parent;
     }
@@ -104,7 +105,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getUuid() 
+    public function getUuid()
     {
         return $this->uuid;
     }
@@ -128,7 +129,7 @@ class FullDocument implements
     /**
      * {@inheritDoc}
      */
-    public function getPath() 
+    public function getPath()
     {
         return $this->path;
     }

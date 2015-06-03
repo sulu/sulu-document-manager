@@ -1,10 +1,10 @@
 <?php
 
-namespace Sulu\Component\DocumentManager\Tests\Bench;
+namespace Sulu\Component\DocumentManager\tests\Bench;
 
+use PhpBench\Benchmark;
 use Sulu\Component\DocumentManager\PathBuilder;
 use Sulu\Component\DocumentManager\PathSegmentRegistry;
-use PhpBench\Benchmark;
 
 class PathBuilderBench implements Benchmark
 {
@@ -33,12 +33,11 @@ class PathBuilderBench implements Benchmark
     {
         return array(
             array(
-                'elements' => array('one', 'two', 'three')
+                'elements' => array('one', 'two', 'three'),
             ),
             array(
                 'elements' => array('%one', '%two%', 'three'),
             ),
         );
     }
-
 }

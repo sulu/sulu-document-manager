@@ -24,7 +24,6 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -164,7 +163,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
      */
     private function rename(NodeInterface $node, $name)
     {
-        $names = (array)$node->getParent()->getNodeNames();
+        $names = (array) $node->getParent()->getNodeNames();
         $pos = array_search($node->getName(), $names);
         $next = isset($names[$pos + 1]) ? $names[$pos + 1] : null;
 

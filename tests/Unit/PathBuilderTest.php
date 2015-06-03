@@ -1,10 +1,10 @@
 <?php
 
-namespace Sulu\Component\DocumentManager\Tests\Unit;
+namespace Sulu\Component\DocumentManager\tests\Unit;
 
-use Sulu\Component\DocumentManager\PathSegmentRegistry;
-use Sulu\Component\DocumentManager\PathBuilder;
 use PhpBench\Benchmark;
+use Sulu\Component\DocumentManager\PathBuilder;
+use Sulu\Component\DocumentManager\PathSegmentRegistry;
 
 class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
 {
@@ -20,18 +20,8 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
     }
 
     /**
-     * @description Build path 1000 times
-     * @revs 1000
-     * @beforeMethod setUp
-     */
-    public function benchBuild()
-    {
-        $this->pathBuilder->build(array('%one%', '%two%', 'four'));
-    }
-
-    /**
      * It should build a path
-     * Using a combination of tokens and literal values
+     * Using a combination of tokens and literal values.
      */
     public function testBuild()
     {
@@ -40,7 +30,7 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
     }
 
     /**
-     * It should build "/" for an empty array
+     * It should build "/" for an empty array.
      */
     public function testBuildEmpty()
     {
@@ -48,7 +38,7 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
     }
 
     /**
-     * It should build "/" for an array with "/"
+     * It should build "/" for an array with "/".
      */
     public function testBuildSingleSlash()
     {
@@ -56,10 +46,18 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
     }
 
     /**
-     * It should replace "//" with "/"
+     * It should replace "//" with "/".
      */
     public function testBuildNoDoubleSlash()
     {
         $this->assertEquals('/hello/world', $this->pathBuilder->build(array('hello', '', '', 'world')));
+    }
+
+    /**
+     * It should allow sub paths.
+     */
+    public function testBuildSubPath()
+    {
+        $this->assertEquals('/hello/world/goodbye/world/k', $this->pathBuilder->build(array('hello', 'world/goodbye/world', 'k')));
     }
 }

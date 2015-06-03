@@ -11,7 +11,6 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Bench;
 
-use PhpBench\BenchCase;
 use PhpBench\Benchmark\Iteration;
 
 class BenchmarkBench extends BaseBench
@@ -37,7 +36,7 @@ class BenchmarkBench extends BaseBench
             $document = $manager->create('full');
             foreach ($locales as $locale) {
                 $manager->persist($document, $locale, array(
-                    'path' => self::BASE_PATH . '/node-' . $i
+                    'path' => self::BASE_PATH . '/node-' . $i,
                 ));
             }
         }
@@ -61,8 +60,8 @@ class BenchmarkBench extends BaseBench
             $node = $baseNode->addNode('node-' . $i);
             foreach ($iteration->getParameter('locales') as $locale) {
                 $node->addMixin('mix:test');
-                $node->setProperty('lsys:' . $locale .'-created', new \DateTime());
-                $node->setProperty('lsys:' . $locale .'-changed', new \DateTime());
+                $node->setProperty('lsys:' . $locale . '-created', new \DateTime());
+                $node->setProperty('lsys:' . $locale . '-changed', new \DateTime());
             }
         }
 
@@ -76,10 +75,10 @@ class BenchmarkBench extends BaseBench
                 'nb_nodes' => 1,
             ),
             array(
-                'nb_nodes' => 10, 
+                'nb_nodes' => 10,
             ),
             array(
-                'nb_nodes' => 100, 
+                'nb_nodes' => 100,
             ),
         );
     }
