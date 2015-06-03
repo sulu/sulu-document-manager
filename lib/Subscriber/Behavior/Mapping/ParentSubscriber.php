@@ -15,6 +15,7 @@ use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
 use Sulu\Component\DocumentManager\DocumentInspector;
 use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\DocumentManagerInterface;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
@@ -38,19 +39,19 @@ class ParentSubscriber implements EventSubscriberInterface
     private $inspector;
 
     /**
-     * @var DocumentManager
+     * @var DocumentManagerInterface
      */
     private $documentManager;
 
     /**
      * @param ProxyFactory $proxyFactory
      * @param DocumentInspector $inspector
-     * @param DocumentManager $documentManager
+     * @param DocumentManagerInterface $documentManager
      */
     public function __construct(
         ProxyFactory $proxyFactory,
         DocumentInspector $inspector,
-        DocumentManager $documentManager
+        DocumentManagerInterface $documentManager
 
     ) {
         $this->proxyFactory = $proxyFactory;

@@ -13,6 +13,7 @@ namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
 use Sulu\Component\DocumentManager\DocumentManager;
+use Sulu\Component\DocumentManager\DocumentManagerInterface;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\NodeManager;
 
@@ -28,13 +29,13 @@ class AliasFilingSubscriber extends AbstractFilingSubscriber
 
     /**
      * @param NodeManager $nodeManager
-     * @param DocumentManager $documentManager
+     * @param DocumentManagerInterface $documentManager
      * @param MetadataFactoryInterface $metadataFactory
      * @param string $basePath
      */
     public function __construct(
         NodeManager $nodeManager,
-        DocumentManager $documentManager,
+        DocumentManagerInterface $documentManager,
         MetadataFactoryInterface $metadataFactory,
         $basePath
     ) {
