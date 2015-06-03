@@ -79,7 +79,7 @@ class ReferrerCollection extends AbstractLazyCollection
         //       initialized, but if we don't do this, we won't know how many items are in the
         //       collection, as one node could have many referring properties.
         foreach ($references as $reference) {
-            /** @var PropertyInterface $reference */
+            /* @var PropertyInterface $reference */
             $referrerNode = $reference->getParent();
             $this->documents[$referrerNode->getIdentifier()] = $referrerNode;
         }

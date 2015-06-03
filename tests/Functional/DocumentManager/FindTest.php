@@ -9,12 +9,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Tests\Functional\DocumentManager;
+namespace Sulu\Component\DocumentManager\tests\Functional\DocumentManager;
 
 use Sulu\Component\DocumentManager\Tests\Functional\BaseTestCase;
-use Sulu\Component\DocumentManager\Tests\Functional\Model\FullDocument;
 
-class DocumentManagerTest extends BaseTestCase
+class FindTest extends BaseTestCase
 {
     public function setUp()
     {
@@ -22,7 +21,7 @@ class DocumentManagerTest extends BaseTestCase
     }
 
     /**
-     * Persist a document in a single locale
+     * Persist a document in a single locale.
      */
     public function testPersist()
     {
@@ -38,7 +37,7 @@ class DocumentManagerTest extends BaseTestCase
     }
 
     /**
-     * Persist a document in a many locales
+     * Persist a document in a many locales.
      */
     public function testPersistManyLocales()
     {

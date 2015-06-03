@@ -83,6 +83,7 @@ class Query
      * @param string $hydrationMode
      *
      * @return mixed|\PHPCR\Query\QueryResultInterface
+     *
      * @throws DocumentManagerException
      */
     public function execute(array $parameters = array(), $hydrationMode = self::HYDRATE_DOCUMENT)

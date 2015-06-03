@@ -129,7 +129,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should purge the workspace
+     * It should purge the workspace.
      */
     public function testPurgeWorkspace()
     {

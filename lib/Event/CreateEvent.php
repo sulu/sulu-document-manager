@@ -33,6 +33,7 @@ class CreateEvent extends AbstractEvent
 
     /**
      * @return object
+     *
      * @throws \RuntimeException
      */
     public function getDocument()

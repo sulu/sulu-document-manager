@@ -115,7 +115,7 @@ class BlameSubscriber implements EventSubscriberInterface
         $token = $this->tokenStorage->getToken();
 
         if (null === $token || $token instanceof AnonymousToken) {
-            return null;
+            return;
         }
 
         $user = $token->getUser();

@@ -11,8 +11,6 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Phpcr;
 
-use PHPCR\NodeInterface;
-use PHPCR\PropertyInterface;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use Sulu\Component\DocumentManager\Events;

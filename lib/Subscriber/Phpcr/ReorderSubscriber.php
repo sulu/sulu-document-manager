@@ -84,7 +84,7 @@ class ReorderSubscriber implements EventSubscriberInterface
     private function resolveSiblingName($siblingId, NodeInterface $parentNode, NodeInterface $node)
     {
         if (null === $siblingId) {
-            return null;
+            return;
         }
 
         $siblingPath = $siblingId;

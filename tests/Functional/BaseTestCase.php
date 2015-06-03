@@ -9,11 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Component\DocumentManager\Tests\Functional;
+namespace Sulu\Component\DocumentManager\tests\Functional;
 
 use Sulu\Component\DocumentManager\Tests\Bootstrap;
-use Sulu\Component\DocumentManager\Subscriber\Behavior;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -59,9 +57,8 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
         foreach ($options['locales'] as $locale) {
             $manager->persist($document, $locale, array(
-                'path' => self::BASE_PATH
+                'path' => self::BASE_PATH,
             ));
         }
     }
 }
-

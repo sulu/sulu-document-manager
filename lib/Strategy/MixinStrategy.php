@@ -54,10 +54,10 @@ class MixinStrategy implements DocumentStrategyInterface
     public function resolveMetadataForNode(NodeInterface $node)
     {
         if (false === $node->hasProperty('jcr:mixinTypes')) {
-            return null;
+            return;
         }
 
-        $mixinTypes = (array)$node->getPropertyValue('jcr:mixinTypes');
+        $mixinTypes = (array) $node->getPropertyValue('jcr:mixinTypes');
 
         foreach ($mixinTypes as $mixinType) {
             if (true == $this->metadataFactory->hasMetadataForPhpcrType($mixinType)) {
@@ -65,6 +65,6 @@ class MixinStrategy implements DocumentStrategyInterface
             }
         }
 
-        return null;
+        return;
     }
 }

@@ -31,6 +31,7 @@ class QueryCreateBuilderEvent extends AbstractEvent
 
     /**
      * @return mixed
+     *
      * @throws DocumentManagerException
      */
     public function getQueryBuilder()
