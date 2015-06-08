@@ -29,6 +29,11 @@ class Metadata
     private $phpcrType;
 
     /**
+     * @var \ReflectionClass
+     */
+    private $reflection;
+
+    /**
      * @return string
      */
     public function getClass()
@@ -42,6 +47,27 @@ class Metadata
     public function setClass($class)
     {
         $this->class = $class;
+        $this->reflection = null;
+    }
+
+    /**
+     * @return ReflectionClass
+     */
+    public function getReflectionClass()
+    {
+        if ($this->reflection) {
+            return $this->reflection;
+        }
+
+        if (!$this->class) {
+            throw new \InvalidArgumentException(
+                'Cannot retrieve ReflectionClass on metadata which has no class attribute'
+            );
+        }
+
+        $this->reflection = new \ReflectionClass($this->class);
+
+        return $this->reflection;
     }
 
     /**
