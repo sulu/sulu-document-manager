@@ -101,7 +101,7 @@ class ProxyFactory
             $eventDispatcher,
             $registry
         ) {
-            $locale = $registry->getLocaleForDocument($fromDocument);
+            $locale = $registry->getOriginalLocaleForDocument($fromDocument);
 
             $hydrateEvent = new HydrateEvent($targetNode, $locale);
             $hydrateEvent->setDocument($document);
@@ -111,7 +111,7 @@ class ProxyFactory
         };
 
         $proxy = $this->proxyFactory->createProxy($targetMetadata->getClass(), $initializer);
-        $locale = $registry->getLocaleForDocument($fromDocument);
+        $locale = $registry->getOriginalLocaleForDocument($fromDocument);
         $this->registry->registerDocument($proxy, $targetNode, $locale);
 
         return $proxy;
