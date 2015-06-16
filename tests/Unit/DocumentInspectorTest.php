@@ -101,4 +101,16 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
             $this->documentInspector->getChildren($this->document)
         );
     }
+
+    /**
+     * It should return true if it has children
+     */
+    public function testHasChildren()
+    {
+        $this->node->hasNodes()->willReturn(true);
+        $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+        $this->assertTrue(
+            $this->documentInspector->hasChildren($this->document)
+        );
+    }
 }

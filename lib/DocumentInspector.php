@@ -105,6 +105,17 @@ class DocumentInspector
     }
 
     /**
+     * Return true if the document has children
+     *
+     * @param object $document
+     * @return boolean
+     */
+    public function hasChildren($document)
+    {
+        return $this->getNode($document)->hasNodes();
+    }
+
+    /**
      * Return the locale for the given document.
      *
      * @param object $document
