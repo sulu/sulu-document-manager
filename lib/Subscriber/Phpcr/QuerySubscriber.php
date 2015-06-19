@@ -85,6 +85,7 @@ class QuerySubscriber implements EventSubscriberInterface
                 $phpcrQuery,
                 $this->eventDispatcher,
                 $event->getLocale(),
+                $event->getOptions(),
                 $event->getPrimarySelector()
             )
         );
@@ -114,7 +115,9 @@ class QuerySubscriber implements EventSubscriberInterface
         $locale = $query->getLocale();
         $phpcrResult = $query->getPhpcrQuery()->execute();
 
-        $event->setResult(new QueryResultCollection($phpcrResult, $this->eventDispatcher, $locale));
+        $event->setResult(
+            new QueryResultCollection($phpcrResult, $this->eventDispatcher, $locale, $event->getOptions())
+        );
     }
 
     /**

@@ -15,6 +15,8 @@ use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 
 class FindEvent extends AbstractEvent
 {
+    use EventOptionsTrait;
+
     /**
      * @var string
      */
@@ -24,11 +26,6 @@ class FindEvent extends AbstractEvent
      * @var string
      */
     private $locale;
-
-    /**
-     * @var array
-     */
-    private $options = array();
 
     /**
      * @var object
@@ -99,13 +96,5 @@ class FindEvent extends AbstractEvent
     public function setDocument($document)
     {
         $this->document = $document;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 }

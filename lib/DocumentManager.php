@@ -137,9 +137,9 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function createQuery($query, $locale = null)
+    public function createQuery($query, $locale = null, array $options = array())
     {
-        $event = new Event\QueryCreateEvent($query, $locale);
+        $event = new Event\QueryCreateEvent($query, $locale, $options);
         $this->eventDispatcher->dispatch(Events::QUERY_CREATE, $event);
 
         return $event->getQuery();

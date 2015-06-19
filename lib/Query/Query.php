@@ -51,6 +51,11 @@ class Query
     private $locale;
 
     /**
+     * @var array
+     */
+    private $options;
+
+    /**
      * @var int
      */
     private $maxResults;
@@ -64,17 +69,20 @@ class Query
      * @param QueryInterface $phpcrQuery
      * @param EventDispatcherInterface $dispatcher
      * @param null|string $locale
+     * @param array $options
      * @param null|string $primarySelector
      */
     public function __construct(
         QueryInterface $phpcrQuery,
         EventDispatcherInterface $dispatcher,
         $locale = null,
+        array $options = array(),
         $primarySelector = null
     ) {
         $this->phpcrQuery = $phpcrQuery;
         $this->dispatcher = $dispatcher;
         $this->locale = $locale;
+        $this->options = $options;
         $this->primarySelector = $primarySelector;
     }
 
@@ -111,7 +119,7 @@ class Query
             ));
         }
 
-        $event = new QueryExecuteEvent($this);
+        $event = new QueryExecuteEvent($this, $this->options);
         $this->dispatcher->dispatch(Events::QUERY_EXECUTE, $event);
 
         return $event->getResult();

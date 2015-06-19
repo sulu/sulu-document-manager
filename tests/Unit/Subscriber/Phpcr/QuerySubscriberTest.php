@@ -25,6 +25,56 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * @var WorkspaceInterface
+     */
+    private $workspace;
+
+    /**
+     * @var QueryManagerInterface
+     */
+    private $queryManager;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
+     * @var QueryInterface
+     */
+    private $phpcrQuery;
+
+    /**
+     * @var QueryResultInterface
+     */
+    private $phpcrResult;
+
+    /**
+     * @var QueryCreateEvent
+     */
+    private $queryCreateEvent;
+
+    /**
+     * @var QueryExecuteEvent
+     */
+    private $queryExecuteEvent;
+
+    /**
+     * @var Query
+     */
+    private $query;
+
+    /**
+     * @var QuerySubscriber
+     */
+    private $subscriber;
+
     public function setUp()
     {
         $this->session = $this->prophesize(SessionInterface::class);
@@ -57,12 +107,14 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->queryCreateEvent->getInnerQuery()->willReturn($query);
         $this->queryCreateEvent->getLocale()->willReturn($locale);
+        $this->queryCreateEvent->getOptions()->willReturn(array());
         $this->queryCreateEvent->getPrimarySelector()->willReturn($primarySelector);
         $this->queryManager->createQuery($query, 'JCR-SQL2')->willReturn($this->phpcrQuery->reveal());
         $this->queryCreateEvent->setQuery(new Query(
             $this->phpcrQuery->reveal(),
             $this->dispatcher->reveal(),
             $locale,
+            array(),
             $primarySelector
         ))->shouldBeCalled();
 
@@ -79,12 +131,14 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->queryCreateEvent->getInnerQuery()->willReturn($this->phpcrQuery->reveal());
         $this->queryCreateEvent->getLocale()->willReturn($locale);
+        $this->queryCreateEvent->getOptions()->willReturn(array());
         $this->queryCreateEvent->getPrimarySelector()->willReturn($primarySelector);
         $this->queryManager->createQuery($this->phpcrQuery->reveal(), 'JCR-SQL2')->willReturn($this->phpcrQuery->reveal());
         $this->queryCreateEvent->setQuery(new Query(
             $this->phpcrQuery->reveal(),
             $this->dispatcher->reveal(),
             $locale,
+            array(),
             $primarySelector
         ))->shouldBeCalled();
 
@@ -104,6 +158,7 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
         $this->phpcrQuery->execute()->willReturn($this->phpcrResult->reveal());
         $this->query->getPrimarySelector()->willReturn($primarySelector);
         $this->queryExecuteEvent->getQuery()->willReturn($this->query->reveal());
+        $this->queryExecuteEvent->getOptions()->willReturn(array());
 
         $this->queryExecuteEvent->setResult(
             new QueryResultCollection(

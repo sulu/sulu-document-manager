@@ -16,6 +16,8 @@ use Sulu\Component\DocumentManager\Query\Query;
 
 class QueryCreateEvent extends AbstractEvent
 {
+    use EventOptionsTrait;
+
     /**
      * @var string
      */
@@ -39,12 +41,14 @@ class QueryCreateEvent extends AbstractEvent
     /**
      * @param string $innerQuery
      * @param string $locale
+     * @param array $options
      * @param null|string $primarySelector
      */
-    public function __construct($innerQuery, $locale, $primarySelector = null)
+    public function __construct($innerQuery, $locale, array $options, $primarySelector = null)
     {
         $this->innerQuery = $innerQuery;
         $this->locale = $locale;
+        $this->options = $options;
         $this->primarySelector = $primarySelector;
     }
 

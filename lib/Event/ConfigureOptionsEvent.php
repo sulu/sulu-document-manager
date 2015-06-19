@@ -15,10 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConfigureOptionsEvent extends AbstractEvent
 {
-    /**
-     * @var OptionsResolver
-     */
-    private $options;
+    use EventOptionsTrait;
 
     /**
      * @param OptionsResolver $options
@@ -26,13 +23,5 @@ class ConfigureOptionsEvent extends AbstractEvent
     public function __construct(OptionsResolver $options)
     {
         $this->options = $options;
-    }
-
-    /**
-     * @return OptionsResolver
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 }

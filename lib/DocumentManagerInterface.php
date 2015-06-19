@@ -111,10 +111,11 @@ interface DocumentManagerInterface
      *
      * @param mixed $query Either a JCR-SQL2 string, or a PHPCR query object
      * @param string $locale
+     * @param array $options
      *
      * @return Query
      */
-    public function createQuery($query, $locale = null);
+    public function createQuery($query, $locale = null, array $options = array());
 
     /**
      * Create a new query builder.

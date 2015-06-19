@@ -37,6 +37,11 @@ class QueryResultCollection extends AbstractLazyCollection
     private $locale;
 
     /**
+     * @var array
+     */
+    private $options;
+
+    /**
      * @var bool
      */
     private $initialized = false;
@@ -50,17 +55,20 @@ class QueryResultCollection extends AbstractLazyCollection
      * @param QueryResultInterface $result
      * @param EventDispatcherInterface $eventDispatcher
      * @param string $locale
+     * @param array $options
      * @param null|string $primarySelector
      */
     public function __construct(
         QueryResultInterface $result,
         EventDispatcherInterface $eventDispatcher,
         $locale,
+        $options = array(),
         $primarySelector = null
     ) {
         $this->result = $result;
         $this->eventDispatcher = $eventDispatcher;
         $this->locale = $locale;
+        $this->options = $options;
         $this->primarySelector = $primarySelector;
     }
 
@@ -73,7 +81,7 @@ class QueryResultCollection extends AbstractLazyCollection
         $row = $this->documents->current();
         $node = $row->getNode($this->primarySelector);
 
-        $hydrateEvent = new HydrateEvent($node, $this->locale);
+        $hydrateEvent = new HydrateEvent($node, $this->locale, $this->options);
         $this->eventDispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
 
         return $hydrateEvent->getDocument();

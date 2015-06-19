@@ -16,6 +16,8 @@ use Sulu\Component\DocumentManager\Query\Query;
 
 class QueryExecuteEvent extends AbstractEvent
 {
+    use EventOptionsTrait;
+
     /**
      * @var Query
      */
@@ -28,10 +30,12 @@ class QueryExecuteEvent extends AbstractEvent
 
     /**
      * @param Query $query
+     * @param array $options
      */
-    public function __construct(Query $query)
+    public function __construct(Query $query, array $options = array())
     {
         $this->query = $query;
+        $this->options = $options;
     }
 
     /**
