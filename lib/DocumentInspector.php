@@ -105,10 +105,11 @@ class DocumentInspector
     }
 
     /**
-     * Return true if the document has children
+     * Return true if the document has children.
      *
      * @param object $document
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasChildren($document)
     {

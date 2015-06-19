@@ -87,8 +87,8 @@ class ReorderSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testOrderBeforeSiblingNotLast()
     {
         $siblings = array(
-            'one' =>  $this->prophesize(NodeInterface::class),
-            'two' =>  $this->prophesize(NodeInterface::class),
+            'one' => $this->prophesize(NodeInterface::class),
+            'two' => $this->prophesize(NodeInterface::class),
         );
 
         $this->event->getDestId()->willReturn(self::UUID);
@@ -111,8 +111,8 @@ class ReorderSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testOrderAfterLast()
     {
         $siblings = array(
-            'one' =>  $this->prophesize(NodeInterface::class),
-            'two' =>  $this->prophesize(NodeInterface::class),
+            'one' => $this->prophesize(NodeInterface::class),
+            'two' => $this->prophesize(NodeInterface::class),
         );
 
         $this->event->getDestId()->willReturn(self::UUID);

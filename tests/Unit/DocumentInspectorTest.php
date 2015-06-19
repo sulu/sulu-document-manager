@@ -103,7 +103,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return true if it has children
+     * It should return true if it has children.
      */
     public function testHasChildren()
     {

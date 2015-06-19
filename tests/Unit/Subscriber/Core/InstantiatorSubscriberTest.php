@@ -25,7 +25,7 @@ class InstantiatorSubscriberTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->metadata = $this->prophesize(Metadata::class);
-        $this->hydrateEvent =  $this->prophesize(HydrateEvent::class);
+        $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
         $this->createEvent = $this->prophesize(CreateEvent::class);
         $this->node = $this->prophesize(NodeInterface::class);
     }
