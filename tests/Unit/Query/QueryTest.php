@@ -22,6 +22,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $this->phpcrQuery->reveal(),
             $this->dispatcher->reveal(),
             'fr',
+            array(),
             'p'
         );
     }

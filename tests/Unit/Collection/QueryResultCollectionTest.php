@@ -21,6 +21,7 @@ class QueryResultCollectionTest extends \PHPUnit_Framework_TestCase
             $this->queryResult->reveal(),
             $this->dispatcher->reveal(),
             'fr',
+            array(),
             's'
         );
 

@@ -32,7 +32,7 @@ class BenchmarkBench extends BaseBench
         $manager = $this->getDocumentManager();
         $locales = $iteration->getParameter('locales');
 
-        for ($i = 0; $i < $iteration->getParameter('nb_nodes'); $i++) {
+        for ($i = 0; $i < $iteration->getParameter('nb_nodes'); ++$i) {
             $document = $manager->create('full');
             foreach ($locales as $locale) {
                 $manager->persist($document, $locale, array(
@@ -56,7 +56,7 @@ class BenchmarkBench extends BaseBench
         $session = $this->getSession();
         $baseNode = $session->getNode(self::BASE_PATH);
 
-        for ($i = 0; $i < $iteration->getParameter('nb_nodes'); $i++) {
+        for ($i = 0; $i < $iteration->getParameter('nb_nodes'); ++$i) {
             $node = $baseNode->addNode('node-' . $i);
             foreach ($iteration->getParameter('locales') as $locale) {
                 $node->addMixin('mix:test');

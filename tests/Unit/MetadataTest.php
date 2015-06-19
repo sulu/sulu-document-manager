@@ -25,7 +25,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the reflection class
+     * It should return the reflection class.
      */
     public function testReflectionClass()
     {

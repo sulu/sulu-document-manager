@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Sulu
  *
@@ -7,6 +8,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Sulu\Component\DocumentManager;
 
 use Sulu\Component\DocumentManager\Query\Query;
@@ -111,10 +113,11 @@ interface DocumentManagerInterface
      *
      * @param mixed $query Either a JCR-SQL2 string, or a PHPCR query object
      * @param string $locale
+     * @param array $options
      *
      * @return Query
      */
-    public function createQuery($query, $locale = null);
+    public function createQuery($query, $locale = null, array $options = array());
 
     /**
      * Create a new query builder.

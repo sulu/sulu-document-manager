@@ -78,7 +78,7 @@ class Events
     /**
      * Fired when a query should be created from a query string.
      */
-    const QUERY_CREATE  = 'sulu_document_manager.query.create';
+    const QUERY_CREATE = 'sulu_document_manager.query.create';
 
     /**
      * Fired when a new query builder should be created.

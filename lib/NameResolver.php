@@ -40,7 +40,7 @@ class NameResolver
 
             $hasChild = $parentNode->hasNode($name);
 
-            $index++;
+            ++$index;
         } while ($hasChild);
 
         return $name;

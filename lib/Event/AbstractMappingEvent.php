@@ -16,6 +16,8 @@ use Sulu\Component\DocumentManager\DocumentAccessor;
 
 abstract class AbstractMappingEvent extends AbstractEvent
 {
+    use EventOptionsTrait;
+
     /**
      * @var object
      */
@@ -35,11 +37,6 @@ abstract class AbstractMappingEvent extends AbstractEvent
      * @var DocumentAccessor
      */
     protected $accessor;
-
-    /**
-     * @var array
-     */
-    protected $options;
 
     /**
      * {@inheritDoc}
@@ -108,28 +105,5 @@ abstract class AbstractMappingEvent extends AbstractEvent
     public function hasNode()
     {
         return null !== $this->node;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * @param string $name
-     * @param null|mixed $default
-     *
-     * @return mixed
-     */
-    public function getOption($name, $default = null)
-    {
-        if (isset($this->options[$name])) {
-            return $this->options[$name];
-        }
-
-        return $default;
     }
 }
