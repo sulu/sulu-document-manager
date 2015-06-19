@@ -44,7 +44,7 @@ class QueryCreateEvent extends AbstractEvent
      * @param array $options
      * @param null|string $primarySelector
      */
-    public function __construct($innerQuery, $locale, array $options, $primarySelector = null)
+    public function __construct($innerQuery, $locale, array $options = array(), $primarySelector = null)
     {
         $this->innerQuery = $innerQuery;
         $this->locale = $locale;
