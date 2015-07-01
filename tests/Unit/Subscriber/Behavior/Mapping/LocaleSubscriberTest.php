@@ -66,4 +66,9 @@ class TestLocaleDocument implements LocaleBehavior
     {
         return $this->locale;
     }
+
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
 }
