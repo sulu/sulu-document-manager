@@ -22,4 +22,11 @@ interface LocaleBehavior
      * @return string
      */
     public function getLocale();
+
+    /**
+     * Sets the document locale.
+     *
+     * @param string $locale
+     */
+    public function setLocale($locale);
 }
