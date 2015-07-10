@@ -47,7 +47,7 @@ class BlameSubscriber implements EventSubscriberInterface
      * @param PropertyEncoder $encoder
      * @param TokenStorage $tokenStorage
      */
-    public function __construct(PropertyEncoder $encoder, TokenStorage $tokenStorage)
+    public function __construct(PropertyEncoder $encoder, TokenStorage $tokenStorage = null)
     {
         $this->encoder = $encoder;
         $this->tokenStorage = $tokenStorage;
@@ -110,6 +110,10 @@ class BlameSubscriber implements EventSubscriberInterface
     {
         if ($options['user']) {
             return $options['user'];
+        }
+
+        if (null === $this->tokenStorage) {
+            return;
         }
 
         $token = $this->tokenStorage->getToken();
