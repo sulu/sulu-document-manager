@@ -7,10 +7,46 @@ use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Event\RemoveEvent;
+use Sulu\Component\DocumentManager\Event\ReorderEvent;
 use Sulu\Component\DocumentManager\Subscriber\Core\RegistratorSubscriber;
 
 class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var DocumentRegistry
+     */
+    private $registry;
+
+    /**
+     * @var RegistratorSubscriber
+     */
+    private $subscriber;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var \stdClass
+     */
+    private $document;
+
+    /**
+     * @var HydrateEvent
+     */
+    private $hydrateEvent;
+
+    /**
+     * @var PersistEvent
+     */
+    private $persistEvent;
+
+    /**
+     * @var RemoveEvent
+     */
+    private $removeEvent;
+
     public function setUp()
     {
         $this->registry = $this->prophesize(DocumentRegistry::class);
@@ -94,7 +130,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
      * It should set the node to the event on persist if the node for the document
      * being persisted is already in the registry.
      */
-    public function testNodeFromRegistry()
+    public function testPersistNodeFromRegistry()
     {
         $this->persistEvent->hasNode()->willReturn(false);
         $this->persistEvent->getDocument()->willReturn($this->document);
@@ -102,6 +138,20 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->registry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
         $this->persistEvent->setNode($this->node->reveal())->shouldBeCalled();
         $this->subscriber->handleNodeFromRegistry($this->persistEvent->reveal());
+    }
+
+    /**
+     * The node should be available from the event.
+     */
+    public function testReorderNodeFomRegistry()
+    {
+        $reorderEvent = $this->prophesize(ReorderEvent::class);
+        $reorderEvent->hasNode()->willReturn(false);
+        $reorderEvent->getDocument()->willReturn($this->document);
+        $this->registry->hasDocument($this->document)->willReturn(true);
+        $this->registry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
+        $reorderEvent->setNode($this->node->reveal())->shouldBeCalled();
+        $this->subscriber->handleNodeFromRegistry($reorderEvent->reveal());
     }
 
     /**

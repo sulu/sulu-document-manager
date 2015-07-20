@@ -17,6 +17,7 @@ use Sulu\Component\DocumentManager\Event\ClearEvent;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Event\RemoveEvent;
+use Sulu\Component\DocumentManager\Event\ReorderEvent;
 use Sulu\Component\DocumentManager\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -60,6 +61,7 @@ class RegistratorSubscriber implements EventSubscriberInterface
             ),
             Events::REMOVE => array('handleRemove', 490),
             Events::CLEAR => array('handleClear', 500),
+            Events::REORDER => array('handleNodeFromRegistry', 510),
         );
     }
 
@@ -150,9 +152,9 @@ class RegistratorSubscriber implements EventSubscriberInterface
     /**
      * If the node for the persisted document is in the registry.
      *
-     * @param PersistEvent $event
+     * @param PersistEvent|ReorderEvent $event
      */
-    public function handleNodeFromRegistry(PersistEvent $event)
+    public function handleNodeFromRegistry($event)
     {
         if ($event->hasNode()) {
             return;
