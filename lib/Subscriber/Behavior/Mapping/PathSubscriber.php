@@ -36,13 +36,13 @@ class PathSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             Events::HYDRATE => 'handleHydrate',
-        );
+        ];
     }
 
     /**

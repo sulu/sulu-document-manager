@@ -107,14 +107,14 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->queryCreateEvent->getInnerQuery()->willReturn($query);
         $this->queryCreateEvent->getLocale()->willReturn($locale);
-        $this->queryCreateEvent->getOptions()->willReturn(array());
+        $this->queryCreateEvent->getOptions()->willReturn([]);
         $this->queryCreateEvent->getPrimarySelector()->willReturn($primarySelector);
         $this->queryManager->createQuery($query, 'JCR-SQL2')->willReturn($this->phpcrQuery->reveal());
         $this->queryCreateEvent->setQuery(new Query(
             $this->phpcrQuery->reveal(),
             $this->dispatcher->reveal(),
             $locale,
-            array(),
+            [],
             $primarySelector
         ))->shouldBeCalled();
 
@@ -131,14 +131,14 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->queryCreateEvent->getInnerQuery()->willReturn($this->phpcrQuery->reveal());
         $this->queryCreateEvent->getLocale()->willReturn($locale);
-        $this->queryCreateEvent->getOptions()->willReturn(array());
+        $this->queryCreateEvent->getOptions()->willReturn([]);
         $this->queryCreateEvent->getPrimarySelector()->willReturn($primarySelector);
         $this->queryManager->createQuery($this->phpcrQuery->reveal(), 'JCR-SQL2')->willReturn($this->phpcrQuery->reveal());
         $this->queryCreateEvent->setQuery(new Query(
             $this->phpcrQuery->reveal(),
             $this->dispatcher->reveal(),
             $locale,
-            array(),
+            [],
             $primarySelector
         ))->shouldBeCalled();
 
@@ -158,7 +158,7 @@ class QuerySubscriberTest extends \PHPUnit_Framework_TestCase
         $this->phpcrQuery->execute()->willReturn($this->phpcrResult->reveal());
         $this->query->getPrimarySelector()->willReturn($primarySelector);
         $this->queryExecuteEvent->getQuery()->willReturn($this->query->reveal());
-        $this->queryExecuteEvent->getOptions()->willReturn(array());
+        $this->queryExecuteEvent->getOptions()->willReturn([]);
 
         $this->queryExecuteEvent->setResult(
             new QueryResultCollection(

@@ -38,7 +38,7 @@ class ReorderEvent extends AbstractMappingEvent
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDebugMessage()
     {

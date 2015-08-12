@@ -43,14 +43,14 @@ class InstantiatorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::HYDRATE => array('handleHydrate', 500),
-            Events::CREATE => array('handleCreate', 500),
-        );
+        return [
+            Events::HYDRATE => ['handleHydrate', 500],
+            Events::CREATE => ['handleCreate', 500],
+        ];
     }
 
     /**

@@ -19,10 +19,10 @@ class PropertyEncoderTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $map = array(
+        $map = [
             'system' => 'nsys',
             'system_localized' => 'lsys',
-        );
+        ];
 
         $this->namespaceRegistry = $this->prophesize(NamespaceRegistry::class);
         $this->namespaceRegistry->getPrefix(Argument::type('string'))->will(function ($args) use ($map) {

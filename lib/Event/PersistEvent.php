@@ -26,7 +26,7 @@ class PersistEvent extends AbstractMappingEvent
      * @param string $locale
      * @param array $options
      */
-    public function __construct($document, $locale, array $options = array())
+    public function __construct($document, $locale, array $options = [])
     {
         $this->document = $document;
         $this->locale = $locale;
@@ -34,7 +34,7 @@ class PersistEvent extends AbstractMappingEvent
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDebugMessage()
     {

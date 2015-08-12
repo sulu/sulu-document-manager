@@ -39,7 +39,7 @@ class MoveEvent extends AbstractEvent
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDebugMessage()
     {

@@ -95,7 +95,7 @@ class DocumentInspectorTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren()
     {
         $childrenCollection = new \stdClass();
-        $this->proxyFactory->createChildrenCollection($this->document, array())->willReturn($childrenCollection);
+        $this->proxyFactory->createChildrenCollection($this->document, [])->willReturn($childrenCollection);
         $this->assertEquals(
             $childrenCollection,
             $this->documentInspector->getChildren($this->document)

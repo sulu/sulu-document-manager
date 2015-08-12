@@ -139,7 +139,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     public function testFindWithInvalidOptions()
     {
         $subscriber = $this->addSubscriber();
-        $this->manager->find('foo', 'bar', array('foo123' => 'bar'));
+        $this->manager->find('foo', 'bar', ['foo123' => 'bar']);
     }
 
     /**
@@ -148,7 +148,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     public function testFindWithOptions()
     {
         $subscriber = $this->addSubscriber();
-        $this->manager->find('foo', 'bar', array('test.foo' => 'bar'));
+        $this->manager->find('foo', 'bar', ['test.foo' => 'bar']);
     }
 
     /**
@@ -208,7 +208,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             Events::PERSIST => 'handlePersist',
             Events::REMOVE => 'handleRemove',
             Events::MOVE => 'handleMove',
@@ -223,15 +223,15 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
             Events::REFRESH => 'handleRefresh',
             Events::REORDER => 'handleReorder',
             Events::CONFIGURE_OPTIONS => 'handleConfigureOptions',
-        );
+        ];
     }
 
     public function handleConfigureOptions(ConfigureOptionsEvent $event)
     {
         $options = $event->getOptions();
-        $options->setDefaults(array(
+        $options->setDefaults([
             'test.foo' => 'bar',
-        ));
+        ]);
     }
 
     public function handlePersist(PersistEvent $event)

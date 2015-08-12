@@ -17,10 +17,10 @@ class NamespaceRegistryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->registry = new NamespaceRegistry(array(
+        $this->registry = new NamespaceRegistry([
             'system' => 'asys',
             'foobar' => 'lsys',
-        ));
+        ]);
     }
 
     /**

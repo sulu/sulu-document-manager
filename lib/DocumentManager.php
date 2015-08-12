@@ -24,7 +24,7 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * @var array Cached options resolver instances
      */
-    private $optionsResolvers = array();
+    private $optionsResolvers = [];
 
     /**
      * @param EventDispatcherInterface $eventDispatcher
@@ -37,7 +37,7 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function find($identifier, $locale = null, array $options = array())
+    public function find($identifier, $locale = null, array $options = [])
     {
         $options = $this->getOptionsResolver(Events::FIND)->resolve($options);
 
@@ -61,7 +61,7 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function persist($document, $locale, array $options = array())
+    public function persist($document, $locale, array $options = [])
     {
         $options = $this->getOptionsResolver(Events::FIND)->resolve($options);
 
@@ -137,7 +137,7 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function createQuery($query, $locale = null, array $options = array())
+    public function createQuery($query, $locale = null, array $options = [])
     {
         $event = new Event\QueryCreateEvent($query, $locale, $options);
         $this->eventDispatcher->dispatch(Events::QUERY_CREATE, $event);

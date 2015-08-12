@@ -21,18 +21,18 @@ class BaseMetadataFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->strategy = $this->prophesize(DocumentStrategyInterface::class);
         $this->factory = new BaseMetadataFactory(
-            array(
-                array(
+            [
+                [
                     'alias' => 'page',
                     'class' => 'Class\Page',
                     'phpcr_type' => 'sulu:page',
-                ),
-                array(
+                ],
+                [
                     'alias' => 'snippet',
                     'class' => 'Class\Snippet',
                     'phpcr_type' => 'sulu:snippet',
-                ),
-            ),
+                ],
+            ],
             $this->strategy->reveal()
         );
     }

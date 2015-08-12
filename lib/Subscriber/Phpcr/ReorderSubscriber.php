@@ -47,13 +47,13 @@ class ReorderSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::REORDER => array('handleReorder', 500),
-        );
+        return [
+            Events::REORDER => ['handleReorder', 500],
+        ];
     }
 
     /**

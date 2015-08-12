@@ -99,7 +99,7 @@ class DocumentInspector
      *
      * @return Collection\ChildrenCollection
      */
-    public function getChildren($document, array $options = array())
+    public function getChildren($document, array $options = [])
     {
         return $this->proxyFactory->createChildrenCollection($document, $options);
     }

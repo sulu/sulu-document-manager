@@ -23,14 +23,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class UuidSubscriber implements EventSubscriberInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             Events::HYDRATE => 'handleUuid',
-            Events::PERSIST => array('handleUuid', 0),
-        );
+            Events::PERSIST => ['handleUuid', 0],
+        ];
     }
 
     /**

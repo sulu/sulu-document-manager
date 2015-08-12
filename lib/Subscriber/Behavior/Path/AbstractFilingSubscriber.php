@@ -54,13 +54,13 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::PERSIST => array('handlePersist', 490),
-        );
+        return [
+            Events::PERSIST => ['handlePersist', 490],
+        ];
     }
 
     public function handlePersist(PersistEvent $event)

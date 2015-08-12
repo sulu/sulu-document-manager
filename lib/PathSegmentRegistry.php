@@ -29,7 +29,7 @@ class PathSegmentRegistry
     /**
      * @param array Array of roles to pathSegments
      */
-    public function __construct(array $pathSegments = array())
+    public function __construct(array $pathSegments = [])
     {
         $this->pathSegments = $pathSegments;
     }

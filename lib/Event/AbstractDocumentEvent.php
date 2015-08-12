@@ -35,7 +35,7 @@ abstract class AbstractDocumentEvent extends AbstractEvent
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDebugMessage()
     {

@@ -50,8 +50,8 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $node = $this->prophesize(NodeInterface::class);
         $node->hasProperty('jcr:mixinTypes')->willReturn(true);
-        $node->getPropertyValue('jcr:mixinTypes')->willReturn(array(
-        ));
+        $node->getPropertyValue('jcr:mixinTypes')->willReturn([
+        ]);
 
         $metadata = $this->factory->getMetadataForPhpcrNode($node->reveal());
         $this->assertNull($metadata->getAlias());

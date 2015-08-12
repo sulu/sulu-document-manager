@@ -27,7 +27,7 @@ interface DocumentManagerInterface
      *
      * @return object
      */
-    public function find($identifier, $locale = null, array $options = array());
+    public function find($identifier, $locale = null, array $options = []);
 
     /**
      * Create a new document instance for the given alias.
@@ -47,7 +47,7 @@ interface DocumentManagerInterface
      * @param string $locale
      * @param array $options
      */
-    public function persist($document, $locale, array $options = array());
+    public function persist($document, $locale, array $options = []);
 
     /**
      * Remove the document. The document should be unregistered
@@ -117,7 +117,7 @@ interface DocumentManagerInterface
      *
      * @return Query
      */
-    public function createQuery($query, $locale = null, array $options = array());
+    public function createQuery($query, $locale = null, array $options = []);
 
     /**
      * Create a new query builder.

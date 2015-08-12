@@ -20,7 +20,7 @@ class HydrateEvent extends AbstractMappingEvent
      * @param string $locale
      * @param array $options
      */
-    public function __construct(NodeInterface $node, $locale, array $options = array())
+    public function __construct(NodeInterface $node, $locale, array $options = [])
     {
         $this->locale = $locale;
         $this->node = $node;

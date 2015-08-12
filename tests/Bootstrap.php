@@ -38,22 +38,22 @@ class Bootstrap
         $dispatcher = new ContainerAwareEventDispatcher($container);
         $container->set('sulu_document_manager.event_dispatcher', $dispatcher);
 
-        $config = array(
+        $config = [
             'sulu_document_manager.default_locale' => 'en',
-            'sulu_document_manager.mapping' => array(
-                'full' => array(
+            'sulu_document_manager.mapping' => [
+                'full' => [
                     'alias' => 'full',
                     'phpcr_type' => 'mix:test',
                     'class' => 'Sulu\Component\DocumentManager\Tests\Functional\Model\FullDocument',
-                ),
-            ),
-            'sulu_document_manager.namespace_mapping' => array(
+                ],
+            ],
+            'sulu_document_manager.namespace_mapping' => [
                 'system' => 'nsys',
                 'system_localized' => 'lsys',
                 'content' => 'ncont',
                 'content_localized' => 'lcont',
-            ),
-        );
+            ],
+        ];
 
         foreach ($config as $parameterName => $parameterValue) {
             $container->setParameter($parameterName, $parameterValue);
@@ -94,13 +94,13 @@ class Bootstrap
     {
         $driver = 'pdo_sqlite'; // pdo_pgsql | pdo_sqlite
 
-        $connection = \Doctrine\DBAL\DriverManager::getConnection(array(
+        $connection = \Doctrine\DBAL\DriverManager::getConnection([
             'driver' => $driver,
             'host' => 'localhost',
             'user' => 'admin',
             'password' => 'admin',
             'path' => __DIR__ . '/../data/test.sqlite',
-        ));
+        ]);
 
         return $connection;
     }
@@ -111,7 +111,7 @@ class Bootstrap
 
         $factory = new RepositoryFactoryDoctrineDBAL();
         $repository = $factory->getRepository(
-            array('jackalope.doctrine_dbal_connection' => $connection)
+            ['jackalope.doctrine_dbal_connection' => $connection]
         );
 
         $credentials = new \PHPCR\SimpleCredentials(null, null);

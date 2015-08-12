@@ -32,7 +32,7 @@ class QueryExecuteEvent extends AbstractEvent
      * @param Query $query
      * @param array $options
      */
-    public function __construct(Query $query, array $options = array())
+    public function __construct(Query $query, array $options = [])
     {
         $this->query = $query;
         $this->options = $options;

@@ -58,14 +58,14 @@ class FindSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::FIND => array('handleFind', 500),
+        return [
+            Events::FIND => ['handleFind', 500],
             Events::CONFIGURE_OPTIONS => 'configureOptions',
-        );
+        ];
     }
 
     /**
@@ -74,9 +74,9 @@ class FindSubscriber implements EventSubscriberInterface
     public function configureOptions(ConfigureOptionsEvent $event)
     {
         $options = $event->getOptions();
-        $options->setDefaults(array(
+        $options->setDefaults([
             'type' => null,
-        ));
+        ]);
     }
 
     /**

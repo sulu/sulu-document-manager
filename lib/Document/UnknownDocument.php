@@ -30,7 +30,7 @@ class UnknownDocument implements NodeNameBehavior, UuidBehavior
     private $uuid;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getNodeName()
     {
@@ -38,7 +38,7 @@ class UnknownDocument implements NodeNameBehavior, UuidBehavior
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUuid()
     {

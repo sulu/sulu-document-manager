@@ -28,17 +28,17 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     /**
      * @var array
      */
-    private $aliasMap = array();
+    private $aliasMap = [];
 
     /**
      * @var array
      */
-    private $classMap = array();
+    private $classMap = [];
 
     /**
      * @var array
      */
-    private $phpcrTypeMap = array();
+    private $phpcrTypeMap = [];
 
     /**
      * @param array $mapping
@@ -53,7 +53,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForAlias($alias)
     {
@@ -70,7 +70,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForPhpcrType($phpcrType)
     {
@@ -87,7 +87,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasMetadataForPhpcrType($phpcrType)
     {
@@ -95,7 +95,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForClass($class)
     {
@@ -114,7 +114,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasAlias($alias)
     {
@@ -122,7 +122,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAliases()
     {
@@ -130,7 +130,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForPhpcrNode(NodeInterface $node)
     {

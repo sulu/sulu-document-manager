@@ -35,7 +35,7 @@ class MixinStrategy implements DocumentStrategyInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function createNodeForDocument($document, NodeInterface $parentNode, $name)
     {
@@ -49,7 +49,7 @@ class MixinStrategy implements DocumentStrategyInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolveMetadataForNode(NodeInterface $node)
     {

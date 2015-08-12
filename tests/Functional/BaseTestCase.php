@@ -48,17 +48,17 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     protected function generateDataSet(array $options)
     {
-        $options = array_merge(array(
-            'locales' => array('en'),
-        ), $options);
+        $options = array_merge([
+            'locales' => ['en'],
+        ], $options);
 
         $manager = $this->getDocumentManager();
         $document = $manager->create('full');
 
         foreach ($options['locales'] as $locale) {
-            $manager->persist($document, $locale, array(
+            $manager->persist($document, $locale, [
                 'path' => self::BASE_PATH,
-            ));
+            ]);
         }
     }
 }
