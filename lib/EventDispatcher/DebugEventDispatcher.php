@@ -48,7 +48,7 @@ class DebugEventDispatcher extends ContainerAwareEventDispatcher
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doDispatch($listeners, $eventName, Event $event)
     {

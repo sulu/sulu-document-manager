@@ -22,7 +22,7 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
     protected $documents;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -32,12 +32,12 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     abstract public function current();
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -47,7 +47,7 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -57,7 +57,7 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -67,7 +67,7 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -83,7 +83,7 @@ abstract class AbstractLazyCollection implements \Iterator, \Countable
      */
     public function toArray()
     {
-        $copy = array();
+        $copy = [];
         foreach ($this as $document) {
             $copy[] = $document;
         }

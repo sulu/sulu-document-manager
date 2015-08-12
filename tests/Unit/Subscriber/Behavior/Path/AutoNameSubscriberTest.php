@@ -96,7 +96,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getLocale()->willReturn(self::DEFAULT_LOCALE);
         $this->doTestAutoName('hai-bye', 'hai-2', false, true);
         $this->node->getParent()->willReturn($this->parentNode->reveal());
-        $this->parentNode->getNodeNames()->willReturn(array('hai-bye'));
+        $this->parentNode->getNodeNames()->willReturn(['hai-bye']);
         $this->node->rename('hai-bye')->shouldBeCalled();
         $this->node->hasNode()->willReturn(true);
         $this->node->getName()->willReturn('foo');

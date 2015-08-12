@@ -52,14 +52,14 @@ class ExplicitSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::PERSIST => array('handlePersist', 485),
+        return [
+            Events::PERSIST => ['handlePersist', 485],
             Events::CONFIGURE_OPTIONS => 'configureOptions',
-        );
+        ];
     }
 
     /**
@@ -68,16 +68,16 @@ class ExplicitSubscriber implements EventSubscriberInterface
     public function configureOptions(ConfigureOptionsEvent $event)
     {
         $options = $event->getOptions();
-        $options->setDefaults(array(
+        $options->setDefaults([
             'path' => null,
             'node_name' => null,
             'parent_path' => null,
             'auto_create' => false,
-        ));
+        ]);
 
-        $options->setAllowedTypes('path', array('null', 'string'));
-        $options->setAllowedTypes('node_name', array('null', 'string'));
-        $options->setAllowedTypes('parent_path', array('null', 'string'));
+        $options->setAllowedTypes('path', ['null', 'string']);
+        $options->setAllowedTypes('node_name', ['null', 'string']);
+        $options->setAllowedTypes('parent_path', ['null', 'string']);
         $options->setAllowedTypes('auto_create', 'bool');
     }
 

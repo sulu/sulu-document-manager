@@ -22,7 +22,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             $this->phpcrQuery->reveal(),
             $this->dispatcher->reveal(),
             'fr',
-            array(),
+            [],
             'p'
         );
     }
@@ -32,10 +32,10 @@ class QueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutePhpcr()
     {
-        $parameters = array(
+        $parameters = [
             'one' => 'two',
             'three' => 'four',
-        );
+        ];
         $limit = 10;
         $firstResult = 5;
 

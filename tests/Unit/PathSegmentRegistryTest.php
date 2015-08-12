@@ -17,10 +17,10 @@ class PathSegmentRegistryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->pathRegistry = new PathSegmentRegistry(array(
+        $this->pathRegistry = new PathSegmentRegistry([
             'base' => 'cmf',
             'foobar' => 'barfoo',
-        ));
+        ]);
     }
 
     /**

@@ -41,13 +41,13 @@ class RemoveSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::REMOVE => array('handleRemove', 500),
-        );
+        return [
+            Events::REMOVE => ['handleRemove', 500],
+        ];
     }
 
     /**

@@ -29,16 +29,16 @@ class ChildrenCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIterable()
     {
-        $children = new \ArrayIterator(array(
+        $children = new \ArrayIterator([
             $this->childNode->reveal(),
-        ));
+        ]);
         $this->parentNode->getNodes()->willReturn($children);
 
         $this->dispatcher->dispatch(Events::HYDRATE, Argument::type('Sulu\Component\DocumentManager\Event\HydrateEvent'))->will(function ($args) {
             $args[1]->setDocument(new \stdClass());
         });
 
-        $results = array();
+        $results = [];
 
         foreach ($this->collection as $document) {
             $results[] = $document;

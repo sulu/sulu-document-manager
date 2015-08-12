@@ -42,27 +42,27 @@ class RegistratorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::HYDRATE => array(
-                array('handleDefaultLocale', 520),
-                array('handleDocumentFromRegistry', 510),
-                array('handleStopPropagationAndResetLocale', 509),
-                array('handleHydrate', 490),
-                array('handleEndHydrate', -500),
-            ),
-            Events::PERSIST => array(
-                array('handlePersist', 450),
-                array('handleNodeFromRegistry', 510),
-                array('handleEndPersist', -500),
-            ),
-            Events::REMOVE => array('handleRemove', 490),
-            Events::CLEAR => array('handleClear', 500),
-            Events::REORDER => array('handleNodeFromRegistry', 510),
-        );
+        return [
+            Events::HYDRATE => [
+                ['handleDefaultLocale', 520],
+                ['handleDocumentFromRegistry', 510],
+                ['handleStopPropagationAndResetLocale', 509],
+                ['handleHydrate', 490],
+                ['handleEndHydrate', -500],
+            ],
+            Events::PERSIST => [
+                ['handlePersist', 450],
+                ['handleNodeFromRegistry', 510],
+                ['handleEndPersist', -500],
+            ],
+            Events::REMOVE => ['handleRemove', 490],
+            Events::CLEAR => ['handleClear', 500],
+            Events::REORDER => ['handleNodeFromRegistry', 510],
+        ];
     }
 
     /**

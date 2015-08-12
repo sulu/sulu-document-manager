@@ -21,7 +21,7 @@ trait EventOptionsTrait
      *
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Returns all the options for the event.

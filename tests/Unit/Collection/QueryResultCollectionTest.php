@@ -21,7 +21,7 @@ class QueryResultCollectionTest extends \PHPUnit_Framework_TestCase
             $this->queryResult->reveal(),
             $this->dispatcher->reveal(),
             'fr',
-            array(),
+            [],
             's'
         );
 
@@ -36,10 +36,10 @@ class QueryResultCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIterable()
     {
-        $results = new \ArrayIterator(array(
+        $results = new \ArrayIterator([
             $this->row1->reveal(),
             $this->row2->reveal(),
-        ));
+        ]);
 
         $this->row1->getNode('s')->willReturn($this->node1->reveal());
         $this->row2->getNode('s')->willReturn($this->node2->reveal());
@@ -50,7 +50,7 @@ class QueryResultCollectionTest extends \PHPUnit_Framework_TestCase
             $args[1]->setDocument(new \stdClass());
         });
 
-        $results = array();
+        $results = [];
 
         foreach ($this->collection as $document) {
             $results[] = $document;

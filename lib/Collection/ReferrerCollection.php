@@ -51,7 +51,7 @@ class ReferrerCollection extends AbstractLazyCollection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -65,7 +65,7 @@ class ReferrerCollection extends AbstractLazyCollection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function initialize()
     {

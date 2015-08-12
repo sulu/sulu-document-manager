@@ -25,9 +25,9 @@ class FindTest extends BaseTestCase
      */
     public function testPersist()
     {
-        $this->generateDataSet(array(
-            'locales' => array('en'),
-        ));
+        $this->generateDataSet([
+            'locales' => ['en'],
+        ]);
 
         $manager = $this->getDocumentManager();
         $manager->flush();
@@ -41,9 +41,9 @@ class FindTest extends BaseTestCase
      */
     public function testPersistManyLocales()
     {
-        $this->generateDataSet(array(
-            'locales' => array('en', 'de'),
-        ));
+        $this->generateDataSet([
+            'locales' => ['en', 'de'],
+        ]);
 
         $manager = $this->getDocumentManager();
         $manager->flush();

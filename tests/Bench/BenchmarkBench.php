@@ -35,9 +35,9 @@ class BenchmarkBench extends BaseBench
         for ($i = 0; $i < $iteration->getParameter('nb_nodes'); ++$i) {
             $document = $manager->create('full');
             foreach ($locales as $locale) {
-                $manager->persist($document, $locale, array(
+                $manager->persist($document, $locale, [
                     'path' => self::BASE_PATH . '/node-' . $i,
-                ));
+                ]);
             }
         }
 
@@ -70,31 +70,31 @@ class BenchmarkBench extends BaseBench
 
     public function provideNodeTotals()
     {
-        return array(
-            array(
+        return [
+            [
                 'nb_nodes' => 1,
-            ),
-            array(
+            ],
+            [
                 'nb_nodes' => 10,
-            ),
-            array(
+            ],
+            [
                 'nb_nodes' => 100,
-            ),
-        );
+            ],
+        ];
     }
 
     public function provideLocales()
     {
-        return array(
-            array(
-                'locales' => array('en'),
-            ),
-            array(
-                'locales' => array('en', 'de'),
-            ),
-            array(
-                'locales' => array('en', 'de', 'fr'),
-            ),
-        );
+        return [
+            [
+                'locales' => ['en'],
+            ],
+            [
+                'locales' => ['en', 'de'],
+            ],
+            [
+                'locales' => ['en', 'de', 'fr'],
+            ],
+        ];
     }
 }

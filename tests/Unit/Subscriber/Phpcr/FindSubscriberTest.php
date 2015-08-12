@@ -47,16 +47,16 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testFind()
     {
-        $this->doTestFind(array('type' => null));
+        $this->doTestFind(['type' => null]);
     }
 
     public function provideFindWithTypeOrClass()
     {
-        return array(
-            array('alias', 'page', false),
-            array('class', 'stdClass', false),
-            array('class', 'SomeUnknownClass', true),
-        );
+        return [
+            ['alias', 'page', false],
+            ['class', 'stdClass', false],
+            ['class', 'SomeUnknownClass', true],
+        ];
     }
 
     /**
@@ -67,7 +67,7 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testFindWithTypeOrClass($type, $typeOrClass, $shouldThrow)
     {
         if ($shouldThrow) {
-            $this->metadataFactory->getAliases()->willReturn(array('test1', 'test2'));
+            $this->metadataFactory->getAliases()->willReturn(['test1', 'test2']);
             $this->setExpectedException(DocumentManagerException::class);
         }
         if ($type === 'alias') {
@@ -77,9 +77,9 @@ class FindSubscriberTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->metadataFactory->hasAlias($typeOrClass)->willReturn(false);
         }
-        $options = array(
+        $options = [
             'type' => $typeOrClass,
-        );
+        ];
 
         $this->doTestFind($options);
     }

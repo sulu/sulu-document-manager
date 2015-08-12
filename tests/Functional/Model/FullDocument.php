@@ -47,7 +47,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getNodeName()
     {
@@ -55,7 +55,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCreated()
     {
@@ -63,7 +63,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChanged()
     {
@@ -71,7 +71,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCreator()
     {
@@ -79,7 +79,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChanger()
     {
@@ -87,7 +87,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getParent()
     {
@@ -95,7 +95,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setParent($parent)
     {
@@ -103,7 +103,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUuid()
     {
@@ -111,7 +111,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getLocale()
     {
@@ -119,7 +119,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getChildren()
     {
@@ -127,7 +127,7 @@ class FullDocument implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getPath()
     {

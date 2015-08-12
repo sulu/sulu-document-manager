@@ -39,7 +39,7 @@ abstract class AbstractMappingEvent extends AbstractEvent
     protected $accessor;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDebugMessage()
     {

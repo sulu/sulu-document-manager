@@ -58,7 +58,7 @@ class ChildrenCollection extends AbstractLazyCollection
         NodeInterface $parentNode,
         EventDispatcherInterface $dispatcher,
         $locale,
-        $options = array()
+        $options = []
     ) {
         $this->parentNode = $parentNode;
         $this->dispatcher = $dispatcher;
@@ -67,7 +67,7 @@ class ChildrenCollection extends AbstractLazyCollection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -81,7 +81,7 @@ class ChildrenCollection extends AbstractLazyCollection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function initialize()
     {

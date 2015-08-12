@@ -44,7 +44,7 @@ class MixinStrategyTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveMetadata()
     {
-        $mixinTypes = array('foobar');
+        $mixinTypes = ['foobar'];
         $this->node->hasProperty('jcr:mixinTypes')->willReturn(true);
         $this->node->getPropertyValue('jcr:mixinTypes')->willReturn($mixinTypes);
 
@@ -60,7 +60,7 @@ class MixinStrategyTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveMetadataNotManaged()
     {
-        $mixinTypes = array('foobar');
+        $mixinTypes = ['foobar'];
         $this->node->hasProperty('jcr:mixinTypes')->willReturn(false);
         $result = $this->strategy->resolveMetadataForNode($this->node->reveal());
 

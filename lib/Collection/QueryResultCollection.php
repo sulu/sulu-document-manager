@@ -62,7 +62,7 @@ class QueryResultCollection extends AbstractLazyCollection
         QueryResultInterface $result,
         EventDispatcherInterface $eventDispatcher,
         $locale,
-        $options = array(),
+        $options = [],
         $primarySelector = null
     ) {
         $this->result = $result;
@@ -73,7 +73,7 @@ class QueryResultCollection extends AbstractLazyCollection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -88,7 +88,7 @@ class QueryResultCollection extends AbstractLazyCollection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function initialize()
     {

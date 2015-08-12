@@ -12,10 +12,10 @@ class PathBuilderBench implements Benchmark
 
     public function setUp()
     {
-        $registry = new PathSegmentRegistry(array(
+        $registry = new PathSegmentRegistry([
             'one' => 'hello',
             'two' => 'goodbye',
-        ));
+        ]);
         $this->pathBuilder = new PathBuilder($registry);
     }
     /**
@@ -31,13 +31,13 @@ class PathBuilderBench implements Benchmark
 
     public function provideElements()
     {
-        return array(
-            array(
-                'elements' => array('one', 'two', 'three'),
-            ),
-            array(
-                'elements' => array('%one', '%two%', 'three'),
-            ),
-        );
+        return [
+            [
+                'elements' => ['one', 'two', 'three'],
+            ],
+            [
+                'elements' => ['%one', '%two%', 'three'],
+            ],
+        ];
     }
 }

@@ -76,7 +76,7 @@ class Query
         QueryInterface $phpcrQuery,
         EventDispatcherInterface $dispatcher,
         $locale = null,
-        array $options = array(),
+        array $options = [],
         $primarySelector = null
     ) {
         $this->phpcrQuery = $phpcrQuery;
@@ -94,7 +94,7 @@ class Query
      *
      * @throws DocumentManagerException
      */
-    public function execute(array $parameters = array(), $hydrationMode = self::HYDRATE_DOCUMENT)
+    public function execute(array $parameters = [], $hydrationMode = self::HYDRATE_DOCUMENT)
     {
         if (null !== $this->maxResults) {
             $this->phpcrQuery->setLimit($this->maxResults);

@@ -49,15 +49,15 @@ class QuerySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::QUERY_CREATE => array('handleCreate', 500),
-            Events::QUERY_CREATE_BUILDER => array('handleCreateBuilder', 500),
-            Events::QUERY_EXECUTE => array('handleQueryExecute', 500),
-        );
+        return [
+            Events::QUERY_CREATE => ['handleCreate', 500],
+            Events::QUERY_CREATE_BUILDER => ['handleCreateBuilder', 500],
+            Events::QUERY_EXECUTE => ['handleQueryExecute', 500],
+        ];
     }
 
     /**

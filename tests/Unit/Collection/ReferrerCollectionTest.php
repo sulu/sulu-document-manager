@@ -31,9 +31,9 @@ class ReferrerCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIterable()
     {
-        $references = new \ArrayIterator(array(
+        $references = new \ArrayIterator([
             $this->reference->reveal(),
-        ));
+        ]);
         $this->node->getReferences()->willReturn($references);
         $this->reference->getParent()->willReturn($this->referrerNode->reveal());
         $this->referrerNode->getIdentifier()->willReturn('1234');
@@ -42,7 +42,7 @@ class ReferrerCollectionTest extends \PHPUnit_Framework_TestCase
             $args[1]->setDocument(new \stdClass());
         });
 
-        $results = array();
+        $results = [];
 
         foreach ($this->collection as $document) {
             $results[] = $document;

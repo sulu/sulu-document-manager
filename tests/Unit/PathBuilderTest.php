@@ -12,10 +12,10 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
 
     public function setUp()
     {
-        $pathRegistry = new PathSegmentRegistry(array(
+        $pathRegistry = new PathSegmentRegistry([
             'one' => 'one',
             'two' => 'two',
-        ));
+        ]);
         $this->pathBuilder = new PathBuilder($pathRegistry);
     }
 
@@ -25,7 +25,7 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
      */
     public function testBuild()
     {
-        $result = $this->pathBuilder->build(array('%one%', '%two%', 'four'));
+        $result = $this->pathBuilder->build(['%one%', '%two%', 'four']);
         $this->assertEquals('/one/two/four', $result);
     }
 
@@ -34,7 +34,7 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
      */
     public function testBuildEmpty()
     {
-        $this->assertEquals('/', $this->pathBuilder->build(array()));
+        $this->assertEquals('/', $this->pathBuilder->build([]));
     }
 
     /**
@@ -42,7 +42,7 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
      */
     public function testBuildSingleSlash()
     {
-        $this->assertEquals('/', $this->pathBuilder->build(array('/')));
+        $this->assertEquals('/', $this->pathBuilder->build(['/']));
     }
 
     /**
@@ -50,7 +50,7 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
      */
     public function testBuildNoDoubleSlash()
     {
-        $this->assertEquals('/hello/world', $this->pathBuilder->build(array('hello', '', '', 'world')));
+        $this->assertEquals('/hello/world', $this->pathBuilder->build(['hello', '', '', 'world']));
     }
 
     /**
@@ -58,6 +58,6 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase implements Benchmark
      */
     public function testBuildSubPath()
     {
-        $this->assertEquals('/hello/world/goodbye/world/k', $this->pathBuilder->build(array('hello', 'world/goodbye/world', 'k')));
+        $this->assertEquals('/hello/world/goodbye/world/k', $this->pathBuilder->build(['hello', 'world/goodbye/world', 'k']));
     }
 }

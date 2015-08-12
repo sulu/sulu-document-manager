@@ -60,18 +60,18 @@ class ParentSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             Events::HYDRATE => 'handleHydrate',
-            Events::PERSIST => array(
-                array('handleChangeParent', 0),
-                array('handleSetParentNodeFromDocument', 490),
-            ),
+            Events::PERSIST => [
+                ['handleChangeParent', 0],
+                ['handleSetParentNodeFromDocument', 490],
+            ],
             Events::MOVE => 'handleMove',
-        );
+        ];
     }
 
     /**

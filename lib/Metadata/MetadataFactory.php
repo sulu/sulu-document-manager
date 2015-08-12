@@ -47,7 +47,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForAlias($alias)
     {
@@ -55,7 +55,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForPhpcrType($phpcrType)
     {
@@ -63,7 +63,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasMetadataForPhpcrType($phpcrType)
     {
@@ -71,7 +71,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForClass($class)
     {
@@ -79,7 +79,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasAlias($alias)
     {
@@ -87,7 +87,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAliases()
     {
@@ -95,7 +95,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForPhpcrNode(NodeInterface $node)
     {

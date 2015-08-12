@@ -44,10 +44,10 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionNodeNameAndPath()
     {
-        $options = $this->resolveOptions(array(
+        $options = $this->resolveOptions([
             'path' => '/path/to/nodename',
             'node_name' => '/foo',
-        ));
+        ]);
         $this->persistEvent->getOptions()->willReturn($options);
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
@@ -59,10 +59,10 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionParentPathAndPath()
     {
-        $options = $this->resolveOptions(array(
+        $options = $this->resolveOptions([
             'path' => '/path/to/nodename',
             'parent_path' => '/foo',
-        ));
+        ]);
         $this->persistEvent->getOptions()->willReturn($options);
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
@@ -72,7 +72,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewNodeFromPath()
     {
-        $options = $this->resolveOptions(array('path' => '/path/to/nodename'));
+        $options = $this->resolveOptions(['path' => '/path/to/nodename']);
         $this->nodeManager->find('/path/to')->willReturn($this->parentNode->reveal());
         $this->strategy->createNodeForDocument($this->document, $this->parentNode->reveal(), 'nodename')->willReturn($this->node->reveal());
 
@@ -92,9 +92,9 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetParentNode()
     {
-        $options = $this->resolveOptions(array(
+        $options = $this->resolveOptions([
             'parent_path' => '/path/to',
-        ));
+        ]);
 
         $this->nodeManager->find('/path/to')->willReturn($this->parentNode->reveal());
 
@@ -110,10 +110,10 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testAutoCreateParent()
     {
-        $options = $this->resolveOptions(array(
+        $options = $this->resolveOptions([
             'parent_path' => '/path/to',
             'auto_create' => true,
-        ));
+        ]);
 
         $this->nodeManager->createPath('/path/to')->willReturn($this->parentNode->reveal());
 
@@ -131,9 +131,9 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testNodeNameButNotParentNode()
     {
-        $options = $this->resolveOptions(array(
+        $options = $this->resolveOptions([
             'node_name' => 'foobar',
-        ));
+        ]);
 
         $this->nodeManager->createPath('/path/to')->willReturn($this->parentNode->reveal());
 
@@ -150,10 +150,10 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testRename()
     {
-        $options = $this->resolveOptions(array(
+        $options = $this->resolveOptions([
             'parent_path' => '/path/to',
             'node_name' => 'booboo',
-        ));
+        ]);
 
         $this->nodeManager->find('/path/to')->willReturn($this->parentNode->reveal());
 
@@ -174,7 +174,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testDoNothing()
     {
-        $options = $this->resolveOptions(array());
+        $options = $this->resolveOptions([]);
 
         $this->persistEvent->getOptions()->willReturn($options);
         $this->persistEvent->getDocument()->willReturn($this->document);

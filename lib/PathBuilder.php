@@ -54,7 +54,7 @@ class PathBuilder
      */
     public function build(array $segments)
     {
-        $results = array();
+        $results = [];
         foreach ($segments as $segment) {
             $result = $this->buildSegment($segment);
 

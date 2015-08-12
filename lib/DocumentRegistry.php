@@ -22,32 +22,32 @@ class DocumentRegistry
     /**
      * @var array
      */
-    private $documentMap = array();
+    private $documentMap = [];
 
     /**
      * @var array
      */
-    private $documentNodeMap = array();
+    private $documentNodeMap = [];
 
     /**
      * @var array
      */
-    private $nodeMap = array();
+    private $nodeMap = [];
 
     /**
      * @var array
      */
-    private $nodeDocumentMap = array();
+    private $nodeDocumentMap = [];
 
     /**
      * @var array
      */
-    private $documentLocaleMap = array();
+    private $documentLocaleMap = [];
 
     /**
      * @var array
      */
-    private $originalLocaleMap = array();
+    private $originalLocaleMap = [];
 
     /**
      * @var string
@@ -57,7 +57,7 @@ class DocumentRegistry
     /**
      * @var array
      */
-    private $hydrationState = array();
+    private $hydrationState = [];
 
     /**
      * @param $defaultLocale
@@ -145,13 +145,13 @@ class DocumentRegistry
      */
     public function clear()
     {
-        $this->documentMap = array();
-        $this->documentNodeMap = array();
-        $this->nodeMap = array();
-        $this->nodeDocumentMap = array();
-        $this->documentLocaleMap = array();
-        $this->originalLocaleMap = array();
-        $this->hydrationState = array();
+        $this->documentMap = [];
+        $this->documentNodeMap = [];
+        $this->nodeMap = [];
+        $this->nodeDocumentMap = [];
+        $this->documentLocaleMap = [];
+        $this->originalLocaleMap = [];
+        $this->hydrationState = [];
     }
 
     /**

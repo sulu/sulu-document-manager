@@ -80,15 +80,15 @@ class AutoNameSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::PERSIST => array('handlePersist', 480),
-            Events::MOVE => array('handleMove', 480),
-            Events::COPY => array('handleCopy', 480),
-        );
+        return [
+            Events::PERSIST => ['handlePersist', 480],
+            Events::MOVE => ['handleMove', 480],
+            Events::COPY => ['handleCopy', 480],
+        ];
     }
 
     /**
