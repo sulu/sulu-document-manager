@@ -11,7 +11,9 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit;
 
+use Massive\Bundle\SearchBundle\Search\Document;
 use PHPCR\NodeInterface;
+use stdClass;
 use Sulu\Component\DocumentManager\Behavior\Audit\BlameBehavior;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
@@ -25,6 +27,71 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var PersistEvent
+     */
+    private $persistEvent;
+
+    /**
+     * @var HydrateEvent
+     */
+    private $hydrateEvent;
+
+    /**
+     * @var stdClass
+     */
+    private $notImplementing;
+
+    /**
+     * @var PropertyEncoder
+     */
+    private $encoder;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var DocumentAccessor
+     */
+    private $accessor;
+
+    /**
+     * @var UserInterface
+     */
+    private $user;
+
+    /**
+     * @var AnonymousToken
+     */
+    private $anonymousToken;
+
+    /**
+     * @var stdClass
+     */
+    private $notUser;
+
+    /**
+     * @var TokenInterface
+     */
+    private $token;
+
+    /**
+     * @var TokenStorage
+     */
+    private $tokenStorage;
+
+    /**
+     * @var BlameTestDocument
+     */
+    private $document;
+
+    /**
+     * @var BlameSubscriber
+     */
+    private $subscriber;
+
     public function setUp()
     {
         if (!class_exists(UserInterface::class)) {
@@ -68,6 +135,17 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent->getDocument()->willReturn($this->document);
         $this->tokenStorage->getToken()->willReturn(null);
+
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should return early if the locale is null.
+     */
+    public function testPersistLocaleIsNull()
+    {
+        $this->persistEvent->getLocale()->willReturn(null);
+        $this->node->setProperty()->shouldNotBeCalled();
 
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }

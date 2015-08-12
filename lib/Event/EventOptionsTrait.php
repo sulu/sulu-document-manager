@@ -11,6 +11,8 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 /**
  * This trait adds options to an event.
  */
@@ -19,14 +21,14 @@ trait EventOptionsTrait
     /**
      * This array is used as key value storage for the options.
      *
-     * @var array
+     * @var OptionsResolver
      */
-    protected $options = [];
+    protected $options;
 
     /**
      * Returns all the options for the event.
      *
-     * @return array
+     * @return OptionsResolver
      */
     public function getOptions()
     {

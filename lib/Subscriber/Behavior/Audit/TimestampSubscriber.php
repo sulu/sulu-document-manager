@@ -59,14 +59,20 @@ class TimestampSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $locale = $event->getLocale();
+
+        if (!$locale) {
+            return;
+        }
+
         $node = $event->getNode();
 
         if (!$document->getCreated()) {
-            $name = $this->encoder->localizedSystemName(self::CREATED, $event->getLocale());
+            $name = $this->encoder->localizedSystemName(self::CREATED, $locale);
             $node->setProperty($name, new \DateTime());
         }
 
-        $name = $this->encoder->localizedSystemName(self::CHANGED, $event->getLocale());
+        $name = $this->encoder->localizedSystemName(self::CHANGED, $locale);
         $node->setProperty($name, new \DateTime());
     }
 

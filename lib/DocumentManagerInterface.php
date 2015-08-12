@@ -47,7 +47,7 @@ interface DocumentManagerInterface
      * @param string $locale
      * @param array $options
      */
-    public function persist($document, $locale, array $options = []);
+    public function persist($document, $locale = null, array $options = []);
 
     /**
      * Remove the document. The document should be unregistered
