@@ -126,6 +126,13 @@ class FullDocument implements
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function setLocale($locale)
+    {
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getChildren()
