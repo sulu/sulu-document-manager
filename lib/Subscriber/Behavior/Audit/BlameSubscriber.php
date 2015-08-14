@@ -37,7 +37,7 @@ class BlameSubscriber implements EventSubscriberInterface
     /**
      * @param TokenStorage $tokenStorage
      */
-    public function __construct(TokenStorage $tokenStorage)
+    public function __construct(TokenStorage $tokenStorage = null)
     {
         $this->tokenStorage = $tokenStorage;
     }
