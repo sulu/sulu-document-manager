@@ -4,14 +4,14 @@ namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Core;
 
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentAccessor;
+use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\PropertyEncoder;
-use Sulu\Component\DocumentManager\Subscriber\Core\MappingSubscriber;
 use Sulu\Component\DocumentManager\ProxyFactory;
-use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Subscriber\Core\MappingSubscriber;
 
 class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,8 +50,8 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testPersist()
     {
         $this->metadata->getFieldMappings()->willReturn(
-            array(
-                'test' => array(
+            [
+                'test' => [
                     'encoding' => 'localized_system',
                     'property' => 'hello',
                     'type' => null,
@@ -59,8 +59,8 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
                     'type' => null,
                     'multiple' => false,
                     'default' => null,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
@@ -69,23 +69,23 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->node->setProperty('sys:hello', 'goodbye')->shouldBeCalled();
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
-    
+
     /**
      * It should not map non-mapped fields to the PHPCR node.
      */
     public function testPersistNonMapped()
     {
         $this->metadata->getFieldMappings()->willReturn(
-            array(
-                'test' => array(
+            [
+                'test' => [
                     'encoding' => 'localized_system',
                     'property' => 'hello',
                     'type' => null,
                     'multiple' => false,
                     'default' => null,
                     'mapped' => false,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
@@ -95,23 +95,23 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception when mapped non-array values to non-multiple fields
+     * It should throw an exception when mapped non-array values to non-multiple fields.
      *
      * @expectedException \InvalidArgumentException
      */
     public function testPersistNonArray()
     {
         $this->metadata->getFieldMappings()->willReturn(
-            array(
-                'test' => array(
+            [
+                'test' => [
                     'encoding' => 'localized_system',
                     'property' => 'hello',
                     'type' => null,
                     'multiple' => true,
                     'default' => null,
                     'mapped' => true,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
@@ -126,16 +126,16 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHydrate()
     {
         $this->metadata->getFieldMappings()->willReturn(
-            array(
-                'test' => array(
+            [
+                'test' => [
                     'encoding' => 'localized_system',
                     'property' => 'hello',
                     'mapped' => true,
                     'type' => null,
                     'multiple' => false,
                     'default' => null,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
@@ -148,21 +148,21 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should not map non-mapped fields
+     * It should not map non-mapped fields.
      */
     public function testHydrateNonMapped()
     {
         $this->metadata->getFieldMappings()->willReturn(
-            array(
-                'test' => array(
+            [
+                'test' => [
                     'encoding' => 'localized_system',
                     'property' => 'hello',
                     'mapped' => false,
                     'type' => null,
                     'multiple' => false,
                     'default' => null,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->metadataFactory->hasMetadataForClass('stdClass')->willReturn(true);
@@ -173,21 +173,21 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should use a default value
+     * It should use a default value.
      */
     public function testHydrateDefault()
     {
         $this->metadata->getFieldMappings()->willReturn(
-            array(
-                'test' => array(
+            [
+                'test' => [
                     'encoding' => 'localized_system',
                     'property' => 'hello',
                     'mapped' => false,
                     'type' => null,
                     'multiple' => false,
                     'default' => 'HAI',
-                ),
-            )
+                ],
+            ]
         );
 
         $this->metadataFactory->hasMetadataForClass('stdClass')->willReturn(true);

@@ -24,7 +24,7 @@ class MappingHydrateBench extends BaseBench
      */
     public function benchHydrateMapping10($iter, $rev)
     {
-        for ($index = 0; $index < 10; $index++) {
+        for ($index = 0; $index < 10; ++$index) {
             $this->getDocumentManager()->find('/test/jcr:root/test/to/node-' .  $index);
         }
     }
@@ -36,7 +36,7 @@ class MappingHydrateBench extends BaseBench
      */
     public function benchHydrateMapping5($iter, $rev)
     {
-        for ($index = 0; $index < 20; $index++) {
+        for ($index = 0; $index < 20; ++$index) {
             $this->getDocumentManager()->find('/test/jcr:root/test/to/node-' .  $index);
         }
     }

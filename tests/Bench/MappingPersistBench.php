@@ -28,10 +28,10 @@ class MappingPersistBench extends BaseBench
         $document->four = $rev;
         $document->five = $rev;
 
-        $this->getDocumentManager()->persist($document, 'de', array(
+        $this->getDocumentManager()->persist($document, 'de', [
             'path' => '/test/to/node-' . $rev,
             'auto_create' => true,
-        ));
+        ]);
     }
 
     /**
@@ -54,9 +54,9 @@ class MappingPersistBench extends BaseBench
         $document->nine = $rev;
         $document->ten = $rev;
 
-        $this->getDocumentManager()->persist($document, 'de', array(
+        $this->getDocumentManager()->persist($document, 'de', [
             'path' => '/test/to/node-' . $rev,
             'auto_create' => true,
-        ));
+        ]);
     }
 }

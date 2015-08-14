@@ -51,7 +51,7 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     /**
      * @var Metadata[]
      */
-    private $metadata = array();
+    private $metadata = [];
 
     /**
      * @param array $mapping
@@ -115,11 +115,12 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     public function hasMetadataForClass($class)
     {
         $class = ClassNameInflector::getUserClassName($class);
+
         return isset($this->classMap[$class]);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataForClass($class)
     {
@@ -170,12 +171,12 @@ class BaseMetadataFactory implements MetadataFactoryInterface
      */
     private function loadMetadata($mapping)
     {
-        $mapping = array_merge(array(
+        $mapping = array_merge([
             'alias' => null,
             'phpcr_type' => null,
             'class' => null,
-            'mapping' => array(),
-        ), $mapping);
+            'mapping' => [],
+        ], $mapping);
 
         if (isset($this->metadata[$mapping['alias']])) {
             return $this->metadata[$mapping['alias']];
@@ -187,10 +188,10 @@ class BaseMetadataFactory implements MetadataFactoryInterface
         $metadata->setClass($mapping['class']);
 
         foreach ($mapping['mapping'] as $fieldName => $fieldMapping) {
-            $fieldMapping = array_merge(array(
+            $fieldMapping = array_merge([
                 'encoding' => 'content',
                 'property' => $fieldName,
-            ), $fieldMapping);
+            ], $fieldMapping);
             $metadata->addFieldMapping($fieldName, $fieldMapping);
         }
 

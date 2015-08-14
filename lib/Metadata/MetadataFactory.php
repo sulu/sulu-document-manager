@@ -87,7 +87,7 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasAlias($alias)
     {

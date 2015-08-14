@@ -53,7 +53,7 @@ class FindTest extends BaseTestCase
     }
 
     /**
-     * It can persist and find without any locales
+     * It can persist and find without any locales.
      */
     public function testPersistFindNoLocales()
     {
@@ -62,10 +62,10 @@ class FindTest extends BaseTestCase
         $document->setTitle('Hello');
         $document->setBody('This is Hello');
         $document->setStatus('open');
-        $manager->persist($document, null, array(
+        $manager->persist($document, null, [
             'path' => '/test/foo',
             'auto_create' => true,
-        ));
+        ]);
         $manager->flush();
 
         $manager->clear();

@@ -65,7 +65,7 @@ interface MetadataFactoryInterface
      *
      t @param string
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMetadataForClass($class);
 

@@ -39,7 +39,7 @@ class Metadata
     private $fieldMappings;
 
     /**
-     * Add a field mapping for field with given name, for example:
+     * Add a field mapping for field with given name, for example:.
      *
      * ````
      * $metadata->addFieldMapping(array(
@@ -50,28 +50,29 @@ class Metadata
      *
      * @param string $name Name of field/property in the mapped class.
      * @param array $mapping {
-     *   @var string $encoding Encoding type to use, @see \Sulu\Component\DocumentManager\PropertyEncoder::encode()
-     *   @var string $property PHPCR property name (excluding the prefix)
-     *   @var string $type Type of field (leave blank to determine automatically)
-     *   @var boolean $mapped If the field should be mapped. Set to false to manually persist and hydrate the data.
+     *
+     *   @var string Encoding type to use, @see \Sulu\Component\DocumentManager\PropertyEncoder::encode()
+     *   @var string PHPCR property name (excluding the prefix)
+     *   @var string Type of field (leave blank to determine automatically)
+     *   @var bool If the field should be mapped. Set to false to manually persist and hydrate the data.
      * }
      */
     public function addFieldMapping($name, $mapping)
     {
-        $mapping = array_merge(array(
+        $mapping = array_merge([
             'encoding' => 'content',
             'property' => $name,
             'type' => null,
             'mapped' => true,
             'multiple' => false,
             'default' => null,
-        ), $mapping);
+        ], $mapping);
 
         $this->fieldMappings[$name] = $mapping;
     }
 
     /**
-     * Return all field mappings
+     * Return all field mappings.
      *
      * @return array
      */

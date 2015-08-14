@@ -30,43 +30,43 @@ class MappingTest extends BaseTestCase
         $document->setBody('body');
         $document->setStatus('published');
 
-        $this->getDocumentManager()->persist($document, 'de', array(
+        $this->getDocumentManager()->persist($document, 'de', [
             'path' => '/test/foo',
             'auto_create' => true,
-        ));
+        ]);
         $this->getDocumentManager()->flush();
 
         $node = $this->getSession()->getNode('/test/foo');
 
-        foreach (array(
+        foreach ([
             'lcon:de-title' => 'Hallo',
             'lcon:de-body' => 'body',
             'nsys:my_status' => 'published',
-        ) as $phpcrName => $expectedValue) {
+        ] as $phpcrName => $expectedValue) {
             $this->assertEquals($expectedValue, $node->getPropertyValue($phpcrName));
         }
     }
 
     /**
-     * It should map reference fields
+     * It should map reference fields.
      */
     public function testMappingReference()
     {
         $manager = $this->getDocumentManager();
 
         $reference = $manager->create('full');
-        $manager->persist($reference, 'de', array(
+        $manager->persist($reference, 'de', [
             'path' => '/test/foo',
             'auto_create' => true,
-        ));
+        ]);
         $manager->flush();
 
         $document = $manager->create('full');
         $document->setReference($reference);
-        $manager->persist($document, 'de', array(
+        $manager->persist($document, 'de', [
             'path' => '/test/boo',
             'auto_create' => true,
-        ));
+        ]);
         $manager->flush();
         $manager->clear();
 
@@ -76,6 +76,5 @@ class MappingTest extends BaseTestCase
             $reference->getUuid(),
             $document->getReference()->getUuid()
         );
-
     }
 }

@@ -2,17 +2,16 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Core;
 
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use PHPCR\NodeInterface;
+use Sulu\Component\DocumentManager\DocumentAccessor;
+use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\PropertyEncoder;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\ProxyFactory;
-use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * This subscriber uses the field map in the metadata to map fields from
@@ -44,14 +43,14 @@ class MappingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::HYDRATE => array('handleHydrate', -100),
-            Events::PERSIST => array('handlePersist', -100),
-        );
+        return [
+            Events::HYDRATE => ['handleHydrate', -100],
+            Events::PERSIST => ['handlePersist', -100],
+        ];
     }
 
     /**
@@ -80,7 +79,7 @@ class MappingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Persist a reference field type
+     * Persist a reference field type.
      *
      * @param NodeInterface $node
      * @param DocumentAccessor $accessor
@@ -161,7 +160,7 @@ class MappingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Hydrate reference field types
+     * Hydrate reference field types.
      *
      * @param NodeInterface $node
      * @param mixed $document
@@ -186,7 +185,7 @@ class MappingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Hydrate "scalar" field types
+     * Hydrate "scalar" field types.
      *
      * @param NodeInterface $node
      * @param DocumentAccessor $accessor
@@ -210,7 +209,7 @@ class MappingSubscriber implements EventSubscriberInterface
             return $fieldMapping['default'];
         }
 
-        return $fieldMapping['multiple'] ? array() : null;
+        return $fieldMapping['multiple'] ? [] : null;
     }
 
     private function validateFieldValue($value, $fieldName, $fieldMapping)

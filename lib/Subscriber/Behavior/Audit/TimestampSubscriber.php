@@ -26,7 +26,7 @@ class TimestampSubscriber implements EventSubscriberInterface
     const CHANGED = 'changed';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
