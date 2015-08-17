@@ -61,7 +61,7 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function persist($document, $locale, array $options = [])
+    public function persist($document, $locale = null, array $options = [])
     {
         $options = $this->getOptionsResolver(Events::FIND)->resolve($options);
 

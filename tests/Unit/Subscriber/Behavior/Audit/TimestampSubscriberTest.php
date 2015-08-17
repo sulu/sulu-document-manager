@@ -22,6 +22,51 @@ use Sulu\Component\DocumentManager\Subscriber\Behavior\Audit\TimestampSubscriber
 
 class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var PersistEvent
+     */
+    private $persistEvent;
+
+    /**
+     * @var HydrateEvent
+     */
+    private $hydrateEvent;
+
+    /**
+     * @var \stdClass
+     */
+    private $notImplementing;
+
+    /**
+     * @var PropertyEncoder
+     */
+    private $encoder;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var DocumentAccessor
+     */
+    private $accessor;
+
+    /**
+     * @var TimestampSubscriber
+     */
+    private $subscriber;
+
+    /**
+     * @var \DateTime
+     */
+    private $createdDate;
+
+    /**
+     * @var \DateTime
+     */
+    private $changedDate;
+
     public function setUp()
     {
         $this->persistEvent = $this->prophesize(PersistEvent::class);
@@ -44,6 +89,20 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testPersistNotImplementing()
     {
         $this->persistEvent->getDocument()->willReturn($this->notImplementing);
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should return early if the locale is null.
+     */
+    public function testPersistLocaleIsNull()
+    {
+        $document = new TestDocument();
+        $this->persistEvent->getDocument()->willReturn($document);
+        $this->persistEvent->getLocale()->willReturn(null);
+
+        $this->node->setProperty()->shouldNotBeCalled();
+
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 

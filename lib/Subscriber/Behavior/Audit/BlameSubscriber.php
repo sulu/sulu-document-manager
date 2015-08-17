@@ -92,8 +92,13 @@ class BlameSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $node = $event->getNode();
         $locale = $event->getLocale();
+
+        if (!$locale) {
+            return;
+        }
+
+        $node = $event->getNode();
 
         if (!$this->getCreator($node, $locale)) {
             $name = $this->encoder->localizedSystemName(self::CREATOR, $locale);
@@ -106,7 +111,7 @@ class BlameSubscriber implements EventSubscriberInterface
         $this->handleHydrate($event);
     }
 
-    private function getUserId(array $options)
+    private function getUserId($options)
     {
         if ($options['user']) {
             return $options['user'];
