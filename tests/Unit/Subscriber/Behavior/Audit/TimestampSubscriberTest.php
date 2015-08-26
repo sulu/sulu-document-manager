@@ -40,11 +40,6 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     private $encoder;
 
     /**
-     * @var NodeInterface
-     */
-    private $node;
-
-    /**
      * @var DocumentAccessor
      */
     private $accessor;
@@ -93,8 +88,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
         $document = new TestDocument();
         $this->persistEvent->getDocument()->willReturn($document);
         $this->persistEvent->getLocale()->willReturn(null);
-
-        $this->node->setProperty()->shouldNotBeCalled();
+        $this->persistEvent->getAccessor()->shouldNotBeCalled();
 
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
@@ -108,6 +102,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->persistEvent->getDocument()->willReturn($document);
         $this->persistEvent->getAccessor()->willReturn($this->accessor->reveal());
+        $this->persistEvent->getLocale()->willReturn('fr');
         $this->accessor->set('created', Argument::type('DateTime'))->shouldBeCalled();
         $this->accessor->set('changed', Argument::type('DateTime'))->shouldBeCalled();
 
@@ -123,6 +118,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->persistEvent->getDocument()->willReturn($document);
         $this->persistEvent->getAccessor()->willReturn($this->accessor->reveal());
+        $this->persistEvent->getLocale()->willReturn('fr');
         $this->accessor->set('created', Argument::type('DateTime'))->shouldNotBeCalled();
         $this->accessor->set('changed', Argument::type('DateTime'))->shouldBeCalled();
         $this->subscriber->handlePersist($this->persistEvent->reveal());
