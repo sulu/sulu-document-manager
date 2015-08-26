@@ -91,27 +91,22 @@ class ProxyFactory
             return $document;
         }
 
-        $eventDispatcher = $this->dispatcher;
-        $registry = $this->registry;
-
         $initializer = function (LazyLoadingInterface $document, $method, array $parameters, &$initializer) use (
             $fromDocument,
-            $targetNode,
-            $eventDispatcher,
-            $registry
+            $targetNode
         ) {
-            $locale = $registry->getOriginalLocaleForDocument($fromDocument);
+            $locale = $this->registry->getOriginalLocaleForDocument($fromDocument);
 
             $hydrateEvent = new HydrateEvent($targetNode, $locale);
             $hydrateEvent->setDocument($document);
-            $eventDispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
+            $this->dispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
 
             $initializer = null;
         };
 
         $targetMetadata = $this->metadataFactory->getMetadataForPhpcrNode($targetNode);
         $proxy = $this->proxyFactory->createProxy($targetMetadata->getClass(), $initializer);
-        $locale = $registry->getOriginalLocaleForDocument($fromDocument);
+        $locale = $this->registry->getOriginalLocaleForDocument($fromDocument);
         $this->registry->registerDocument($proxy, $targetNode, $locale);
 
         return $proxy;

@@ -19,9 +19,24 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class MappingSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var MetadataFactoryInterface
+     */
     private $factory;
+
+    /**
+     * @var PropertyEncoder
+     */
     private $encoder;
+
+    /**
+     * @var ProxyFactory
+     */
     private $proxyFactory;
+
+    /**
+     * @var DocumentRegistry
+     */
     private $documentRegistry;
 
     /**
