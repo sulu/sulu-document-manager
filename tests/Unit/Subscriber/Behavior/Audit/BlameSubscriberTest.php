@@ -120,7 +120,7 @@ class BlameSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return early if no token storage is provided
+     * It should return early if no token storage is provided.
      */
     public function testNoTokenStorage()
     {
