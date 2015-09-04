@@ -1,5 +1,8 @@
-CHANGELOG for Sulu
-==================
+CHANGELOG for Sulu Document Manager
+===================================
+
+* dev-master
+    * FEATURE #60 Added query builder based on the PHPCR-ODM.
 
 * 0.5.0 (2015-12-18)
     * FEATURE #56 added auto_name option to deactivate renaming of nodes in certain situations
