@@ -61,7 +61,8 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->node->getParent()->willReturn($this->parentNode->reveal());
         $this->node->getDepth()->willReturn(2);
 
-        $this->proxyFactory->createProxyForNode($this->document, $this->parentNode->reveal())->willReturn($this->parentDocument);
+        $this->proxyFactory->createProxyForNode($this->document, $this->parentNode->reveal(), [])
+            ->willReturn($this->parentDocument);
         $this->parentNode->hasProperty('jcr:uuid')->willReturn(true);
 
         $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
