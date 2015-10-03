@@ -67,6 +67,9 @@ class RegistratorSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param ConfigureOptionsEvent $event
+     */
     public function configureOptions(ConfigureOptionsEvent $event)
     {
         $options = $event->getOptions();
