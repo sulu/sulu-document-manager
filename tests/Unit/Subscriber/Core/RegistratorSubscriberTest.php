@@ -70,7 +70,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->hydrateEvent->hasDocument()->willReturn(false);
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
         $this->hydrateEvent->getLocale()->willReturn('fr');
-        $this->hydrateEvent->getOptions()->willReturn(array());
+        $this->hydrateEvent->getOptions()->willReturn([]);
         $this->registry->hasNode($this->node->reveal())->willReturn(true);
         $this->registry->getDocumentForNode($this->node->reveal())->willReturn($this->document);
         $this->hydrateEvent->setDocument($this->document)->shouldBeCalled();
