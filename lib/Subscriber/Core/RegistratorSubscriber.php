@@ -20,6 +20,7 @@ use Sulu\Component\DocumentManager\Event\RemoveEvent;
 use Sulu\Component\DocumentManager\Event\ReorderEvent;
 use Sulu\Component\DocumentManager\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 
 /**
  * Responsible for registering and deregistering documents and PHPCR nodes
@@ -62,7 +63,16 @@ class RegistratorSubscriber implements EventSubscriberInterface
             Events::REMOVE => ['handleRemove', 490],
             Events::CLEAR => ['handleClear', 500],
             Events::REORDER => ['handleNodeFromRegistry', 510],
+            Events::CONFIGURE_OPTIONS => 'configureOptions',
         ];
+    }
+
+    public function configureOptions(ConfigureOptionsEvent $event)
+    {
+        $options = $event->getOptions();
+        $options->setDefaults([
+            'rehydrate' => true,
+        ]);
     }
 
     /**
@@ -98,6 +108,15 @@ class RegistratorSubscriber implements EventSubscriberInterface
         $document = $this->documentRegistry->getDocumentForNode($node);
 
         $event->setDocument($document);
+
+        $options = $event->getOptions();
+
+        // if reydration is not required (f.e. we just want to retrieve the
+        // current state of the document, no matter it's current state) stop
+        // further event propagation - we have the document now.
+        if (isset($options['rehydrate']) && false === $options['rehydrate']) {
+            $event->stopPropagation();
+        }
     }
 
     /**
