@@ -80,7 +80,7 @@ class ParentSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
         $node = $this->inspector->getNode($event->getDocument());
-        $this->mapParent($document, $node, $event->getOptions());
+        $this->mapParent($document, $node);
     }
 
     /**
