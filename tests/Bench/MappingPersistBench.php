@@ -3,8 +3,10 @@
 namespace Sulu\Component\DocumentManager\Tests\Bench;
 
 /**
- * @processIsolation iteration
- * @group mapping_persist
+ * @Groups({"mapping_persist"})
+ * @Revs(10)
+ * @Iterations(2)
+ * @BeforeMethods({"init"})
  */
 class MappingPersistBench extends BaseBench
 {
@@ -13,14 +15,9 @@ class MappingPersistBench extends BaseBench
         $this->initPhpcr();
     }
 
-    /**
-     * @description Persist document with 5 mapping fileds (no flush)
-     * @beforeMethod init
-     * @revs 10
-     * @iterations 2
-     */
-    public function benchPersistMapping5($iter, $rev)
+    public function benchPersistMapping5()
     {
+        static $rev = 0;
         $document = $this->getDocumentManager()->create('mapping_5');
         $document->one = $rev;
         $document->two = $rev;
@@ -32,16 +29,12 @@ class MappingPersistBench extends BaseBench
             'path' => '/test/to/node-' . $rev,
             'auto_create' => true,
         ]);
+        ++$rev;
     }
 
-    /**
-     * @description Persist document with 10 mapping fileds (no flush)
-     * @beforeMethod init
-     * @revs 10
-     * @iterations 2
-     */
-    public function benchPersistMapping10($iter, $rev)
+    public function benchPersistMapping10()
     {
+        static $rev = 0;
         $document = $this->getDocumentManager()->create('mapping_10');
         $document->one = $rev;
         $document->two = $rev;
@@ -58,5 +51,6 @@ class MappingPersistBench extends BaseBench
             'path' => '/test/to/node-' . $rev,
             'auto_create' => true,
         ]);
+        ++$rev;
     }
 }
