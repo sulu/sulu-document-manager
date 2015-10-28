@@ -211,10 +211,10 @@ class RegistratorSubscriber implements EventSubscriberInterface
         $this->documentRegistry->clear();
     }
 
-    /*
-     * Register the document and apparently update the locale --
+    /**
+     * Register the document and apparently update the locale.
      *
-     * TODO: Is locale handling already done above??
+     * TODO: Is locale handling already done above?
      *
      * @param AbstractMappingEvent $event
      */
