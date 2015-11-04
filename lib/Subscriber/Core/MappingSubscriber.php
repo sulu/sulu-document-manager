@@ -102,8 +102,13 @@ class MappingSubscriber implements EventSubscriberInterface
      * @param mixed $locale
      * @param mixed $fieldMapping
      */
-    private function persistReference(NodeInterface $node, DocumentAccessor $accessor, $fieldName, $locale, $fieldMapping)
-    {
+    private function persistReference(
+        NodeInterface $node,
+        DocumentAccessor $accessor,
+        $fieldName,
+        $locale,
+        $fieldMapping
+    ) {
         $referenceDocument = $accessor->get($fieldName);
 
         if (!$referenceDocument) {
@@ -111,14 +116,21 @@ class MappingSubscriber implements EventSubscriberInterface
         }
 
         if ($fieldMapping['multiple']) {
-            throw new \InvalidArgumentException(sprintf(
-                'Mapping references as multiple not currently supported (when mapping "%s"',
-                $fieldName
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Mapping references as multiple not currently supported (when mapping "%s")',
+                    $fieldName
+                )
+            );
         }
 
         $referenceNode = $this->documentRegistry->getNodeForDocument($referenceDocument);
-        $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+        try {
+            $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+        } catch (\InvalidArgumentException $ex) {
+            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            return;
+        }
         $node->setProperty($phpcrName, $referenceNode);
     }
 
@@ -131,9 +143,19 @@ class MappingSubscriber implements EventSubscriberInterface
      * @param mixed $locale
      * @param array $fieldMapping
      */
-    private function persistGeneric(NodeInterface $node, DocumentAccessor $accessor, $fieldName, $locale, array $fieldMapping)
-    {
-        $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+    private function persistGeneric(
+        NodeInterface $node,
+        DocumentAccessor $accessor,
+        $fieldName,
+        $locale,
+        array $fieldMapping
+    ) {
+        try {
+            $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+        } catch (\InvalidArgumentException $ex) {
+            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            return;
+        }
         $value = $accessor->get($fieldName);
         $this->validateFieldValue($value, $fieldName, $fieldMapping);
         $node->setProperty($phpcrName, $value);
@@ -184,10 +206,22 @@ class MappingSubscriber implements EventSubscriberInterface
      * @param mixed $locale
      * @param array $fieldMapping
      */
-    private function hydrateReferenceField(NodeInterface $node, $document, DocumentAccessor $accessor, $fieldName, $locale, array $fieldMapping)
-    {
+    private function hydrateReferenceField(
+        NodeInterface $node,
+        $document,
+        DocumentAccessor $accessor,
+        $fieldName,
+        $locale,
+        array $fieldMapping
+    ) {
+        try {
+            $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+        } catch (\InvalidArgumentException $ex) {
+            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            return;
+        }
         $referencedNode = $node->getPropertyValueWithDefault(
-            $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale),
+            $phpcrName,
             $this->getDefaultValue($fieldMapping)
         );
 
@@ -208,9 +242,19 @@ class MappingSubscriber implements EventSubscriberInterface
      * @param mixed $locale
      * @param array $fieldMapping
      */
-    private function hydrateGenericField(NodeInterface $node, DocumentAccessor $accessor, $fieldName, $locale, array $fieldMapping)
-    {
-        $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+    private function hydrateGenericField(
+        NodeInterface $node,
+        DocumentAccessor $accessor,
+        $fieldName,
+        $locale,
+        array $fieldMapping
+    ) {
+        try {
+            $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+        } catch (\InvalidArgumentException $ex) {
+            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            return;
+        }
         $value = $node->getPropertyValueWithDefault(
             $phpcrName,
             $this->getDefaultValue($fieldMapping)
@@ -230,10 +274,13 @@ class MappingSubscriber implements EventSubscriberInterface
     private function validateFieldValue($value, $fieldName, $fieldMapping)
     {
         if ($fieldMapping['multiple'] && !is_array($value)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Field "%s" is mapped as multiple, and therefore must be an array, got "%s"',
-                $fieldName, is_object($value) ? get_class($value) : gettype($value)
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Field "%s" is mapped as multiple, and therefore must be an array, got "%s"',
+                    $fieldName,
+                    is_object($value) ? get_class($value) : gettype($value)
+                )
+            );
         }
     }
 }
