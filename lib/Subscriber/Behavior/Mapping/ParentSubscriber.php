@@ -130,7 +130,7 @@ class ParentSubscriber implements EventSubscriberInterface
             ));
         }
 
-        $this->mapParent($document, $node);
+        $this->mapParent($document, $node, $event->getOptions());
     }
 
     /**

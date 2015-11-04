@@ -115,11 +115,12 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHydrateParent()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->document->reveal());
+        $this->hydrateEvent->getOptions()->willReturn(['test' => true]);
 
         $this->node->getParent()->willReturn($this->parentNode->reveal());
         $this->node->getDepth()->willReturn(2);
 
-        $this->proxyFactory->createProxyForNode($this->document->reveal(), $this->parentNode->reveal(), [])
+        $this->proxyFactory->createProxyForNode($this->document->reveal(), $this->parentNode->reveal(), ['test' => true])
             ->willReturn($this->parentDocument);
         $this->parentNode->hasProperty('jcr:uuid')->willReturn(true);
 
@@ -134,6 +135,8 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHydrateParentNoUuid()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->document->reveal());
+        $this->hydrateEvent->getOptions()->willReturn(['test' => true]);
+
         $this->node->getParent()->willReturn($this->parentNode->reveal());
         $this->node->getDepth()->willReturn(2);
         $this->parentNode->hasProperty('jcr:uuid')->willReturn(false);
