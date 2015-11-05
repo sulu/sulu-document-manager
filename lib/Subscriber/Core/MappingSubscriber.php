@@ -8,6 +8,7 @@ use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\Exception\InvalidLocaleException;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\PropertyEncoder;
 use Sulu\Component\DocumentManager\ProxyFactory;
@@ -124,14 +125,14 @@ class MappingSubscriber implements EventSubscriberInterface
             );
         }
 
-        $referenceNode = $this->documentRegistry->getNodeForDocument($referenceDocument);
         try {
+            $referenceNode = $this->documentRegistry->getNodeForDocument($referenceDocument);
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
-        } catch (\InvalidArgumentException $ex) {
+            $node->setProperty($phpcrName, $referenceNode);
+        } catch (InvalidLocaleException $ex) {
             // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
-        $node->setProperty($phpcrName, $referenceNode);
     }
 
     /**
@@ -152,13 +153,13 @@ class MappingSubscriber implements EventSubscriberInterface
     ) {
         try {
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
-        } catch (\InvalidArgumentException $ex) {
+            $value = $accessor->get($fieldName);
+            $this->validateFieldValue($value, $fieldName, $fieldMapping);
+            $node->setProperty($phpcrName, $value);
+        } catch (InvalidLocaleException $ex) {
             // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
-        $value = $accessor->get($fieldName);
-        $this->validateFieldValue($value, $fieldName, $fieldMapping);
-        $node->setProperty($phpcrName, $value);
     }
 
     /**
@@ -216,20 +217,20 @@ class MappingSubscriber implements EventSubscriberInterface
     ) {
         try {
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
-        } catch (\InvalidArgumentException $ex) {
+            $referencedNode = $node->getPropertyValueWithDefault(
+                $phpcrName,
+                $this->getDefaultValue($fieldMapping)
+            );
+
+            if ($referencedNode) {
+                $accessor->set(
+                    $fieldName,
+                    $this->proxyFactory->createProxyForNode($document, $referencedNode)
+                );
+            }
+        } catch (InvalidLocaleException $ex) {
             // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
-        }
-        $referencedNode = $node->getPropertyValueWithDefault(
-            $phpcrName,
-            $this->getDefaultValue($fieldMapping)
-        );
-
-        if ($referencedNode) {
-            $accessor->set(
-                $fieldName,
-                $this->proxyFactory->createProxyForNode($document, $referencedNode)
-            );
         }
     }
 
@@ -251,15 +252,15 @@ class MappingSubscriber implements EventSubscriberInterface
     ) {
         try {
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
-        } catch (\InvalidArgumentException $ex) {
+            $value = $node->getPropertyValueWithDefault(
+                $phpcrName,
+                $this->getDefaultValue($fieldMapping)
+            );
+            $accessor->set($fieldName, $value);
+        } catch (InvalidLocaleException $ex) {
             // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
-        $value = $node->getPropertyValueWithDefault(
-            $phpcrName,
-            $this->getDefaultValue($fieldMapping)
-        );
-        $accessor->set($fieldName, $value);
     }
 
     private function getDefaultValue(array $fieldMapping)
