@@ -129,7 +129,7 @@ class RegistratorSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should notstop propagation if the document is loaded with rehydrate option.
+     * It should not stop propagation if the document is loaded with rehydrate option.
      */
     public function testStopPropagationRehydrate()
     {
