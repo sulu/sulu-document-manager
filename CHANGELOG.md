@@ -1,7 +1,7 @@
 CHANGELOG for Sulu
 ==================
 
-* dev-develop
+* 0.5.0 (2015-12-01)
     * BUGFIX #55 Added rehydrate option to stop propagation listener
 
 * 0.4.0 (2015-11-05)
