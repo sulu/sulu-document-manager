@@ -1,6 +1,9 @@
 CHANGELOG for Sulu
 ==================
 
+* dev-master
+    * FEATURE #56 added auto_name option to deactivate renaming of nodes in certain situations
+
 * 0.5.0 (2015-12-01)
     * BUGFIX #55 Added rehydrate option to stop propagation listener
 
