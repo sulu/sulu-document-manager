@@ -1,7 +1,7 @@
 CHANGELOG for Sulu
 ==================
 
-* 0.5.0 (2015-12-18)
+* 0.5.1 (2015-12-18)
     * FEATURE #56 added auto_name option to deactivate renaming of nodes in certain situations
 
 * 0.5.0 (2015-12-01)
