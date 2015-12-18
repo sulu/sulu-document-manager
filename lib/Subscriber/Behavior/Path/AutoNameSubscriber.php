@@ -16,6 +16,7 @@ use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentHelper;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
+use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\CopyEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
@@ -85,10 +86,20 @@ class AutoNameSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            Events::CONFIGURE_OPTIONS => 'configureOptions',
             Events::PERSIST => ['handlePersist', 480],
             Events::MOVE => ['handleMove', 480],
             Events::COPY => ['handleCopy', 480],
         ];
+    }
+
+    public function configureOptions(ConfigureOptionsEvent $event)
+    {
+        $event->getOptions()->setDefaults(
+            [
+                'auto_name' => true,
+            ]
+        );
     }
 
     /**
@@ -114,6 +125,10 @@ class AutoNameSubscriber implements EventSubscriberInterface
      */
     public function handlePersist(PersistEvent $event)
     {
+        if (!$event->getOption('auto_name')) {
+            return;
+        }
+
         $document = $event->getDocument();
 
         if (!$document instanceof AutoNameBehavior) {
@@ -123,10 +138,12 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $title = $document->getTitle();
 
         if (!$title) {
-            throw new DocumentManagerException(sprintf(
-                'Document has no title (title is required for auto name behavior): %s)',
-                DocumentHelper::getDebugTitle($document)
-            ));
+            throw new DocumentManagerException(
+                sprintf(
+                    'Document has no title (title is required for auto name behavior): %s)',
+                    DocumentHelper::getDebugTitle($document)
+                )
+            );
         }
 
         $name = $this->slugifier->slugify($title);

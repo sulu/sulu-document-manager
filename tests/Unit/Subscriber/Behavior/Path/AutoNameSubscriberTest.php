@@ -12,6 +12,7 @@
 namespace Sulu\Component\DocumentManager\tests\Unit\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
+use Prophecy\Argument;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
@@ -26,6 +27,81 @@ use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     const DEFAULT_LOCALE = 'en';
+
+    /**
+     * @var DocumentRegistry
+     */
+    private $documentRegistry;
+
+    /**
+     * @var SlugifierInterface
+     */
+    private $slugifier;
+
+    /**
+     * @var PersistEvent
+     */
+    private $persistEvent;
+
+    /**
+     * @var MoveEvent
+     */
+    private $moveEvent;
+
+    /**
+     * @var AutoNameBehavior
+     */
+    private $document;
+
+    /**
+     * @var \stdClass
+     */
+    private $parentDocument;
+
+    /**
+     * @var NodeInterface
+     */
+    private $newNode;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var NodeInterface
+     */
+    private $parentNode;
+
+    /**
+     * @var Metadata
+     */
+    private $metadata;
+
+    /**
+     * @var \stdClass
+     */
+    private $parent;
+
+    /**
+     * @var NameResolver
+     */
+    private $resolver;
+
+    /**
+     * @var NodeManager
+     */
+    private $nodeManager;
+
+    /**
+     * @var DocumentStrategyInterface
+     */
+    private $strategy;
+
+    /**
+     * @var AutoNameSubscriber
+     */
+    private $subscriber;
 
     public function setUp()
     {
@@ -60,6 +136,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testNotInstanceOfAutoName()
     {
         $document = new \stdClass();
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
         $this->persistEvent->hasNode()->willReturn(false);
         $this->persistEvent->getDocument()->willReturn($document);
         $this->subscriber->handlePersist($this->persistEvent->reveal());
@@ -74,6 +151,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent->hasNode()->willReturn(false);
         $this->document->getTitle()->willReturn(null);
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
@@ -84,6 +162,18 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testAutoName()
     {
         $this->doTestAutoName('hai', 'hai', true, false);
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not assign a new name, if the option says it is disabled.
+     */
+    public function testAutoNameWithDisabledOption()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(false);
+        $this->persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->node->rename(Argument::any())->shouldNotBeCalled();
+
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 
@@ -137,10 +227,10 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 
     private function doTestAutoName($title, $expectedName, $create = false, $hasNode = false)
     {
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
         $this->persistEvent->hasNode()->willReturn($hasNode);
         $node = $hasNode ? $this->node->reveal() : null;
 
-        $phpcrType = 'sulu:test';
         $this->document->getTitle()->willReturn($title);
         $this->document->getParent()->willReturn($this->parent);
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
