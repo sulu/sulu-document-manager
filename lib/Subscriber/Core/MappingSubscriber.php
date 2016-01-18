@@ -228,7 +228,15 @@ class MappingSubscriber implements EventSubscriberInterface
 
             switch ($fieldMapping['type']) {
                 case 'reference':
-                    $this->hydrateReferenceField($node, $document, $accessor, $fieldName, $locale, $fieldMapping);
+                    $this->hydrateReferenceField(
+                        $node,
+                        $document,
+                        $accessor,
+                        $fieldName,
+                        $locale,
+                        $fieldMapping,
+                        $event->getOptions()
+                    );
                     break;
                 case 'json_array':
                     $this->hydrateJsonArrayField($node, $accessor, $fieldName, $locale, $fieldMapping);
@@ -248,6 +256,7 @@ class MappingSubscriber implements EventSubscriberInterface
      * @param mixed $fieldName
      * @param mixed $locale
      * @param array $fieldMapping
+     * @param array $options
      */
     private function hydrateReferenceField(
         NodeInterface $node,
@@ -255,7 +264,8 @@ class MappingSubscriber implements EventSubscriberInterface
         DocumentAccessor $accessor,
         $fieldName,
         $locale,
-        array $fieldMapping
+        array $fieldMapping,
+        array $options
     ) {
         try {
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
@@ -267,7 +277,7 @@ class MappingSubscriber implements EventSubscriberInterface
             if ($referencedNode) {
                 $accessor->set(
                     $fieldName,
-                    $this->proxyFactory->createProxyForNode($document, $referencedNode)
+                    $this->proxyFactory->createProxyForNode($document, $referencedNode, $options)
                 );
             }
         } catch (InvalidLocaleException $ex) {
