@@ -142,7 +142,7 @@ class MappingSubscriber implements EventSubscriberInterface
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
             $node->setProperty($phpcrName, $referenceNode);
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -169,7 +169,7 @@ class MappingSubscriber implements EventSubscriberInterface
             $this->validateFieldValue($value, $fieldName, $fieldMapping);
             $node->setProperty($phpcrName, $value);
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -196,7 +196,7 @@ class MappingSubscriber implements EventSubscriberInterface
             $this->validateFieldValue($value, $fieldName, $fieldMapping);
             $node->setProperty($phpcrName, json_encode($value));
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -281,7 +281,7 @@ class MappingSubscriber implements EventSubscriberInterface
                 );
             }
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -310,7 +310,7 @@ class MappingSubscriber implements EventSubscriberInterface
             );
             $accessor->set($fieldName, $value);
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -339,7 +339,7 @@ class MappingSubscriber implements EventSubscriberInterface
             );
             $accessor->set($fieldName, json_decode($value, true));
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }

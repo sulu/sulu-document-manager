@@ -65,7 +65,6 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
                     'property' => 'hello',
                     'type' => null,
                     'mapped' => true,
-                    'type' => null,
                     'multiple' => false,
                     'default' => null,
                 ],
@@ -204,6 +203,58 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->encoder->encode('localized_system', 'hello', 'de')->willReturn('sys:hello');
         $this->node->getPropertyValueWithDefault('sys:hello', null)->willReturn(null);
         $this->accessor->set('test', 'HAI')->shouldNotBeCalled();
+
+        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+    }
+
+    /**
+     * It should json_encode the data.
+     */
+    public function testPersistJsonArray()
+    {
+        $this->metadata->getFieldMappings()->willReturn(
+            [
+                'test' => [
+                    'encoding' => 'system',
+                    'property' => 'hello',
+                    'type' => 'json_array',
+                    'mapped' => true,
+                    'multiple' => false,
+                    'default' => null,
+                ],
+            ]
+        );
+
+        $this->persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->encoder->encode('system', 'hello', 'de')->willReturn('sys:hello');
+        $this->accessor->get('test')->willReturn(['key' => 'value']);
+        $this->node->setProperty('sys:hello', json_encode(['key' => 'value']))->shouldBeCalled();
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should json_decode the data.
+     */
+    public function testHydrateJsonArray()
+    {
+        $this->metadata->getFieldMappings()->willReturn(
+            [
+                'test' => [
+                    'encoding' => 'system',
+                    'property' => 'hello',
+                    'mapped' => true,
+                    'type' => 'json_array',
+                    'multiple' => false,
+                    'default' => null,
+                ],
+            ]
+        );
+
+        $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
+        $this->encoder->encode('system', 'hello', 'de')->willReturn('sys:hello');
+        $this->metadataFactory->hasMetadataForClass('stdClass')->willReturn(true);
+        $this->node->getPropertyValueWithDefault('sys:hello', null)->willReturn(json_encode(['key' => 'value']));
+        $this->accessor->set('test', ['key' => 'value'])->shouldBeCalled();
 
         $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
     }
