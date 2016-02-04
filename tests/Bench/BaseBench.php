@@ -11,10 +11,9 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Bench;
 
-use PhpBench\Benchmark;
 use Sulu\Component\DocumentManager\Tests\Bootstrap;
 
-abstract class BaseBench implements Benchmark
+abstract class BaseBench
 {
     const BASE_NAME = 'test';
     const BASE_PATH = '/test';
