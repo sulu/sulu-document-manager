@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -165,7 +165,7 @@ class Bootstrap
 
         $nodeTypeManager = $session->getWorkspace()->getNodeTypeManager();
         if (!$nodeTypeManager->hasNodeType('mix:test')) {
-            $nodeTypeManager->registerNodeTypesCnd(<<<EOT
+            $nodeTypeManager->registerNodeTypesCnd(<<<'EOT'
 [mix:test] > mix:referenceable mix
 [mix:mapping5] > mix:referenceable mix
 [mix:mapping10] > mix:referenceable mix
