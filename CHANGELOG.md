@@ -1,6 +1,9 @@
 CHANGELOG for Sulu
 ==================
 
+* dev-develop
+    * ENHANCEMENT #59 Removed blame subscriber
+
 * 0.5.0 (2015-12-18)
     * FEATURE #56 added auto_name option to deactivate renaming of nodes in certain situations
 
