@@ -24,10 +24,29 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     const UUID2 = '1dd2270d-c1e1-4d4e-9b7c-6da0efb6e91d';
     const PATH2 = '/path/to/this';
 
+    /**
+     * @var NodeManager
+     */
     private $manager;
+
+    /**
+     * @var SessionInterface
+     */
     private $session;
+
+    /**
+     * @var WorkspaceInterface
+     */
     private $workspace;
+
+    /**
+     * @var NodeInterface
+     */
     private $node1;
+
+    /**
+     * @var NodeInterface
+     */
     private $node2;
 
     public function setUp()
@@ -67,7 +86,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * It should throw an exception if the node1 was not found.
      *
-     * @expectedException Sulu\Component\DocumentManager\Exception\DocumentNotFoundException
+     * @expectedException \Sulu\Component\DocumentManager\Exception\DocumentNotFoundException
      */
     public function testFindNotFound()
     {

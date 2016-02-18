@@ -19,8 +19,7 @@ use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
 
 /**
- * The node manager is responsible for talking to the PHPCR
- * implementation.
+ * The node manager is responsible for talking to the PHPCR implementation.
  */
 class NodeManager
 {

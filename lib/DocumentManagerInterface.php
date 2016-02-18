@@ -16,8 +16,7 @@ use Sulu\Component\DocumentManager\Query\Query;
 interface DocumentManagerInterface
 {
     /**
-     * Find a document by path or UUID in the given
-     * locale, optionally enforcing the given type.
+     * Find a document by path or UUID in the given locale, optionally enforcing the given type.
      *
      * @param string $identifier Path or UUID
      * @param string $locale Locale
@@ -50,16 +49,15 @@ interface DocumentManagerInterface
     public function persist($document, $locale = null, array $options = []);
 
     /**
-     * Remove the document. The document should be unregistered
-     * and the related PHPCR node should be removed from the session.
+     * Remove the document. The document should be unregistered and the related PHPCR node should be removed from the
+     * session.
      *
      * @param object $document
      */
     public function remove($document);
 
     /**
-     * Move the PHPCR node to which the document is mapped to be
-     * a child of the node at the given path or UUID.
+     * Move the PHPCR node to which the document is mapped to be a child of the node at the given path or UUID.
      *
      * @param object $document
      * @param string $destId Path or UUID
@@ -67,8 +65,7 @@ interface DocumentManagerInterface
     public function move($document, $destId);
 
     /**
-     * Create a copy of the node representing the given document
-     * at the given path.
+     * Create a copy of the node representing the given document at the given path.
      *
      * @param object $document
      * @param string $destPath
@@ -99,17 +96,15 @@ interface DocumentManagerInterface
     public function flush();
 
     /**
-     * Clear the document manager, should reset the underlying PHPCR
-     * session and deregister all documents.
+     * Clear the document manager, should reset the underlying PHPCR session and deregister all documents.
      */
     public function clear();
 
     /**
      * Create a new query from a JCR-SQL2 query string.
      *
-     * NOTE: This should not be used generally as it exposes the
-     *       database structure and breaks abstraction. Use the domain-aware
-     *       query builder instead.
+     * NOTE: This should not be used generally as it exposes the database structure and breaks abstraction. Use the
+     *       domain-aware query builder instead.
      *
      * @param mixed $query Either a JCR-SQL2 string, or a PHPCR query object
      * @param string $locale
