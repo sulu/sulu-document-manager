@@ -70,6 +70,13 @@ interface MetadataFactoryInterface
     public function hasMetadataForClass($class);
 
     /**
+     * Return the metadata for all managed document classes.
+     *
+     * @return Metadata[]
+     */
+    public function getAllMetadata();
+
+    /**
      * Return true if the given alias exists.
      *
      * @param string $alias
