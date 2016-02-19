@@ -173,6 +173,19 @@ class BaseMetadataFactory implements MetadataFactoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getAllMetadata()
+    {
+        $metadatas = [];
+        foreach (array_keys($this->aliasMap) as $alias) {
+            $metadatas[] = $this->getMetadataForAlias($alias);
+        }
+
+        return $metadatas;
+    }
+
+    /**
      * @param array $mapping
      *
      * @return Metadata

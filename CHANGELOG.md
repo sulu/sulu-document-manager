@@ -1,6 +1,8 @@
 CHANGELOG for Sulu
 ==================
 
+* dev-develop
+    * Added getAllMetadata() method to MetadataFactoryInterface
 * 0.5.0 (2015-12-18)
     * FEATURE #56 added auto_name option to deactivate renaming of nodes in certain situations
 
