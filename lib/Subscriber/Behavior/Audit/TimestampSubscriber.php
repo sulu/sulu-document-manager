@@ -11,14 +11,15 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Audit;
 
+use Sulu\Component\DocumentManager\Behavior\Audit\LocalizedTimestampBehavior;
 use Sulu\Component\DocumentManager\Behavior\Audit\TimestampBehavior;
+use Sulu\Component\DocumentManager\Event\MetadataLoadEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Manage the timestamp (created, changed) fields on
- * documents before they are persisted.
+ * Manage the timestamp (created, changed) fields on documents before they are persisted.
  */
 class TimestampSubscriber implements EventSubscriberInterface
 {
@@ -37,26 +38,31 @@ class TimestampSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param MetadataLoadEvent
+     * @param MetadataLoadEvent $event
      */
-    public function handleMetadataLoad($event)
+    public function handleMetadataLoad(MetadataLoadEvent $event)
     {
-        if (!$event->getMetadata()->getReflectionClass()->isSubclassOf(TimestampBehavior::class)) {
+        if (!$event->getMetadata()->getReflectionClass()->isSubclassOf(LocalizedTimestampBehavior::class)) {
             return;
+        }
+
+        $encoding = 'system_localized';
+        if ($event->getMetadata()->getReflectionClass()->isSubclassOf(TimestampBehavior::class)) {
+            $encoding = 'system';
         }
 
         $metadata = $event->getMetadata();
         $metadata->addFieldMapping(
             self::CREATED,
             [
-                'encoding' => 'system_localized',
+                'encoding' => $encoding,
                 'property' => self::CREATED,
             ]
         );
         $metadata->addFieldMapping(
             self::CHANGED,
             [
-                'encoding' => 'system_localized',
+                'encoding' => $encoding,
                 'property' => self::CHANGED,
             ]
         );
@@ -69,7 +75,7 @@ class TimestampSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
 
-        if (!$document instanceof TimestampBehavior) {
+        if (!$document instanceof LocalizedTimestampBehavior) {
             return;
         }
 

@@ -97,6 +97,9 @@ class MappingSubscriber implements EventSubscriberInterface
                 case 'reference':
                     $this->persistReference($node, $accessor, $fieldName, $locale, $fieldMapping);
                     break;
+                case 'json_array':
+                    $this->persistJsonArray($node, $accessor, $fieldName, $locale, $fieldMapping);
+                    break;
                 default:
                     $this->persistGeneric($node, $accessor, $fieldName, $locale, $fieldMapping);
             }
@@ -139,7 +142,7 @@ class MappingSubscriber implements EventSubscriberInterface
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
             $node->setProperty($phpcrName, $referenceNode);
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -166,7 +169,34 @@ class MappingSubscriber implements EventSubscriberInterface
             $this->validateFieldValue($value, $fieldName, $fieldMapping);
             $node->setProperty($phpcrName, $value);
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            return;
+        }
+    }
+
+    /**
+     * Persist "json_array" field types.
+     *
+     * @param NodeInterface $node
+     * @param DocumentAccessor $accessor
+     * @param mixed $fieldName
+     * @param mixed $locale
+     * @param array $fieldMapping
+     */
+    private function persistJsonArray(
+        NodeInterface $node,
+        DocumentAccessor $accessor,
+        $fieldName,
+        $locale,
+        array $fieldMapping
+    ) {
+        try {
+            $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+            $value = $accessor->get($fieldName);
+            $this->validateFieldValue($value, $fieldName, $fieldMapping);
+            $node->setProperty($phpcrName, json_encode($value));
+        } catch (InvalidLocaleException $ex) {
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -198,7 +228,18 @@ class MappingSubscriber implements EventSubscriberInterface
 
             switch ($fieldMapping['type']) {
                 case 'reference':
-                    $this->hydrateReferenceField($node, $document, $accessor, $fieldName, $locale, $fieldMapping);
+                    $this->hydrateReferenceField(
+                        $node,
+                        $document,
+                        $accessor,
+                        $fieldName,
+                        $locale,
+                        $fieldMapping,
+                        $event->getOptions()
+                    );
+                    break;
+                case 'json_array':
+                    $this->hydrateJsonArrayField($node, $accessor, $fieldName, $locale, $fieldMapping);
                     break;
                 default:
                     $this->hydrateGenericField($node, $accessor, $fieldName, $locale, $fieldMapping);
@@ -215,6 +256,7 @@ class MappingSubscriber implements EventSubscriberInterface
      * @param mixed $fieldName
      * @param mixed $locale
      * @param array $fieldMapping
+     * @param array $options
      */
     private function hydrateReferenceField(
         NodeInterface $node,
@@ -222,7 +264,8 @@ class MappingSubscriber implements EventSubscriberInterface
         DocumentAccessor $accessor,
         $fieldName,
         $locale,
-        array $fieldMapping
+        array $fieldMapping,
+        array $options
     ) {
         try {
             $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
@@ -234,11 +277,11 @@ class MappingSubscriber implements EventSubscriberInterface
             if ($referencedNode) {
                 $accessor->set(
                     $fieldName,
-                    $this->proxyFactory->createProxyForNode($document, $referencedNode)
+                    $this->proxyFactory->createProxyForNode($document, $referencedNode, $options)
                 );
             }
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }
@@ -267,7 +310,36 @@ class MappingSubscriber implements EventSubscriberInterface
             );
             $accessor->set($fieldName, $value);
         } catch (InvalidLocaleException $ex) {
-            // arguments unvalid no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
+            return;
+        }
+    }
+
+    /**
+     * Hydrate "json_array" field types.
+     *
+     * @param NodeInterface $node
+     * @param DocumentAccessor $accessor
+     * @param mixed $fieldName
+     * @param mixed $locale
+     * @param array $fieldMapping
+     */
+    private function hydrateJsonArrayField(
+        NodeInterface $node,
+        DocumentAccessor $accessor,
+        $fieldName,
+        $locale,
+        array $fieldMapping
+    ) {
+        try {
+            $phpcrName = $this->encoder->encode($fieldMapping['encoding'], $fieldMapping['property'], $locale);
+            $value = $node->getPropertyValueWithDefault(
+                $phpcrName,
+                $this->getDefaultValue($fieldMapping)
+            );
+            $accessor->set($fieldName, json_decode($value, true));
+        } catch (InvalidLocaleException $ex) {
+            // arguments invalid, no valid propertyname could be generated (e.g. no locale given for localized encoding)
             return;
         }
     }

@@ -15,12 +15,19 @@ use Sulu\Component\DocumentManager\PathSegmentRegistry;
 
 class PathSegmentRegistryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var PathSegmentRegistry
+     */
+    private $pathRegistry;
+
     public function setUp()
     {
-        $this->pathRegistry = new PathSegmentRegistry([
-            'base' => 'cmf',
-            'foobar' => 'barfoo',
-        ]);
+        $this->pathRegistry = new PathSegmentRegistry(
+            [
+                'base' => 'cmf',
+                'foobar' => 'barfoo',
+            ]
+        );
     }
 
     /**

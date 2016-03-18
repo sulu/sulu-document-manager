@@ -11,8 +11,17 @@
 namespace Sulu\Component\DocumentManager\Behavior\Audit;
 
 /**
- * Adds the date when created and lastly changed the document (without locale).
+ * Adds the date when created and lastly changed the document.
  */
-interface TimestampBehavior extends LocalizedTimestampBehavior
+interface LocalizedTimestampBehavior
 {
+    /**
+     * @return \DateTime
+     */
+    public function getCreated();
+
+    /**
+     * @return \DateTime
+     */
+    public function getChanged();
 }
