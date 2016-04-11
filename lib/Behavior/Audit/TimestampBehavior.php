@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Sulu.
  *
@@ -11,15 +10,9 @@
 
 namespace Sulu\Component\DocumentManager\Behavior\Audit;
 
-interface TimestampBehavior
+/**
+ * Adds the date when created and lastly changed the document (without locale).
+ */
+interface TimestampBehavior extends LocalizedTimestampBehavior
 {
-    /**
-     * @return \DateTime
-     */
-    public function getCreated();
-
-    /**
-     * @return \DateTime
-     */
-    public function getChanged();
 }

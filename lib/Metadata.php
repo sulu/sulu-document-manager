@@ -99,7 +99,7 @@ class Metadata
     }
 
     /**
-     * @return ReflectionClass
+     * @return \ReflectionClass
      */
     public function getReflectionClass()
     {

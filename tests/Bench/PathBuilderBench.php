@@ -1,15 +1,27 @@
 <?php
 
+/*
+ * This file is part of Sulu.
+ *
+ * (c) MASSIVE ART WebServices GmbH
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Sulu\Component\DocumentManager\tests\Bench;
 
-use PhpBench\Benchmark;
 use Sulu\Component\DocumentManager\PathBuilder;
 use Sulu\Component\DocumentManager\PathSegmentRegistry;
 
 /**
- * @group path_builder
+ * @Groups({"path_builder"})
+ * @Revs(1000)
+ * @Iterations(4)
+ * @BeforeMethods({"setUp"})
+ * @ParamProviders({"provideElements"})
  */
-class PathBuilderBench implements Benchmark
+class PathBuilderBench
 {
     private $pathBuilder;
 
@@ -22,15 +34,9 @@ class PathBuilderBench implements Benchmark
         $this->pathBuilder = new PathBuilder($registry);
     }
 
-    /**
-     * @description Build path 1000 times
-     * @revs 1000
-     * @beforeMethod setUp
-     * @paramProvider provideElements
-     */
-    public function benchBuild($iteration)
+    public function benchBuild($params)
     {
-        $this->pathBuilder->build($iteration->getParameter('elements'));
+        $this->pathBuilder->build($params['elements']);
     }
 
     public function provideElements()

@@ -1,6 +1,11 @@
 CHANGELOG for Sulu
 ==================
 
+* 0.6.0 (2016-04-11)
+    * ENHANCEMENT #58 Added behavior to save unlocalized timestamps and added json_array mapping type
+    * ENHANCEMENT #59 Removed blame subscriber
+    * Added getAllMetadata() method to MetadataFactoryInterface
+
 * 0.5.1 (2015-12-18)
     * FEATURE #56 added auto_name option to deactivate renaming of nodes in certain situations
 

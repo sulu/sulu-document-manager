@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -11,10 +11,9 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Bench;
 
-use PhpBench\Benchmark;
 use Sulu\Component\DocumentManager\Tests\Bootstrap;
 
-abstract class BaseBench implements Benchmark
+abstract class BaseBench
 {
     const BASE_NAME = 'test';
     const BASE_PATH = '/test';

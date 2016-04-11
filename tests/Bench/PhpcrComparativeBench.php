@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -11,10 +11,11 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Bench;
 
-use PhpBench\Benchmark\Iteration;
-
 /**
- * @group phpcr_comparison
+ * @Groups({"phpcr_comparison"})
+ * @Iterations(4)
+ * @ParamProviders({"provideNodeTotals"})
+ * @BeforeMethods({"init"})
  */
 class PhpcrComparativeBench extends BaseBench
 {
@@ -23,22 +24,13 @@ class PhpcrComparativeBench extends BaseBench
         $this->initPhpcr();
     }
 
-    /**
-     * @description persist and find nodes using the Document Manager
-     * @iterations 4
-     * @paramProvider provideNodeTotals
-     * @paramProvider provideLocales
-     * @beforeMethod init
-     * @group phpcr_comparison
-     */
-    public function benchCreatePersist(Iteration $iteration)
+    public function benchCreatePersist($params)
     {
         $manager = $this->getDocumentManager();
-        $locales = $iteration->getParameter('locales');
 
-        for ($i = 0; $i < $iteration->getParameter('nb_nodes'); ++$i) {
+        for ($i = 0; $i < $params['nb_nodes']; ++$i) {
             $document = $manager->create('full');
-            foreach ($locales as $locale) {
+            foreach (['en', 'de', 'fr'] as $locale) {
                 $manager->persist($document, $locale, [
                     'path' => self::BASE_PATH . '/node-' . $i,
                 ]);
@@ -48,21 +40,14 @@ class PhpcrComparativeBench extends BaseBench
         $manager->flush();
     }
 
-    /**
-     * @description persist and find nodes using raw PHPCR
-     * @iterations 4
-     * @paramProvider provideNodeTotals
-     * @paramProvider provideLocales
-     * @beforeMethod init
-     */
-    public function benchCreatePersistPhpcr(Iteration $iteration)
+    public function benchCreatePersistPhpcr($params)
     {
         $session = $this->getSession();
         $baseNode = $session->getNode(self::BASE_PATH);
 
-        for ($i = 0; $i < $iteration->getParameter('nb_nodes'); ++$i) {
+        for ($i = 0; $i < $params['nb_nodes']; ++$i) {
             $node = $baseNode->addNode('node-' . $i);
-            foreach ($iteration->getParameter('locales') as $locale) {
+            foreach (['en', 'de', 'fr'] as $locale) {
                 $node->addMixin('mix:test');
                 $node->setProperty('lsys:' . $locale . '-created', new \DateTime());
                 $node->setProperty('lsys:' . $locale . '-changed', new \DateTime());
@@ -83,21 +68,6 @@ class PhpcrComparativeBench extends BaseBench
             ],
             [
                 'nb_nodes' => 100,
-            ],
-        ];
-    }
-
-    public function provideLocales()
-    {
-        return [
-            [
-                'locales' => ['en'],
-            ],
-            [
-                'locales' => ['en', 'de'],
-            ],
-            [
-                'locales' => ['en', 'de', 'fr'],
             ],
         ];
     }

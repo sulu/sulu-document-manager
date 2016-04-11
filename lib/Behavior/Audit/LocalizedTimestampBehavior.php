@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Sulu.
  *
@@ -11,15 +10,18 @@
 
 namespace Sulu\Component\DocumentManager\Behavior\Audit;
 
-interface BlameBehavior
+/**
+ * Adds the date when created and lastly changed the document.
+ */
+interface LocalizedTimestampBehavior
 {
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getCreator();
+    public function getCreated();
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getChanger();
+    public function getChanged();
 }

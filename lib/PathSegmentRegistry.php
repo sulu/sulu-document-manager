@@ -55,8 +55,6 @@ class PathSegmentRegistry
             );
         }
 
-        $name = $this->pathSegments[$name];
-
-        return $name;
+        return $this->pathSegments[$name];
     }
 }

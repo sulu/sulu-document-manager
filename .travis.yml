@@ -13,6 +13,8 @@ before_script:
 
 script: 
   - phpunit
+  # run the benchmarks with 1 iteration and 1 rev each to ensure that they work.
+  - php ./vendor/bin/phpbench run --progress=dots --iterations=1 --revs=1
 
 notifications:
   slack:

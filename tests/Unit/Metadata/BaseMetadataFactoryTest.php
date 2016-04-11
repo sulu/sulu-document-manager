@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -138,5 +138,17 @@ class BaseMetadataFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->factory->hasAlias('page'));
         $this->assertFalse($this->factory->hasAlias('fooabarbardg'));
+    }
+
+    /**
+     * It should return metadata for all mapped documents.
+     */
+    public function testAllMetadata()
+    {
+        $metadatas = $this->factory->getAllMetadata();
+        $this->assertCount(2, $metadatas);
+        $this->assertContainsOnlyInstancesOf('Sulu\Component\DocumentManager\Metadata', $metadatas);
+        $metadata = reset($metadatas);
+        $this->assertEquals('Class\Page', $metadata->getClass());
     }
 }

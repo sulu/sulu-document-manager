@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of Sulu.
  *
  * (c) MASSIVE ART WebServices GmbH
  *
@@ -12,7 +12,7 @@
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit;
 
 use Prophecy\Argument;
-use Sulu\Component\DocumentManager\Behavior\Audit\TimestampBehavior;
+use Sulu\Component\DocumentManager\Behavior\Audit\LocalizedTimestampBehavior;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Audit\TimestampSubscriber;
@@ -125,7 +125,7 @@ class TimestampSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class TestDocument implements TimestampBehavior
+class TestDocument implements LocalizedTimestampBehavior
 {
     private $created;
     private $changed;

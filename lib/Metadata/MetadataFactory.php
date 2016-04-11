@@ -117,6 +117,14 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getAllMetadata()
+    {
+        return $this->metadataFactory->getAllMetadata();
+    }
+
+    /**
      * @return Metadata
      */
     private function getUnknownMetadata()
