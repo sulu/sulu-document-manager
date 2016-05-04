@@ -11,26 +11,40 @@
 
 namespace Sulu\Component\DocumentManager\Event;
 
+use PHPCR\NodeInterface;
+
 class CopyEvent extends MoveEvent
 {
     /**
-     * @var string
+     * @var NodeInterface
      */
-    private $copiedPath;
+    private $copiedNode;
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCopiedPath()
     {
-        return $this->copiedPath;
+        if (!$this->copiedNode) {
+            return;
+        }
+
+        return $this->copiedNode->getPath();
     }
 
     /**
-     * @param string $copiedPath
+     * @return NodeInterface
      */
-    public function setCopiedPath($copiedPath)
+    public function getCopiedNode()
     {
-        $this->copiedPath = $copiedPath;
+        return $this->copiedNode;
+    }
+
+    /**
+     * @param NodeInterface $copiedNode
+     */
+    public function setCopiedNode($copiedNode)
+    {
+        $this->copiedNode = $copiedNode;
     }
 }

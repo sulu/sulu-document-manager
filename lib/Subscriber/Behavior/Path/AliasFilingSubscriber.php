@@ -12,6 +12,7 @@
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use Doctrine\Common\Inflector\Inflector;
+use PHPCR\SessionInterface;
 use Sulu\Component\DocumentManager\Behavior\Path\AliasFilingBehavior;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
@@ -33,10 +34,11 @@ class AliasFilingSubscriber extends AbstractFilingSubscriber
      * @param MetadataFactoryInterface $metadataFactory
      */
     public function __construct(
-        NodeManager $nodeManager,
+        SessionInterface $defaultSession,
+        SessionInterface $liveSession,
         MetadataFactoryInterface $metadataFactory
     ) {
-        parent::__construct($nodeManager);
+        parent::__construct($defaultSession, $liveSession);
         $this->metadataFactory = $metadataFactory;
     }
 

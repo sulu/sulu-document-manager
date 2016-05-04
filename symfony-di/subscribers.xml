@@ -77,8 +77,7 @@
         </service>
 
         <service id="sulu_document_manager.subscriber.phpcr.reorder" class="Sulu\Component\DocumentManager\Subscriber\Phpcr\ReorderSubscriber">
-            <argument type="service" id="sulu_document_manager.node_manager"/>
-            <argument type="service" id="sulu_document_manager.document_registry"/>
+            <argument type="service" id="sulu_document_manager.node_helper"/>
             <tag name="sulu_document_manager.event_subscriber"/>
         </service>
 
@@ -99,6 +98,7 @@
         <service id="sulu_document_manager.subscriber.phpcr.general" class="Sulu\Component\DocumentManager\Subscriber\Phpcr\GeneralSubscriber">
             <argument type="service" id="sulu_document_manager.document_registry"/>
             <argument type="service" id="sulu_document_manager.node_manager"/>
+            <argument type="service" id="sulu_document_manager.node_helper"/>
             <argument type="service" id="sulu_document_manager.event_dispatcher"/>
             <tag name="sulu_document_manager.event_subscriber"/>
         </service>

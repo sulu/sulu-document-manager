@@ -101,10 +101,19 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function reorder($document, $destId, $after = false)
+    public function reorder($document, $destId)
     {
-        $event = new Event\ReorderEvent($document, $destId, $after);
+        $event = new Event\ReorderEvent($document, $destId);
         $this->eventDispatcher->dispatch(Events::REORDER, $event);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publish($document, $locale)
+    {
+        $event = new Event\PublishEvent($document, $locale);
+        $this->eventDispatcher->dispatch(Events::PUBLISH, $event);
     }
 
     /**

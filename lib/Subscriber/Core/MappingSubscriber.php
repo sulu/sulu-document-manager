@@ -15,7 +15,6 @@ use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
-use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\InvalidLocaleException;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
@@ -74,14 +73,15 @@ class MappingSubscriber implements EventSubscriberInterface
     {
         return [
             Events::HYDRATE => ['handleHydrate', -100],
-            Events::PERSIST => ['handlePersist', -100],
+            Events::PERSIST => ['handleMapping', -100],
+            Events::PUBLISH => ['handleMapping', -128],
         ];
     }
 
     /**
-     * @param PersistEvent $event
+     * @param AbstractMappingEvent $event
      */
-    public function handlePersist(PersistEvent $event)
+    public function handleMapping(AbstractMappingEvent $event)
     {
         $metadata = $this->factory->getMetadataForClass(get_class($event->getDocument()));
         $locale = $event->getLocale();

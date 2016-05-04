@@ -6,6 +6,7 @@ CHANGELOG for Sulu
     * ENHANCEMENT #89 Extracted LocalizedTitleBehavior from TitleBehavior
     * BUGFIX      #90 Added missing check in handleChangeParent method of ParentSubscriber
     * BUGFIX      #88 Introduced mandatory locale in document-registry
+    * FEATURE     #81 Added publish method to DocumentManager
     * BUGFIX      #85 Fixed get locale for proxy
 
 * 0.6.1 (2016-06-01)
