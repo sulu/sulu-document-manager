@@ -18,6 +18,7 @@ use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
+use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
@@ -144,15 +145,16 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 
     /**
      * It should throw an exception if the document has no title.
-     *
-     * @expectedException Sulu\Component\DocumentManager\Exception\DocumentManagerException
      */
     public function testNoTitle()
     {
+        $this->setExpectedException(DocumentManagerException::class);
+
         $this->persistEvent->hasNode()->willReturn(false);
         $this->document->getTitle()->willReturn(null);
         $this->persistEvent->getOption('auto_name')->willReturn(true);
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
+        $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
 
@@ -171,6 +173,20 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testAutoNameWithDisabledOption()
     {
         $this->persistEvent->getOption('auto_name')->willReturn(false);
+        $this->persistEvent->getDocument()->willReturn($this->prophesize(AutoNameBehavior::class)->reveal());
+        $this->persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->node->rename(Argument::any())->shouldNotBeCalled();
+
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not assign a new name, if a not supported document is passed.
+     */
+    public function testAutoNameWithNotSupportedDocument()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(false);
+        $this->persistEvent->getDocument()->willReturn(new \stdClass());
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->node->rename(Argument::any())->shouldNotBeCalled();
 
@@ -187,7 +203,6 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->doTestAutoName('hai-bye', 'hai-2', false, true);
         $this->node->getParent()->willReturn($this->parentNode->reveal());
         $this->parentNode->getNodeNames()->willReturn(['hai-bye']);
-        $this->node->rename('hai-bye')->shouldBeCalled();
         $this->node->hasNode()->willReturn(true);
         $this->node->getName()->willReturn('foo');
 
@@ -223,6 +238,102 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->moveEvent->setDestName('foobar')->shouldBeCalled();
 
         $this->subscriber->handleMove($this->moveEvent->reveal());
+    }
+
+    /**
+     * It should rename the node.
+     */
+    public function testRename()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->hasNode()->willReturn(true);
+        $this->persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
+        $this->persistEvent->getLocale()->willReturn('en');
+        $this->persistEvent->getDocument()->willReturn($this->document->reveal());
+
+        $this->node->isNew()->willReturn(false);
+        $this->node->getName()->willReturn('foobar');
+        $this->node->getParent()->willReturn($this->parentNode->reveal());
+        $this->node->rename('test')->shouldBeCalled();
+
+        $this->document->getTitle()->willReturn('Test');
+        $this->slugifier->slugify('Test')->willReturn('test');
+        $this->resolver->resolveName($this->parentNode->reveal(), 'test', $this->node->reveal())->willReturn('test');
+
+        $this->subscriber->handleRename($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not rename the node for auto_name false.
+     */
+    public function testRenameAutoNameFalse()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(false);
+        $this->persistEvent->getDocument()->willReturn($this->document->reveal());
+
+        $this->node->rename(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleRename($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not rename the node for a document which does not implement AutoNameBehavior.
+     */
+    public function testRenameWrongDocument()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getDocument()->willReturn(new \stdClass());
+
+        $this->node->rename(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleRename($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not rename the node for not for a locale which is not default.
+     */
+    public function testRenameNotDefaultLocale()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getDocument()->willReturn($this->document->reveal());
+        $this->persistEvent->getLocale()->willReturn('de');
+
+        $this->node->rename(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleRename($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not rename the node if no node isset.
+     */
+    public function testRenameForNoNode()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getDocument()->willReturn($this->document->reveal());
+        $this->persistEvent->getLocale()->willReturn('en');
+        $this->persistEvent->hasNode()->willReturn(false);
+
+        $this->node->rename(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleRename($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should not rename the node if node is new.
+     */
+    public function testRenameForNewNode()
+    {
+        $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getDocument()->willReturn($this->document->reveal());
+        $this->persistEvent->getLocale()->willReturn('en');
+        $this->persistEvent->hasNode()->willReturn(true);
+        $this->persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->node->isNew()->willReturn(true);
+
+        $this->node->rename(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleRename($this->persistEvent->reveal());
     }
 
     private function doTestAutoName($title, $expectedName, $create = false, $hasNode = false)
