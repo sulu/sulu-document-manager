@@ -77,10 +77,11 @@ class ProxyFactory
      */
     public function createProxyForNode($fromDocument, NodeInterface $targetNode, $options = [])
     {
+        $locale = $this->registry->getOriginalLocaleForDocument($fromDocument);
+
         // if node is already registered then just return the registered document
         if ($this->registry->hasNode($targetNode)) {
             $document = $this->registry->getDocumentForNode($targetNode);
-            $locale = $this->registry->getOriginalLocaleForDocument($fromDocument);
 
             // If the parent is not loaded in the correct locale, reload it in the correct locale.
             if ($this->registry->getOriginalLocaleForDocument($document) !== $locale) {
@@ -95,10 +96,9 @@ class ProxyFactory
         $initializer = function (LazyLoadingInterface $document, $method, array $parameters, &$initializer) use (
             $fromDocument,
             $targetNode,
-            $options
+            $options,
+            $locale
         ) {
-            $locale = $this->registry->getOriginalLocaleForDocument($fromDocument);
-
             $hydrateEvent = new HydrateEvent($targetNode, $locale, $options);
             $hydrateEvent->setDocument($document);
             $this->dispatcher->dispatch(Events::HYDRATE, $hydrateEvent);
