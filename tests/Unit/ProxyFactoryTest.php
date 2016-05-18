@@ -56,7 +56,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateProxy()
     {
-        $this->documentRegistry->hasNode(Argument::any())->willReturn(false);
+        $this->documentRegistry->hasNode(Argument::type(NodeInterface::class), 'de')->willReturn(false);
         $this->documentRegistry->getDocumentForNode(Argument::any())->willReturn(new \stdClass());
         $this->documentRegistry->getOriginalLocaleForDocument(Argument::any())->willReturn('de');
         $this->documentRegistry->registerDocument(Argument::cetera())->willReturn(null);

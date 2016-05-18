@@ -2,8 +2,8 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * BUGFIX      #88 Introduced mandatory locale in document-registry
     * BUGFIX      #85 Fixed get locale for proxy
-    * HOTFIX      #82 Introduced mandatory locale in document-registry
 
 * 0.6.0 (2016-04-11)
     * ENHANCEMENT #58 Added behavior to save unlocalized timestamps and added json_array mapping type
