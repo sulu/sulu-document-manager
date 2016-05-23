@@ -2,7 +2,10 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * BUGFIX      #88 Introduced mandatory locale in document-registry
     * BUGFIX      #85 Fixed get locale for proxy
+
+* 0.6.0 (2016-04-11)
     * ENHANCEMENT #58 Added behavior to save unlocalized timestamps and added json_array mapping type
     * ENHANCEMENT #59 Removed blame subscriber
     * Added getAllMetadata() method to MetadataFactoryInterface

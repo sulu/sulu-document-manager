@@ -77,11 +77,10 @@ class ProxyFactory
      */
     public function createProxyForNode($fromDocument, NodeInterface $targetNode, $options = [])
     {
-        $locale = $this->registry->getOriginalLocaleForDocument($fromDocument);
-
         // if node is already registered then just return the registered document
-        if ($this->registry->hasNode($targetNode)) {
-            $document = $this->registry->getDocumentForNode($targetNode);
+        $locale = $this->registry->getOriginalLocaleForDocument($fromDocument);
+        if ($this->registry->hasNode($targetNode, $locale)) {
+            $document = $this->registry->getDocumentForNode($targetNode, $locale);
 
             // If the parent is not loaded in the correct locale, reload it in the correct locale.
             if ($this->registry->getOriginalLocaleForDocument($document) !== $locale) {
