@@ -1,7 +1,7 @@
 CHANGELOG for Sulu
 ==================
 
-* dev-master
+* 0.6.1 (2016-06-01)
     * HOTFIX      #83 Fixed auto-name subscriber to rename at the very end of persist 
 
 * 0.6.0 (2016-04-11)
