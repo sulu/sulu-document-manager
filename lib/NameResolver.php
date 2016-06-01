@@ -27,21 +27,11 @@ class NameResolver
      */
     public function resolveName(NodeInterface $parentNode, $name, $forNode = null)
     {
-        if ($forNode && $parentNode->hasNode($name) && $parentNode->getNode($name) == $forNode) {
-            return $name;
-        }
-
         $index = 0;
         $baseName = $name;
-        do {
-            if ($index > 0) {
-                $name = $baseName . '-' . $index;
-            }
-
-            $hasChild = $parentNode->hasNode($name);
-
-            ++$index;
-        } while ($hasChild);
+        while ($parentNode->hasNode($name) && (!$forNode || $parentNode->getNode($name) !== $forNode)) {
+            $name = $baseName . '-' . ++$index;
+        }
 
         return $name;
     }

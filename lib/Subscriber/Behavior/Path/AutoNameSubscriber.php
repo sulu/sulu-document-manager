@@ -87,7 +87,12 @@ class AutoNameSubscriber implements EventSubscriberInterface
     {
         return [
             Events::CONFIGURE_OPTIONS => 'configureOptions',
-            Events::PERSIST => ['handlePersist', 480],
+            Events::PERSIST => [
+                ['handlePersist', 480],
+                // the rename has to done at the very end to avoid ItemNotFoundException
+                // see https://github.com/jackalope/jackalope/blob/3cf6e0582acb26b5b83b3445be238ea8aadf46ec/src/Jackalope/ObjectManager.php#L429
+                ['handleRename', -480],
+            ],
             Events::MOVE => ['handleMove', 480],
             Events::COPY => ['handleCopy', 480],
         ];
@@ -125,16 +130,59 @@ class AutoNameSubscriber implements EventSubscriberInterface
      */
     public function handlePersist(PersistEvent $event)
     {
-        if (!$event->getOption('auto_name')) {
-            return;
-        }
-
         $document = $event->getDocument();
-
-        if (!$document instanceof AutoNameBehavior) {
+        if (!$event->getOption('auto_name') || !$document instanceof AutoNameBehavior || $event->hasNode()) {
             return;
         }
 
+        $parentNode = $event->getParentNode();
+        $name = $this->getName($document, $parentNode);
+        $node = $this->documentStrategy->createNodeForDocument($document, $parentNode, $name);
+        $event->setNode($node);
+    }
+
+    /**
+     * Renames node if necessary.
+     *
+     * @param PersistEvent $event
+     */
+    public function handleRename(PersistEvent $event)
+    {
+        $document = $event->getDocument();
+        $defaultLocale = $this->registry->getDefaultLocale();
+
+        if (!$event->getOption('auto_name')
+            || !$document instanceof AutoNameBehavior
+            || $defaultLocale !== $event->getLocale()
+            || !$event->hasNode()
+            || $event->getNode()->isNew()
+        ) {
+            return;
+        }
+
+        $node = $event->getNode();
+        $name = $this->getName($document, $event->getParentNode(), $node);
+
+        if ($name === $node->getName()) {
+            return;
+        }
+
+        $this->rename($event->getNode(), $name);
+    }
+
+    /**
+     * Returns unique name for given document and nodes.
+     *
+     * @param AutoNameBehavior $document
+     * @param NodeInterface $parentNode
+     * @param NodeInterface|null $node
+     *
+     * @return string
+     *
+     * @throws DocumentManagerException
+     */
+    private function getName(AutoNameBehavior $document, NodeInterface $parentNode, NodeInterface $node = null)
+    {
         $title = $document->getTitle();
 
         if (!$title) {
@@ -148,30 +196,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
 
         $name = $this->slugifier->slugify($title);
 
-        $parentNode = $event->getParentNode();
-
-        $node = $event->hasNode() ? $event->getNode() : null;
-        $name = $this->resolver->resolveName($parentNode, $name, $node);
-
-        if (null === $node) {
-            $node = $this->documentStrategy->createNodeForDocument($document, $parentNode, $name);
-            $event->setNode($node);
-
-            return;
-        }
-
-        if ($name === $node->getName()) {
-            return;
-        }
-
-        $node = $event->getNode();
-        $defaultLocale = $this->registry->getDefaultLocale();
-
-        if ($defaultLocale != $event->getLocale()) {
-            return;
-        }
-
-        $this->rename($node, $name);
+        return $this->resolver->resolveName($parentNode, $name, $node);
     }
 
     /**
