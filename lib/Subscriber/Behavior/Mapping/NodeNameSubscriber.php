@@ -28,9 +28,22 @@ class NodeNameSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::HYDRATE => 'handleNodeName',
-            Events::PERSIST => 'handleNodeName',
+            Events::HYDRATE => 'setFinalNodeName',
+            Events::PERSIST => [
+                ['setInitialNodeName', 0],
+                ['setFinalNodeName', -480]
+            ],
         ];
+    }
+
+    public function setInitialNodeName(AbstractMappingEvent $event)
+    {
+        $this->setNodeName($event);
+    }
+
+    public function setFinalNodeName(AbstractMappingEvent $event)
+    {
+        $this->setNodeName($event);
     }
 
     /**
@@ -38,7 +51,7 @@ class NodeNameSubscriber implements EventSubscriberInterface
      *
      * @throws DocumentManagerException
      */
-    public function handleNodeName(AbstractMappingEvent $event)
+    private function setNodeName(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();
 

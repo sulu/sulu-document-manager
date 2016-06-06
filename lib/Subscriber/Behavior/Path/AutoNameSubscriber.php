@@ -22,6 +22,7 @@ use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Component\DocumentManager\Exception\NodeNameAlreadyExistsException;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
@@ -103,8 +104,14 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $event->getOptions()->setDefaults(
             [
                 'auto_name' => true,
+                'auto_rename' => true,
             ]
         );
+
+        $event->getOptions()->setAllowedTypes([
+            'auto_name' => 'bool',
+            'auto_rename' => 'bool',
+        ]);
     }
 
     /**
@@ -136,7 +143,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         }
 
         $parentNode = $event->getParentNode();
-        $name = $this->getName($document, $parentNode);
+        $name = $this->getName($document, $parentNode, $event->getOption('auto_rename'));
         $node = $this->documentStrategy->createNodeForDocument($document, $parentNode, $name);
         $event->setNode($node);
     }
@@ -161,7 +168,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         }
 
         $node = $event->getNode();
-        $name = $this->getName($document, $event->getParentNode(), $node);
+        $name = $this->getName($document, $event->getParentNode(), $event->getOption('auto_rename'), $node);
 
         if ($name === $node->getName()) {
             return;
@@ -176,13 +183,18 @@ class AutoNameSubscriber implements EventSubscriberInterface
      * @param AutoNameBehavior $document
      * @param NodeInterface $parentNode
      * @param NodeInterface|null $node
+     * @param bool $autoRename
      *
      * @return string
      *
      * @throws DocumentManagerException
      */
-    private function getName(AutoNameBehavior $document, NodeInterface $parentNode, NodeInterface $node = null)
-    {
+    private function getName(
+        AutoNameBehavior $document,
+        NodeInterface $parentNode,
+        $autoRename = true,
+        NodeInterface $node = null
+    ) {
         $title = $document->getTitle();
 
         if (!$title) {
@@ -195,6 +207,10 @@ class AutoNameSubscriber implements EventSubscriberInterface
         }
 
         $name = $this->slugifier->slugify($title);
+
+        if (!$autoRename && $parentNode->hasNode($name)) {
+            throw new NodeNameAlreadyExistsException($name, $document);
+        }
 
         return $this->resolver->resolveName($parentNode, $name, $node);
     }

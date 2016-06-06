@@ -13,12 +13,14 @@ namespace Sulu\Component\DocumentManager\tests\Unit\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
 use Prophecy\Argument;
+use Sulu\Component\DocumentManager\Behavior\Mapping\TitleBehavior;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
+use Sulu\Component\DocumentManager\Exception\NodeNameAlreadyExistsException;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
@@ -153,6 +155,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->hasNode()->willReturn(false);
         $this->document->getTitle()->willReturn(null);
         $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getOption('auto_rename')->willReturn(true);
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
         $this->subscriber->handlePersist($this->persistEvent->reveal());
@@ -246,6 +249,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testRename()
     {
         $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getOption('auto_rename')->willReturn(true);
         $this->persistEvent->hasNode()->willReturn(true);
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
@@ -339,6 +343,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     private function doTestAutoName($title, $expectedName, $create = false, $hasNode = false)
     {
         $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getOption('auto_rename')->willReturn(true);
         $this->persistEvent->hasNode()->willReturn($hasNode);
         $node = $hasNode ? $this->node->reveal() : null;
 

@@ -2,6 +2,7 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * ENHANCEMENT #89 Added `auto_rename` option to AutoNameSubscriber
     * BUGFIX      #88 Introduced mandatory locale in document-registry
     * BUGFIX      #85 Fixed get locale for proxy
 
