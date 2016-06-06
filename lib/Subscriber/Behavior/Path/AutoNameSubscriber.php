@@ -22,7 +22,6 @@ use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\DocumentManager\Exception\NodeNameAlreadyExistsException;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
@@ -105,12 +104,14 @@ class AutoNameSubscriber implements EventSubscriberInterface
             [
                 'auto_name' => true,
                 'auto_rename' => true,
+                'auto_name_locale' => $this->registry->getDefaultLocale(),
             ]
         );
 
         $event->getOptions()->setAllowedTypes([
             'auto_name' => 'bool',
             'auto_rename' => 'bool',
+            'auto_name_locale' => 'string',
         ]);
     }
 
@@ -156,11 +157,10 @@ class AutoNameSubscriber implements EventSubscriberInterface
     public function handleRename(PersistEvent $event)
     {
         $document = $event->getDocument();
-        $defaultLocale = $this->registry->getDefaultLocale();
 
         if (!$event->getOption('auto_name')
             || !$document instanceof AutoNameBehavior
-            || $defaultLocale !== $event->getLocale()
+            || $event->getOption('auto_name_locale') !== $event->getLocale()
             || !$event->hasNode()
             || $event->getNode()->isNew()
         ) {
@@ -208,11 +208,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
 
         $name = $this->slugifier->slugify($title);
 
-        if (!$autoRename && $parentNode->hasNode($name)) {
-            throw new NodeNameAlreadyExistsException($name, $document);
-        }
-
-        return $this->resolver->resolveName($parentNode, $name, $node);
+        return $this->resolver->resolveName($parentNode, $name, $node, $autoRename);
     }
 
     /**

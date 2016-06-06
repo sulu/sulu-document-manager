@@ -13,14 +13,12 @@ namespace Sulu\Component\DocumentManager\tests\Unit\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
 use Prophecy\Argument;
-use Sulu\Component\DocumentManager\Behavior\Mapping\TitleBehavior;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
-use Sulu\Component\DocumentManager\Exception\NodeNameAlreadyExistsException;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\NameResolver;
 use Sulu\Component\DocumentManager\NodeManager;
@@ -250,6 +248,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->persistEvent->getOption('auto_name')->willReturn(true);
         $this->persistEvent->getOption('auto_rename')->willReturn(true);
+        $this->persistEvent->getOption('auto_name_locale')->willReturn('en');
         $this->persistEvent->hasNode()->willReturn(true);
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
@@ -263,7 +262,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->document->getTitle()->willReturn('Test');
         $this->slugifier->slugify('Test')->willReturn('test');
-        $this->resolver->resolveName($this->parentNode->reveal(), 'test', $this->node->reveal())->willReturn('test');
+        $this->resolver->resolveName($this->parentNode->reveal(), 'test', $this->node->reveal(), true)->willReturn('test');
 
         $this->subscriber->handleRename($this->persistEvent->reveal());
     }
@@ -300,6 +299,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testRenameNotDefaultLocale()
     {
         $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getOption('auto_name_locale')->willReturn('en');
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->persistEvent->getLocale()->willReturn('de');
 
@@ -314,6 +314,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testRenameForNoNode()
     {
         $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getOption('auto_name_locale')->willReturn('en');
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->persistEvent->getLocale()->willReturn('en');
         $this->persistEvent->hasNode()->willReturn(false);
@@ -329,6 +330,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testRenameForNewNode()
     {
         $this->persistEvent->getOption('auto_name')->willReturn(true);
+        $this->persistEvent->getOption('auto_name_locale')->willReturn('en');
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->persistEvent->getLocale()->willReturn('en');
         $this->persistEvent->hasNode()->willReturn(true);
@@ -352,7 +354,7 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getDocument()->willReturn($this->document->reveal());
         $this->slugifier->slugify($title)->willReturn($title);
 
-        $this->resolver->resolveName($this->parentNode->reveal(), $title, $node)->willReturn($title);
+        $this->resolver->resolveName($this->parentNode->reveal(), $title, $node, true)->willReturn($title);
         $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
         $this->strategy->createNodeForDocument($this->document->reveal(), $this->parentNode->reveal(), $expectedName)->willReturn($this->newNode->reveal());
 

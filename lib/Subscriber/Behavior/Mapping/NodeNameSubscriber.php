@@ -31,22 +31,34 @@ class NodeNameSubscriber implements EventSubscriberInterface
             Events::HYDRATE => 'setFinalNodeName',
             Events::PERSIST => [
                 ['setInitialNodeName', 0],
-                ['setFinalNodeName', -480]
+                ['setFinalNodeName', -480],
             ],
         ];
     }
 
+    /**
+     * Sets the initial node name.
+     *
+     * @param AbstractMappingEvent $event
+     */
     public function setInitialNodeName(AbstractMappingEvent $event)
     {
         $this->setNodeName($event);
     }
 
+    /**
+     * Sets the final node name at the end, in case it was changed.
+     *
+     * @param AbstractMappingEvent $event
+     */
     public function setFinalNodeName(AbstractMappingEvent $event)
     {
         $this->setNodeName($event);
     }
 
     /**
+     * Sets the node name.
+     *
      * @param AbstractMappingEvent $event
      *
      * @throws DocumentManagerException
