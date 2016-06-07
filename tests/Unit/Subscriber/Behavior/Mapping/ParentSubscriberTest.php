@@ -18,6 +18,7 @@ use Sulu\Component\DocumentManager\DocumentInspector;
 use Sulu\Component\DocumentManager\DocumentManager;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\ProxyFactory;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping\ParentSubscriber;
 
@@ -169,5 +170,15 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->document->setParent(Argument::any())->shouldBeCalled();
 
         $this->subscriber->handleMove($this->moveEvent->reveal());
+    }
+
+    public function testHandleChangeParent()
+    {
+        $persistEvent = $this->prophesize(PersistEvent::class);
+        $persistEvent->getDocument(new \stdClass());
+
+        $this->documentManager->move(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleChangeParent($persistEvent->reveal());
     }
 }

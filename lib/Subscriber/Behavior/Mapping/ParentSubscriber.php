@@ -140,6 +140,10 @@ class ParentSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
 
+        if (!$document instanceof ParentBehavior) {
+            return;
+        }
+
         $node = $this->inspector->getNode($document);
         $parentNode = $event->getParentNode();
 
