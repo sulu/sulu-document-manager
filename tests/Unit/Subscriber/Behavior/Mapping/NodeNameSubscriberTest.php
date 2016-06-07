@@ -19,6 +19,36 @@ use Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping\NodeNameSubscribe
 
 class NodeNameSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var HydrateEvent
+     */
+    private $hydrateEvent;
+
+    /**
+     * @var \stdClass
+     */
+    private $notImplementing;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var TestNodeNameDocument
+     */
+    private $document;
+
+    /**
+     * @var DocumentAccessor
+     */
+    private $accessor;
+
+    /**
+     * @var NodeNameSubscriber
+     */
+    private $subscriber;
+
     public function setUp()
     {
         $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
@@ -36,7 +66,7 @@ class NodeNameSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHydrateNotImplementing()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->notImplementing);
-        $this->subscriber->handleNodeName($this->hydrateEvent->reveal());
+        $this->subscriber->setFinalNodeName($this->hydrateEvent->reveal());
     }
 
     /**
@@ -49,7 +79,7 @@ class NodeNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->hydrateEvent->getAccessor()->willReturn($this->accessor);
         $this->node->getName()->willReturn('hello');
 
-        $this->subscriber->handleNodeName($this->hydrateEvent->reveal());
+        $this->subscriber->setFinalNodeName($this->hydrateEvent->reveal());
 
         $this->assertEquals('hello', $this->document->getNodeName());
     }
