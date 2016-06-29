@@ -76,6 +76,11 @@ class Events
     const PUBLISH = 'sulu_document_manager.publish';
 
     /**
+     * Fired when the document manager unpublish method is called.
+     */
+    const UNPUBLISH = 'sulu_document_manager.unpublish';
+
+    /**
      * Fired when the document manager requests that are flush to persistent storage happen.
      */
     const FLUSH = 'sulu_document_manager.flush';

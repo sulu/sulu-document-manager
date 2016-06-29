@@ -91,6 +91,14 @@ interface DocumentManagerInterface
     public function publish($document, $locale);
 
     /**
+     * Unpublishes a document from the public workspace.
+     *
+     * @param object $document
+     * @param string $locale
+     */
+    public function unpublish($document, $locale);
+
+    /**
      * Refresh the given document with the persisted state of the node.
      *
      * @param object $document
