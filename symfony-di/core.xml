@@ -28,7 +28,7 @@
         </service>
 
         <service id="sulu_document_manager.node_manager" class="Sulu\Component\DocumentManager\NodeManager" public="false">
-            <argument type="service" id="doctrine_phpcr.default_session"/>
+            <argument type="service" id="doctrine_phpcr.session"/>
         </service>
 
         <service id="sulu_document_manager.metadata_factory.base" class="Sulu\Component\DocumentManager\Metadata\BaseMetadataFactory" public="false">

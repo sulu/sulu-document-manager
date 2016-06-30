@@ -31,7 +31,7 @@ class Bootstrap
         }
 
         $container = new ContainerBuilder();
-        $container->set('doctrine_phpcr.default_session', self::createSession());
+        $container->set('doctrine_phpcr.session', self::createSession());
         $logger = new Logger('test');
         $logger->pushHandler(new StreamHandler($logDir . '/test.log'));
 

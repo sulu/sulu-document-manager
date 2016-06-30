@@ -2,6 +2,7 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * ENHANCEMENT #93 Use correct default phpcr session
     * ENHANCEMENT #89 Added auto_rename option to AutoNameSubscriber
     * ENHANCEMENT #89 Extracted LocalizedTitleBehavior from TitleBehavior
     * BUGFIX      #90 Added missing check in handleChangeParent method of ParentSubscriber

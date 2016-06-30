@@ -45,7 +45,7 @@ abstract class BaseBench
 
     protected function getSession()
     {
-        $session = $this->getContainer()->get('doctrine_phpcr.default_session');
+        $session = $this->getContainer()->get('doctrine_phpcr.session');
 
         return $session;
     }
