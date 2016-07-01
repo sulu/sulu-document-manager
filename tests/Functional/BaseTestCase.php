@@ -32,7 +32,7 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getSession()
     {
-        return $this->getContainer()->get('doctrine_phpcr.default_session');
+        return $this->getContainer()->get('doctrine_phpcr.session');
     }
 
     protected function getContainer()
