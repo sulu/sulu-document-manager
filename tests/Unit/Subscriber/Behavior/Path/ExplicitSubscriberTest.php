@@ -12,7 +12,6 @@
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit\Path;
 
 use PHPCR\NodeInterface;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\NodeManager;
@@ -21,18 +20,51 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var PersistEvent
+     */
+    private $persistEvent;
+
+    /**
+     * @var \stdClass
+     */
+    private $document;
+
+    /**
+     * @var NodeManager
+     */
+    private $nodeManager;
+
+    /**
+     * @var ConfigureOptionsEvent
+     */
+    private $configureEvent;
+
+    /**
+     * @var NodeInterface
+     */
+    private $parentNode;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var ExplicitSubscriber
+     */
+    private $subscriber;
+
     public function setUp()
     {
         $this->persistEvent = $this->prophesize(PersistEvent::class);
         $this->document = new \stdClass();
         $this->nodeManager = $this->prophesize(NodeManager::class);
-        $this->strategy = $this->prophesize(DocumentStrategyInterface::class);
         $this->configureEvent = $this->prophesize(ConfigureOptionsEvent::class);
         $this->parentNode = $this->prophesize(NodeInterface::class);
         $this->node = $this->prophesize(NodeInterface::class);
 
         $this->subscriber = new ExplicitSubscriber(
-            $this->strategy->reveal(),
             $this->nodeManager->reveal()
         );
     }
@@ -74,7 +106,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $options = $this->resolveOptions(['path' => '/path/to/nodename']);
         $this->nodeManager->find('/path/to')->willReturn($this->parentNode->reveal());
-        $this->strategy->createNodeForDocument($this->document, $this->parentNode->reveal(), 'nodename')->willReturn($this->node->reveal());
+        $this->parentNode->addNode('nodename')->shouldBeCalled()->willReturn($this->node->reveal());
 
         $this->persistEvent->getDocument()->willReturn($this->document);
         $this->persistEvent->setParentNode($this->parentNode->reveal())->shouldBeCalled();

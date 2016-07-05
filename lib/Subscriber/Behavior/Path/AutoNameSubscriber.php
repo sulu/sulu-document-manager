@@ -15,7 +15,6 @@ use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentHelper;
 use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\CopyEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
@@ -55,29 +54,21 @@ class AutoNameSubscriber implements EventSubscriberInterface
     private $nodeManager;
 
     /**
-     * @var DocumentStrategyInterface
-     */
-    private $documentStrategy;
-
-    /**
      * @param DocumentRegistry $registry
      * @param SlugifierInterface $slugifier
      * @param NameResolver $resolver
      * @param NodeManager $nodeManager
-     * @param DocumentStrategyInterface $documentStrategy
      */
     public function __construct(
         DocumentRegistry $registry,
         SlugifierInterface $slugifier,
         NameResolver $resolver,
-        NodeManager $nodeManager,
-        DocumentStrategyInterface $documentStrategy
+        NodeManager $nodeManager
     ) {
         $this->registry = $registry;
         $this->slugifier = $slugifier;
         $this->resolver = $resolver;
         $this->nodeManager = $nodeManager;
-        $this->documentStrategy = $documentStrategy;
     }
 
     /**
@@ -145,7 +136,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
 
         $parentNode = $event->getParentNode();
         $name = $this->getName($document, $parentNode, $event->getOption('auto_rename'));
-        $node = $this->documentStrategy->createNodeForDocument($document, $parentNode, $name);
+        $node = $parentNode->addNode($name);
         $event->setNode($node);
     }
 

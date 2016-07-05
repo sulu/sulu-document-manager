@@ -15,7 +15,6 @@ use PHPCR\NodeInterface;
 use Prophecy\Argument;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Exception\DocumentManagerException;
@@ -95,11 +94,6 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
     private $nodeManager;
 
     /**
-     * @var DocumentStrategyInterface
-     */
-    private $strategy;
-
-    /**
      * @var AutoNameSubscriber
      */
     private $subscriber;
@@ -120,14 +114,12 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->documentRegistry->getDefaultLocale()->willReturn(self::DEFAULT_LOCALE);
         $this->resolver = $this->prophesize(NameResolver::class);
         $this->nodeManager = $this->prophesize(NodeManager::class);
-        $this->strategy = $this->prophesize(DocumentStrategyInterface::class);
 
         $this->subscriber = new AutoNameSubscriber(
             $this->documentRegistry->reveal(),
             $this->slugifier->reveal(),
             $this->resolver->reveal(),
-            $this->nodeManager->reveal(),
-            $this->strategy->reveal()
+            $this->nodeManager->reveal()
         );
     }
 
@@ -356,12 +348,12 @@ class AutoNameSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->resolver->resolveName($this->parentNode->reveal(), $title, $node, true)->willReturn($title);
         $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
-        $this->strategy->createNodeForDocument($this->document->reveal(), $this->parentNode->reveal(), $expectedName)->willReturn($this->newNode->reveal());
 
         if (!$create) {
             return;
         }
 
+        $this->parentNode->addNode($expectedName)->shouldBeCalled()->willReturn($this->newNode->reveal());
         $this->persistEvent->setNode($this->newNode->reveal())->shouldBeCalled();
     }
 }

@@ -14,7 +14,6 @@ namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 use PHPCR\NodeInterface;
 use PHPCR\Util\PathHelper;
 use Sulu\Component\DocumentManager\DocumentHelper;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
@@ -30,24 +29,16 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 class ExplicitSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var DocumentStrategyInterface
-     */
-    private $strategy;
-
-    /**
      * @var NodeManager
      */
     private $nodeManager;
 
     /**
-     * @param DocumentStrategyInterface $strategy
      * @param NodeManager $nodeManager
      */
     public function __construct(
-        DocumentStrategyInterface $strategy,
         NodeManager $nodeManager
     ) {
-        $this->strategy = $strategy;
         $this->nodeManager = $nodeManager;
     }
 
@@ -132,11 +123,7 @@ class ExplicitSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $node = $this->strategy->createNodeForDocument(
-            $document,
-            $event->getParentNode(),
-            $nodeName
-        );
+        $node = $event->getParentNode()->addNode($nodeName);
 
         $event->setNode($node);
     }
