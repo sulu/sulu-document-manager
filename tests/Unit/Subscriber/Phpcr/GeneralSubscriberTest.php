@@ -20,6 +20,7 @@ use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\RefreshEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\NodeHelperInterface;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Subscriber\Phpcr\GeneralSubscriber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -30,10 +31,71 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     const DST_PATH = '/dest/path';
     const DST_NAME = 'foo';
 
+    /**
+     * @var NodeManager
+     */
+    private $nodeManager;
+
+    /**
+     * @var DocumentRegistry
+     */
+    private $documentRegistry;
+
+    /**
+     * @var NodeHelperInterface
+     */
+    private $nodeHelper;
+
+    /**
+     * @var EventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var MoveEvent
+     */
+    private $moveEvent;
+
+    /**
+     * @var CopyEvent
+     */
+    private $copyEvent;
+
+    /**
+     * @var ClearEvent
+     */
+    private $clearEvent;
+
+    /**
+     * @var FlushEvent
+     */
+    private $flushEvent;
+
+    /**
+     * @var RefreshEvent
+     */
+    private $refreshEvent;
+
+    /**
+     * @var \stdClass
+     */
+    private $document;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var GeneralSubscriber
+     */
+    private $generalSubscriber;
+
     public function setUp()
     {
         $this->nodeManager = $this->prophesize(NodeManager::class);
         $this->documentRegistry = $this->prophesize(DocumentRegistry::class);
+        $this->nodeHelper = $this->prophesize(NodeHelperInterface::class);
         $this->eventDispatcher = $this->prophesize(EventDispatcher::class);
 
         $this->moveEvent = $this->prophesize(MoveEvent::class);
@@ -45,9 +107,10 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->document = new \stdClass();
         $this->node = $this->prophesize(NodeInterface::class);
 
-        $this->subscriber = new GeneralSubscriber(
+        $this->generalSubscriber = new GeneralSubscriber(
             $this->documentRegistry->reveal(),
             $this->nodeManager->reveal(),
+            $this->nodeHelper->reveal(),
             $this->eventDispatcher->reveal()
         );
     }
@@ -64,9 +127,9 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
         $this->node->getPath()->willReturn(self::SRC_PATH);
 
-        $this->nodeManager->move(self::SRC_PATH, self::DST_PATH, self::DST_NAME)->shouldBeCalled();
+        $this->nodeHelper->move($this->node->reveal(), self::DST_PATH, self::DST_NAME)->shouldBeCalled();
 
-        $this->subscriber->handleMove($this->moveEvent->reveal());
+        $this->generalSubscriber->handleMove($this->moveEvent->reveal());
     }
 
     /**
@@ -79,10 +142,13 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->copyEvent->getDestName()->willReturn(self::DST_NAME);
         $this->documentRegistry->getNodeForDocument($this->document)->willReturn($this->node->reveal());
         $this->node->getPath()->willReturn(self::SRC_PATH);
-        $this->nodeManager->copy(self::SRC_PATH, self::DST_PATH, self::DST_NAME)->willReturn('foobar');
-        $this->copyEvent->setCopiedPath('foobar')->shouldBeCalled();
+        $this->nodeHelper->copy($this->node->reveal(), self::DST_PATH, self::DST_NAME)->willReturn('foobar');
+        $node = $this->prophesize(NodeInterface::class);
+        $node->getPath()->willReturn('foobar');
+        $this->nodeManager->find('foobar')->willReturn($node->reveal());
+        $this->copyEvent->setCopiedNode($node->reveal())->shouldBeCalled();
 
-        $this->subscriber->handleCopy($this->copyEvent->reveal());
+        $this->generalSubscriber->handleCopy($this->copyEvent->reveal());
     }
 
     /**
@@ -91,7 +157,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHandleClear()
     {
         $this->nodeManager->clear()->shouldBeCalled();
-        $this->subscriber->handleClear($this->clearEvent->reveal());
+        $this->generalSubscriber->handleClear($this->clearEvent->reveal());
     }
 
     /**
@@ -100,7 +166,7 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testHandleFlush()
     {
         $this->nodeManager->save()->shouldBeCalled();
-        $this->subscriber->handleFlush($this->flushEvent->reveal());
+        $this->generalSubscriber->handleFlush($this->flushEvent->reveal());
     }
 
     /**
@@ -116,6 +182,6 @@ class GeneralSubscriberTest extends \PHPUnit_Framework_TestCase
         $event = new HydrateEvent($this->node->reveal(), 'fr');
         $this->eventDispatcher->dispatch(Events::REFRESH, $event);
 
-        $this->subscriber->handleRefresh($this->refreshEvent->reveal());
+        $this->generalSubscriber->handleRefresh($this->refreshEvent->reveal());
     }
 }

@@ -13,14 +13,12 @@ namespace Sulu\Component\DocumentManager\Metadata;
 
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 /**
  * This class fully implements the MetadataFactoryInterface by composing
- * the "base" metadata factory and the document strategy, which depends also
- * upon the base metadata factory.
+ * the "base" metadata factory and the node mxins.
  */
 class MetadataFactory implements MetadataFactoryInterface
 {
@@ -30,20 +28,11 @@ class MetadataFactory implements MetadataFactoryInterface
     private $metadataFactory;
 
     /**
-     * @var DocumentStrategyInterface
-     */
-    private $strategy;
-
-    /**
      * @param MetadataFactoryInterface $metadataFactory
-     * @param DocumentStrategyInterface $strategy
      */
-    public function __construct(
-        MetadataFactoryInterface $metadataFactory,
-        DocumentStrategyInterface $strategy
-    ) {
+    public function __construct(MetadataFactoryInterface $metadataFactory)
+    {
         $this->metadataFactory = $metadataFactory;
-        $this->strategy = $strategy;
     }
 
     /**
@@ -107,10 +96,16 @@ class MetadataFactory implements MetadataFactoryInterface
      */
     public function getMetadataForPhpcrNode(NodeInterface $node)
     {
-        $metadata = $this->strategy->resolveMetadataForNode($node);
+        if (false === $node->hasProperty('jcr:mixinTypes')) {
+            return $this->getUnknownMetadata();
+        }
 
-        if (null !== $metadata) {
-            return $metadata;
+        $mixinTypes = (array) $node->getPropertyValue('jcr:mixinTypes');
+
+        foreach ($mixinTypes as $mixinType) {
+            if (true == $this->metadataFactory->hasMetadataForPhpcrType($mixinType)) {
+                return $this->metadataFactory->getMetadataForPhpcrType($mixinType);
+            }
         }
 
         return $this->getUnknownMetadata();

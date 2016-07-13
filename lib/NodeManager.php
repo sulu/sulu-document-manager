@@ -98,6 +98,8 @@ class NodeManager
      * @param string $srcId
      * @param string $destId
      * @param string $name
+     *
+     * @deprecated Use NodeHelper::move instead
      */
     public function move($srcId, $destId, $name)
     {
@@ -117,6 +119,8 @@ class NodeManager
      * @param string $name
      *
      * @return string
+     *
+     * @deprecated Use NodeHelper::copy instead
      */
     public function copy($srcId, $destId, $name)
     {

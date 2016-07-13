@@ -21,20 +21,13 @@ class ReorderEvent extends AbstractMappingEvent
     private $destId;
 
     /**
-     * @var bool
-     */
-    private $after;
-
-    /**
      * @param object $document
      * @param string $destId
-     * @param bool $after
      */
-    public function __construct($document, $destId, $after)
+    public function __construct($document, $destId)
     {
         $this->document = $document;
         $this->destId = $destId;
-        $this->after = $after;
     }
 
     /**
@@ -43,10 +36,9 @@ class ReorderEvent extends AbstractMappingEvent
     public function getDebugMessage()
     {
         return sprintf(
-            '%s did:%s after:%s',
+            '%s did:%s',
             parent::getDebugMessage(),
-            $this->destId ?: '<no dest>',
-            $this->after ? 'true' : 'false'
+            $this->destId ?: '<no dest>'
         );
     }
 
@@ -56,14 +48,6 @@ class ReorderEvent extends AbstractMappingEvent
     public function getDestId()
     {
         return $this->destId;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getAfter()
-    {
-        return $this->after;
     }
 
     /**

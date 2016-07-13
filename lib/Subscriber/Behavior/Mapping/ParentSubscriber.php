@@ -51,7 +51,6 @@ class ParentSubscriber implements EventSubscriberInterface
         ProxyFactory $proxyFactory,
         DocumentInspector $inspector,
         DocumentManagerInterface $documentManager
-
     ) {
         $this->proxyFactory = $proxyFactory;
         $this->inspector = $inspector;

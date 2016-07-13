@@ -13,7 +13,7 @@ namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping;
 
 use Sulu\Component\DocumentManager\Behavior\Mapping\PathBehavior;
 use Sulu\Component\DocumentManager\DocumentInspector;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -41,14 +41,38 @@ class PathSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::HYDRATE => 'handleHydrate',
+            Events::PERSIST => [
+                ['setInitialPath', 0],
+                ['setFinalPath', -495],
+            ],
+            Events::HYDRATE => 'setFinalPath',
         ];
     }
 
     /**
-     * @param HydrateEvent $event
+     * Sets the path at the beginning of persisting.
+     *
+     * @param AbstractMappingEvent $event
      */
-    public function handleHydrate(HydrateEvent $event)
+    public function setInitialPath(AbstractMappingEvent $event)
+    {
+        $this->setPath($event);
+    }
+
+    /**
+     * Sets the path at the very end, in case the path has been changed in the persisting process.
+     *
+     * @param AbstractMappingEvent $event
+     */
+    public function setFinalPath(AbstractMappingEvent $event)
+    {
+        $this->setPath($event);
+    }
+
+    /**
+     * @param AbstractMappingEvent $event
+     */
+    private function setPath(AbstractMappingEvent $event)
     {
         $document = $event->getDocument();
 
@@ -56,9 +80,6 @@ class PathSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getAccessor()->set(
-            'path',
-            $this->documentInspector->getPath($document)
-        );
+        $event->getAccessor()->set('path', $this->documentInspector->getPath($document));
     }
 }

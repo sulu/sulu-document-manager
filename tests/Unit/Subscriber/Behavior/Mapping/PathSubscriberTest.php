@@ -12,64 +12,102 @@
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Mapping;
 
 use PHPCR\NodeInterface;
+use Prophecy\Argument;
 use Sulu\Component\DocumentManager\Behavior\Mapping\PathBehavior;
 use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\DocumentInspector;
-use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Event\AbstractMappingEvent;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping\PathSubscriber;
 
 class PathSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var AbstractMappingEvent
+     */
+    private $abstractMappingEvent;
+
+    /**
+     * @var PathBehavior
+     */
+    private $document;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var NodeInterface
+     */
+    private $pathNode;
+
+    /**
+     * @var \stdClass
+     */
+    private $pathDocument;
+
+    /**
+     * @var DocumentInspector
+     */
+    private $inspector;
+
+    /**
+     * @var DocumentAccessor
+     */
+    private $accessor;
+
+    /**
+     * @var PathSubscriber
+     */
+    private $pathSubscriber;
+
     public function setUp()
     {
-        $this->hydrateEvent = $this->prophesize(HydrateEvent::class);
-        $this->document = new TestPathDocument();
-        $this->notImplementing = new \stdClass();
+        $this->abstractMappingEvent = $this->prophesize(AbstractMappingEvent::class);
+        $this->document = $this->prophesize(PathBehavior::class);
         $this->node = $this->prophesize(NodeInterface::class);
         $this->pathNode = $this->prophesize(NodeInterface::class);
         $this->pathDocument = new \stdClass();
         $this->inspector = $this->prophesize(DocumentInspector::class);
         $this->accessor = $this->prophesize(DocumentAccessor::class);
-        $this->hydrateEvent->getAccessor()->willReturn($this->accessor);
+        $this->abstractMappingEvent->getAccessor()->willReturn($this->accessor);
 
-        $this->subscriber = new PathSubscriber(
+        $this->pathSubscriber = new PathSubscriber(
             $this->inspector->reveal()
         );
     }
 
-    /**
-     * It should return early if the document does not implement the PathBehavior interface.
-     */
-    public function testHydrateNotImplementing()
+    public function testSetInitialPathNotImplementing()
     {
-        $this->hydrateEvent->getDocument()->willReturn($this->notImplementing);
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->abstractMappingEvent->getDocument()->willReturn(\stdClass::class);
+        $this->accessor->set(Argument::cetera())->shouldNotBeCalled();
+        $this->pathSubscriber->setInitialPath($this->abstractMappingEvent->reveal());
     }
 
-    /**
-     * It should populate the documents path property with a proxy.
-     */
-    public function testHydratePath()
+    public function testSetInitialPath()
     {
-        $this->hydrateEvent->getDocument()->willReturn($this->document);
+        $this->abstractMappingEvent->getDocument()->willReturn($this->document->reveal());
 
-        $this->node->getPath()->willReturn($this->pathNode->reveal());
+        $this->inspector->getPath($this->document->reveal())->willReturn('/path/to');
+        $this->accessor->set('path', '/path/to')->shouldBeCalled();
 
-        $this->inspector->getPath($this->document)->willReturn('/path/to');
-        $this->accessor->set(
-            'path', '/path/to'
-        )->shouldBeCalled();
-
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->pathSubscriber->setInitialPath($this->abstractMappingEvent->reveal());
     }
-}
 
-class TestPathDocument implements PathBehavior
-{
-    private $path;
-
-    public function getPath()
+    public function testSetFinalPathNotImplementing()
     {
-        return $this->path;
+        $this->abstractMappingEvent->getDocument()->willReturn(\stdClass::class);
+        $this->accessor->set(Argument::cetera())->shouldNotBeCalled();
+        $this->pathSubscriber->setFinalPath($this->abstractMappingEvent->reveal());
+    }
+
+    public function testSetFinalPath()
+    {
+        $this->abstractMappingEvent->getDocument()->willReturn($this->document->reveal());
+
+        $this->inspector->getPath($this->document->reveal())->willReturn('/path/to');
+        $this->accessor->set('path', '/path/to')->shouldBeCalled();
+
+        $this->pathSubscriber->setFinalPath($this->abstractMappingEvent->reveal());
     }
 }
