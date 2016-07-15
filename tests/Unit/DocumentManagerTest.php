@@ -27,6 +27,8 @@ use Sulu\Component\DocumentManager\Event\QueryCreateEvent;
 use Sulu\Component\DocumentManager\Event\QueryExecuteEvent;
 use Sulu\Component\DocumentManager\Event\RefreshEvent;
 use Sulu\Component\DocumentManager\Event\RemoveEvent;
+use Sulu\Component\DocumentManager\Event\ReorderEvent;
+use Sulu\Component\DocumentManager\Event\UnpublishEvent;
 use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\NodeManager;
 use Sulu\Component\DocumentManager\Query\Query;
@@ -143,6 +145,13 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($subscriber->publish);
     }
 
+    public function testUnpublish()
+    {
+        $subscriber = $this->addSubscriber();
+        $this->documentManager->unpublish(new \stdClass(), 'de');
+        $this->assertTrue($subscriber->unpublish);
+    }
+
     /**
      * It should issue a refresh event.
      */
@@ -248,6 +257,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
     public $queryCreateBuilder = false;
     public $queryExecute = false;
     public $publish = false;
+    public $unpublish = false;
     public $refresh = false;
     public $reorder = false;
 
@@ -278,6 +288,7 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
             Events::REORDER => 'handleReorder',
             Events::CONFIGURE_OPTIONS => 'handleConfigureOptions',
             Events::PUBLISH => 'handlePublish',
+            Events::UNPUBLISH => 'handleUnpublish',
         ];
     }
 
@@ -346,6 +357,11 @@ class TestDocumentManagerSubscriber implements EventSubscriberInterface
     public function handlePublish(PublishEvent $event)
     {
         $this->publish = true;
+    }
+
+    public function handleUnpublish(UnpublishEvent $event)
+    {
+        $this->unpublish = true;
     }
 
     public function handleRefresh(RefreshEvent $event)
