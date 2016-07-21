@@ -18,6 +18,7 @@ use Sulu\Component\DocumentManager\DocumentInspector;
 use Sulu\Component\DocumentManager\DocumentManager;
 use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
+use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\ProxyFactory;
 use Sulu\Component\DocumentManager\Subscriber\Behavior\Mapping\ParentSubscriber;
 
@@ -100,18 +101,12 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->hydrateEvent->getNode()->willReturn($this->node);
     }
 
-    /**
-     * It should return early if the document does not implement the ParentBehavior interface.
-     */
     public function testHydrateNotImplementing()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->notImplementing);
         $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 
-    /**
-     * It should populate the documents parent property with a proxy.
-     */
     public function testHydrateParent()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->document->reveal());
@@ -129,9 +124,6 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 
-    /**
-     * It should not map the parent if the parent node has no UUID property.
-     */
     public function testHydrateParentNoUuid()
     {
         $this->hydrateEvent->getDocument()->willReturn($this->document->reveal());
@@ -145,8 +137,6 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the node for the document is a root node.
-     *
      * @expectedException \RuntimeException
      */
     public function testThrowExceptionRootNode()
@@ -169,5 +159,46 @@ class ParentSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->document->setParent(Argument::any())->shouldBeCalled();
 
         $this->subscriber->handleMove($this->moveEvent->reveal());
+    }
+
+    public function testHandleChangeParent()
+    {
+        $persistEvent = $this->prophesize(PersistEvent::class);
+        $persistEvent->getDocument()->willReturn($this->document->reveal());
+        $persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->inspector->getNode($this->document->reveal())->willReturn($this->node->reveal());
+        $this->node->getParent()->willReturn($this->parentNode->reveal());
+
+        $newParentNode = $this->prophesize(NodeInterface::class);
+        $newParentNode->getPath()->willReturn('/path/to/new/parent');
+        $persistEvent->getParentNode()->willReturn($newParentNode->reveal());
+
+        $this->documentManager->move($this->document->reveal(), '/path/to/new/parent')->shouldBeCalled();
+
+        $this->subscriber->handleChangeParent($persistEvent->reveal());
+    }
+
+    public function testHandleChangeParentWithSameParent()
+    {
+        $persistEvent = $this->prophesize(PersistEvent::class);
+        $persistEvent->getDocument()->willReturn($this->document->reveal());
+        $persistEvent->getNode()->willReturn($this->node->reveal());
+        $this->inspector->getNode($this->document->reveal())->willReturn($this->node->reveal());
+        $this->node->getParent()->willReturn($this->parentNode->reveal());
+        $persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
+
+        $this->documentManager->move(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleChangeParent($persistEvent->reveal());
+    }
+
+    public function testHandleChangeParentWithWrongDocument()
+    {
+        $persistEvent = $this->prophesize(PersistEvent::class);
+        $persistEvent->getDocument(new \stdClass());
+
+        $this->documentManager->move(Argument::cetera())->shouldNotBeCalled();
+
+        $this->subscriber->handleChangeParent($persistEvent->reveal());
     }
 }

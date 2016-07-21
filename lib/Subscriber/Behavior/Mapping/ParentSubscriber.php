@@ -51,7 +51,6 @@ class ParentSubscriber implements EventSubscriberInterface
         ProxyFactory $proxyFactory,
         DocumentInspector $inspector,
         DocumentManagerInterface $documentManager
-
     ) {
         $this->proxyFactory = $proxyFactory;
         $this->inspector = $inspector;
@@ -139,6 +138,10 @@ class ParentSubscriber implements EventSubscriberInterface
     public function handleChangeParent(PersistEvent $event)
     {
         $document = $event->getDocument();
+
+        if (!$document instanceof ParentBehavior) {
+            return;
+        }
 
         $node = $this->inspector->getNode($document);
         $parentNode = $event->getParentNode();

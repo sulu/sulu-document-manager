@@ -19,6 +19,7 @@ use Sulu\Component\DocumentManager\Event\HydrateEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
 use Sulu\Component\DocumentManager\Event\RefreshEvent;
 use Sulu\Component\DocumentManager\Events;
+use Sulu\Component\DocumentManager\NodeHelperInterface;
 use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -46,6 +47,11 @@ class GeneralSubscriber implements EventSubscriberInterface
     private $nodeManager;
 
     /**
+     * @var NodeHelperInterface
+     */
+    private $nodeHelper;
+
+    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -53,10 +59,12 @@ class GeneralSubscriber implements EventSubscriberInterface
     public function __construct(
         DocumentRegistry $documentRegistry,
         NodeManager $nodeManager,
+        NodeHelperInterface $nodeHelper,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->documentRegistry = $documentRegistry;
         $this->nodeManager = $nodeManager;
+        $this->nodeHelper = $nodeHelper;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -81,7 +89,7 @@ class GeneralSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
         $node = $this->documentRegistry->getNodeForDocument($document);
-        $this->nodeManager->move($node->getPath(), $event->getDestId(), $event->getDestName());
+        $this->nodeHelper->move($node, $event->getDestId(), $event->getDestName());
     }
 
     /**
@@ -91,8 +99,8 @@ class GeneralSubscriber implements EventSubscriberInterface
     {
         $document = $event->getDocument();
         $node = $this->documentRegistry->getNodeForDocument($document);
-        $newPath = $this->nodeManager->copy($node->getPath(), $event->getDestId(), $event->getDestName());
-        $event->setCopiedPath($newPath);
+        $newPath = $this->nodeHelper->copy($node, $event->getDestId(), $event->getDestName());
+        $event->setCopiedNode($this->nodeManager->find($newPath));
     }
 
     /**

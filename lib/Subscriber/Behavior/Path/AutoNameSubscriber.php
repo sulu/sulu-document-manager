@@ -15,7 +15,6 @@ use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
 use Sulu\Component\DocumentManager\DocumentHelper;
 use Sulu\Component\DocumentManager\DocumentRegistry;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\CopyEvent;
 use Sulu\Component\DocumentManager\Event\MoveEvent;
@@ -55,29 +54,21 @@ class AutoNameSubscriber implements EventSubscriberInterface
     private $nodeManager;
 
     /**
-     * @var DocumentStrategyInterface
-     */
-    private $documentStrategy;
-
-    /**
      * @param DocumentRegistry $registry
      * @param SlugifierInterface $slugifier
      * @param NameResolver $resolver
      * @param NodeManager $nodeManager
-     * @param DocumentStrategyInterface $documentStrategy
      */
     public function __construct(
         DocumentRegistry $registry,
         SlugifierInterface $slugifier,
         NameResolver $resolver,
-        NodeManager $nodeManager,
-        DocumentStrategyInterface $documentStrategy
+        NodeManager $nodeManager
     ) {
         $this->registry = $registry;
         $this->slugifier = $slugifier;
         $this->resolver = $resolver;
         $this->nodeManager = $nodeManager;
-        $this->documentStrategy = $documentStrategy;
     }
 
     /**
@@ -103,8 +94,16 @@ class AutoNameSubscriber implements EventSubscriberInterface
         $event->getOptions()->setDefaults(
             [
                 'auto_name' => true,
+                'auto_rename' => true,
+                'auto_name_locale' => $this->registry->getDefaultLocale(),
             ]
         );
+
+        $event->getOptions()->setAllowedTypes([
+            'auto_name' => 'bool',
+            'auto_rename' => 'bool',
+            'auto_name_locale' => 'string',
+        ]);
     }
 
     /**
@@ -136,8 +135,8 @@ class AutoNameSubscriber implements EventSubscriberInterface
         }
 
         $parentNode = $event->getParentNode();
-        $name = $this->getName($document, $parentNode);
-        $node = $this->documentStrategy->createNodeForDocument($document, $parentNode, $name);
+        $name = $this->getName($document, $parentNode, $event->getOption('auto_rename'));
+        $node = $parentNode->addNode($name);
         $event->setNode($node);
     }
 
@@ -149,11 +148,10 @@ class AutoNameSubscriber implements EventSubscriberInterface
     public function handleRename(PersistEvent $event)
     {
         $document = $event->getDocument();
-        $defaultLocale = $this->registry->getDefaultLocale();
 
         if (!$event->getOption('auto_name')
             || !$document instanceof AutoNameBehavior
-            || $defaultLocale !== $event->getLocale()
+            || $event->getOption('auto_name_locale') !== $event->getLocale()
             || !$event->hasNode()
             || $event->getNode()->isNew()
         ) {
@@ -161,7 +159,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
         }
 
         $node = $event->getNode();
-        $name = $this->getName($document, $event->getParentNode(), $node);
+        $name = $this->getName($document, $event->getParentNode(), $event->getOption('auto_rename'), $node);
 
         if ($name === $node->getName()) {
             return;
@@ -176,13 +174,18 @@ class AutoNameSubscriber implements EventSubscriberInterface
      * @param AutoNameBehavior $document
      * @param NodeInterface $parentNode
      * @param NodeInterface|null $node
+     * @param bool $autoRename
      *
      * @return string
      *
      * @throws DocumentManagerException
      */
-    private function getName(AutoNameBehavior $document, NodeInterface $parentNode, NodeInterface $node = null)
-    {
+    private function getName(
+        AutoNameBehavior $document,
+        NodeInterface $parentNode,
+        $autoRename = true,
+        NodeInterface $node = null
+    ) {
         $title = $document->getTitle();
 
         if (!$title) {
@@ -196,7 +199,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
 
         $name = $this->slugifier->slugify($title);
 
-        return $this->resolver->resolveName($parentNode, $name, $node);
+        return $this->resolver->resolveName($parentNode, $name, $node, $autoRename);
     }
 
     /**

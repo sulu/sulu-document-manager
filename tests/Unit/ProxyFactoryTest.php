@@ -18,6 +18,8 @@ use ProxyManager\Proxy\LazyLoadingInterface;
 use Sulu\Component\DocumentManager\Behavior\Mapping\ParentBehavior;
 use Sulu\Component\DocumentManager\Collection\ChildrenCollection;
 use Sulu\Component\DocumentManager\DocumentRegistry;
+use Sulu\Component\DocumentManager\Event\HydrateEvent;
+use Sulu\Component\DocumentManager\Events;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 use Sulu\Component\DocumentManager\ProxyFactory;
@@ -54,6 +56,10 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateProxy()
     {
+        $this->documentRegistry->hasNode(Argument::type(NodeInterface::class), 'de')->willReturn(false);
+        $this->documentRegistry->getDocumentForNode(Argument::any())->willReturn(new \stdClass());
+        $this->documentRegistry->getOriginalLocaleForDocument(Argument::any())->willReturn('de');
+        $this->documentRegistry->registerDocument(Argument::cetera())->willReturn(null);
         $this->node->getParent()->willReturn($this->parentNode->reveal());
         $this->metadataFactory->getMetadataForPhpcrNode($this->parentNode->reveal())->willReturn($this->metadata->reveal());
         $this->metadata->getClass()->willReturn(TestProxyDocumentProxy::class);
@@ -62,7 +68,7 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
 
-        return $proxy;
+        return [$this->dispatcher, $proxy];
     }
 
     /**
@@ -100,8 +106,19 @@ class ProxyFactoryTest extends \PHPUnit_Framework_TestCase
      *
      * @depends testCreateProxy
      */
-    public function testHydrateLazyProxy($proxy)
+    public function testHydrateLazyProxy($result)
     {
+        list($dispatcher, $proxy) = $result;
+
+        $dispatcher->dispatch(
+            Events::HYDRATE,
+            Argument::that(
+                function (HydrateEvent $arg) {
+                    return $arg->getLocale() === 'de';
+                }
+            )
+        )->shouldBeCalled();
+
         $this->assertEquals('Hello', $proxy->getTitle());
     }
 

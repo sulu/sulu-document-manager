@@ -60,7 +60,7 @@ interface DocumentManagerInterface
      * Move the PHPCR node to which the document is mapped to be a child of the node at the given path or UUID.
      *
      * @param object $document
-     * @param string $destId Path or UUID
+     * @param string $destId The path of the new parent.
      */
     public function move($document, $destId);
 
@@ -79,9 +79,24 @@ interface DocumentManagerInterface
      *
      * @param object $document
      * @param string $destId
-     * @param bool $after
      */
-    public function reorder($document, $destId, $after = false);
+    public function reorder($document, $destId);
+
+    /**
+     * Publishes a document to the public workspace.
+     *
+     * @param object $document
+     * @param string $locale
+     */
+    public function publish($document, $locale);
+
+    /**
+     * Unpublishes a document from the public workspace.
+     *
+     * @param object $document
+     * @param string $locale
+     */
+    public function unpublish($document, $locale);
 
     /**
      * Refresh the given document with the persisted state of the node.

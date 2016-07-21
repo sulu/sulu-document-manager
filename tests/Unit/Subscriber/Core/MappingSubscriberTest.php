@@ -24,6 +24,61 @@ use Sulu\Component\DocumentManager\Subscriber\Core\MappingSubscriber;
 
 class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var MetadataFactoryInterface
+     */
+    private $metadataFactory;
+
+    /**
+     * @var PropertyEncoder
+     */
+    private $encoder;
+
+    /**
+     * @var Metadata\
+     */
+    private $metadata;
+
+    /**
+     * @var NodeInterface
+     */
+    private $node;
+
+    /**
+     * @var \stdClass
+     */
+    private $document;
+
+    /**
+     * @var DocumentAccessor
+     */
+    private $accessor;
+
+    /**
+     * @var PersistEvent
+     */
+    private $persistEvent;
+
+    /**
+     * @var HydrateEvent
+     */
+    private $hydrateEvent;
+
+    /**
+     * @var ProxyFactory
+     */
+    private $proxyFactory;
+
+    /**
+     * @var DocumentRegistry
+     */
+    private $documentRegistry;
+
+    /**
+     * @var MappingSubscriber
+     */
+    private $mappingSubscriber;
+
     public function setUp()
     {
         $this->metadataFactory = $this->prophesize(MetadataFactoryInterface::class);
@@ -43,7 +98,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getLocale()->willReturn('de');
         $this->persistEvent->getAccessor()->willReturn($this->accessor);
 
-        $this->subscriber = new MappingSubscriber(
+        $this->mappingSubscriber = new MappingSubscriber(
             $this->metadataFactory->reveal(),
             $this->encoder->reveal(),
             $this->proxyFactory->reveal(),
@@ -75,7 +130,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->encoder->encode('localized_system', 'hello', 'de')->willReturn('sys:hello');
         $this->accessor->get('test')->willReturn('goodbye');
         $this->node->setProperty('sys:hello', 'goodbye')->shouldBeCalled();
-        $this->subscriber->handlePersist($this->persistEvent->reveal());
+        $this->mappingSubscriber->handleMapping($this->persistEvent->reveal());
     }
 
     /**
@@ -99,7 +154,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->encoder->encode('localized_system', 'hello', 'de')->willReturn('sys:hello');
         $this->node->setProperty('sys:hello', 'goodbye')->shouldNotBeCalled();
-        $this->subscriber->handlePersist($this->persistEvent->reveal());
+        $this->mappingSubscriber->handleMapping($this->persistEvent->reveal());
     }
 
     /**
@@ -125,7 +180,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getNode()->willReturn($this->node->reveal());
         $this->encoder->encode('localized_system', 'hello', 'de')->willReturn('sys:hello');
         $this->accessor->get('test')->willReturn('goodbye');
-        $this->subscriber->handlePersist($this->persistEvent->reveal());
+        $this->mappingSubscriber->handleMapping($this->persistEvent->reveal());
     }
 
     /**
@@ -152,7 +207,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->node->getPropertyValueWithDefault('sys:hello', null)->willReturn('goodbye');
         $this->accessor->set('test', 'goodbye')->shouldBeCalled();
 
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->mappingSubscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 
     /**
@@ -177,7 +232,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->hydrateEvent->getNode()->willReturn($this->node->reveal());
         $this->accessor->set('test', 'goodbye')->shouldNotBeCalled();
 
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->mappingSubscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 
     /**
@@ -204,7 +259,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->node->getPropertyValueWithDefault('sys:hello', null)->willReturn(null);
         $this->accessor->set('test', 'HAI')->shouldNotBeCalled();
 
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->mappingSubscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 
     /**
@@ -229,7 +284,7 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->encoder->encode('system', 'hello', 'de')->willReturn('sys:hello');
         $this->accessor->get('test')->willReturn(['key' => 'value']);
         $this->node->setProperty('sys:hello', json_encode(['key' => 'value']))->shouldBeCalled();
-        $this->subscriber->handlePersist($this->persistEvent->reveal());
+        $this->mappingSubscriber->handleMapping($this->persistEvent->reveal());
     }
 
     /**
@@ -256,6 +311,6 @@ class MappingSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->node->getPropertyValueWithDefault('sys:hello', null)->willReturn(json_encode(['key' => 'value']));
         $this->accessor->set('test', ['key' => 'value'])->shouldBeCalled();
 
-        $this->subscriber->handleHydrate($this->hydrateEvent->reveal());
+        $this->mappingSubscriber->handleHydrate($this->hydrateEvent->reveal());
     }
 }

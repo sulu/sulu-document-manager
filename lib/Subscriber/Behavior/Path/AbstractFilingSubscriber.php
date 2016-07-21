@@ -11,9 +11,11 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
+use PHPCR\NodeInterface;
+use PHPCR\SessionInterface;
+use PHPCR\Util\UUIDHelper;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
 use Sulu\Component\DocumentManager\Events;
-use Sulu\Component\DocumentManager\NodeManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -22,17 +24,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 abstract class AbstractFilingSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var NodeManager
+     * @var SessionInterface
      */
-    private $nodeManager;
+    private $defaultSession;
 
     /**
-     * @param NodeManager $nodeManager
+     * @var SessionInterface
+     */
+    private $liveSession;
+
+    /**
+     * @param SessionInterface $defaultSession
+     * @param SessionInterface $liveSession
      */
     public function __construct(
-        NodeManager $nodeManager
+        SessionInterface $defaultSession,
+        SessionInterface $liveSession
     ) {
-        $this->nodeManager = $nodeManager;
+        $this->defaultSession = $defaultSession;
+        $this->liveSession = $liveSession;
     }
 
     /**
@@ -55,8 +65,17 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
 
         $path = $this->generatePath($event);
 
-        $parentNode = $this->nodeManager->createPath($path);
-        $event->setParentNode($parentNode);
+        $currentDefaultNode = $this->defaultSession->getRootNode();
+        $currentLiveNode = $this->liveSession->getRootNode();
+
+        $pathSegments = explode('/', ltrim($path, '/'));
+        foreach ($pathSegments as $pathSegment) {
+            $uuid = UUIDHelper::generateUUID();
+            $currentDefaultNode = $this->createNode($currentDefaultNode, $pathSegment, $uuid);
+            $currentLiveNode = $this->createNode($currentLiveNode, $pathSegment, $uuid);
+        }
+
+        $event->setParentNode($currentDefaultNode);
     }
 
     /**
@@ -81,4 +100,26 @@ abstract class AbstractFilingSubscriber implements EventSubscriberInterface
      * @return string
      */
     abstract protected function getParentName($document);
+
+    /**
+     * Adds a node with the given path segment as a node name to the given node.
+     *
+     * @param NodeInterface $node
+     * @param string $pathSegment
+     * @param string $uuid
+     *
+     * @return mixed
+     */
+    private function createNode(NodeInterface $node, $pathSegment, $uuid)
+    {
+        if ($node->hasNode($pathSegment)) {
+            return $node->getNode($pathSegment);
+        }
+
+        $node = $node->addNode($pathSegment);
+        $node->addMixin('mix:referenceable');
+        $node->setProperty('jcr:uuid', $uuid);
+
+        return $node;
+    }
 }

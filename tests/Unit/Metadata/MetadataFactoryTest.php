@@ -13,39 +13,51 @@ namespace Sulu\Component\DocumentManager\tests\Unit\Metadata;
 
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Document\UnknownDocument;
-use Sulu\Component\DocumentManager\DocumentStrategyInterface;
 use Sulu\Component\DocumentManager\Metadata;
 use Sulu\Component\DocumentManager\Metadata\MetadataFactory;
 use Sulu\Component\DocumentManager\MetadataFactoryInterface;
 
 class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var MetadataFactoryInterface
+     */
+    private $baseMetadataFactory;
+
+    /**
+     * @var MetadataFactory
+     */
+    private $metadataFactory;
+
     public function setUp()
     {
-        $this->strategy = $this->prophesize(DocumentStrategyInterface::class);
-        $this->baseFactory = $this->prophesize(MetadataFactoryInterface::class);
-        $this->factory = new MetadataFactory(
-            $this->baseFactory->reveal(),
-            $this->strategy->reveal()
-        );
+        $this->baseMetadataFactory = $this->prophesize(MetadataFactoryInterface::class);
+        $this->metadataFactory = new MetadataFactory($this->baseMetadataFactory->reveal());
     }
 
-    /**
-     * It should retrieve metadata for a given PHPCR node.
-     */
+    public function testGetForPhpcrNodeWithoutMixins()
+    {
+        $node = $this->prophesize(NodeInterface::class);
+        $node->hasProperty('jcr:mixinTypes')->willReturn(false);
+
+        $metadata = $this->metadataFactory->getMetadataForPhpcrNode($node->reveal());
+        $this->assertEquals(UnknownDocument::class, $metadata->getClass());
+    }
+
     public function testGetForPhpcrNode()
     {
-        $expectedMetadata = $this->prophesize(Metadata::class);
+        $metadata = $this->prophesize(Metadata::class);
         $node = $this->prophesize(NodeInterface::class);
-        $this->strategy->resolveMetadataForNode($node->reveal())->willReturn($expectedMetadata->reveal());
+        $node->hasProperty('jcr:mixinTypes')->willReturn(true);
+        $node->getPropertyValue('jcr:mixinTypes')->willReturn(['mix:referenceable', 'sulu:page']);
 
-        $metadata = $this->factory->getMetadataForPhpcrNode($node->reveal());
-        $this->assertSame($expectedMetadata->reveal(), $metadata);
+        $this->baseMetadataFactory->hasMetadataForPhpcrType('mix:referenceable')->willReturn(false);
+        $this->baseMetadataFactory->hasMetadataForPhpcrType('sulu:page')->willReturn(true);
+        $this->baseMetadataFactory->getMetadataForPhpcrType('sulu:page')->willReturn($metadata->reveal());
+
+        $this->assertSame($metadata->reveal(), $this->metadataFactory->getMetadataForPhpcrNode($node->reveal()));
     }
 
-    /**
-     * It should retrieve return unknown document metadata when node is unmanaged.
-     */
     public function testGetForPhpcrNodeNoManaged()
     {
         $node = $this->prophesize(NodeInterface::class);
@@ -53,7 +65,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
         $node->getPropertyValue('jcr:mixinTypes')->willReturn([
         ]);
 
-        $metadata = $this->factory->getMetadataForPhpcrNode($node->reveal());
+        $metadata = $this->metadataFactory->getMetadataForPhpcrNode($node->reveal());
         $this->assertNull($metadata->getAlias());
         $this->assertEquals(UnknownDocument::class, $metadata->getClass());
         $this->assertNull($metadata->getPhpcrType());

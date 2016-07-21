@@ -1,6 +1,16 @@
 CHANGELOG for Sulu
 ==================
 
+* dev-develop
+    * ENHANCEMENT #93 Use correct default phpcr session
+    * FEATURE     #92 Added unpublish method to DocumentManager
+    * ENHANCEMENT #89 Added auto_rename option to AutoNameSubscriber
+    * ENHANCEMENT #89 Extracted LocalizedTitleBehavior from TitleBehavior
+    * BUGFIX      #90 Added missing check in handleChangeParent method of ParentSubscriber
+    * BUGFIX      #88 Introduced mandatory locale in document-registry
+    * FEATURE     #81 Added publish method to DocumentManager
+    * BUGFIX      #85 Fixed get locale for proxy
+
 * 0.6.1 (2016-06-01)
     * HOTFIX      #83 Fixed auto-name subscriber to rename at the very end of persist 
 
