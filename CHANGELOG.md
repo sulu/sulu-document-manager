@@ -1,7 +1,7 @@
 CHANGELOG for Sulu
 ==================
 
-* dev-develop
+* 0.7.0 (2016-07-21)
     * ENHANCEMENT #93 Use correct default phpcr session
     * FEATURE     #92 Added unpublish method to DocumentManager
     * ENHANCEMENT #89 Added auto_rename option to AutoNameSubscriber
