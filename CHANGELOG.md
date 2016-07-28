@@ -1,7 +1,7 @@
 CHANGELOG for Sulu
 ==================
 
-* dev-develop
+* 0.8.0 (2016-07-28)
     * FEATURE     #94 Added removeDraft method to DocumentManager
 
 * 0.7.0 (2016-07-21)
