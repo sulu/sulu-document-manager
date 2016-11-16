@@ -4,6 +4,9 @@ CHANGELOG for Sulu
 * dev-develop
     * BUGFIX      #98 Removed deprecations
 
+* dev-master
+    * HOTFIX      #96 Added overwrite option to ExplicitSubscriber
+
 * 0.8.1 (2016-08-08)
     * HOTFIX      #91 Added replacer to avoid 10e in node-names
 

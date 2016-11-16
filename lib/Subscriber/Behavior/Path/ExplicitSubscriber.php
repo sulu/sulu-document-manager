@@ -11,6 +11,7 @@
 
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
+use PHPCR\ItemExistsException;
 use PHPCR\NodeInterface;
 use PHPCR\Util\PathHelper;
 use Sulu\Component\DocumentManager\DocumentHelper;
@@ -36,9 +37,8 @@ class ExplicitSubscriber implements EventSubscriberInterface
     /**
      * @param NodeManager $nodeManager
      */
-    public function __construct(
-        NodeManager $nodeManager
-    ) {
+    public function __construct(NodeManager $nodeManager)
+    {
         $this->nodeManager = $nodeManager;
     }
 
@@ -64,12 +64,14 @@ class ExplicitSubscriber implements EventSubscriberInterface
             'node_name' => null,
             'parent_path' => null,
             'auto_create' => false,
+            'override' => false,
         ]);
 
         $options->setAllowedTypes('path', ['null', 'string']);
         $options->setAllowedTypes('node_name', ['null', 'string']);
         $options->setAllowedTypes('parent_path', ['null', 'string']);
         $options->setAllowedTypes('auto_create', 'bool');
+        $options->setAllowedTypes('override', 'bool');
     }
 
     /**
@@ -123,7 +125,19 @@ class ExplicitSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $node = $event->getParentNode()->addNode($nodeName);
+        if (!$event->getParentNode()->hasNode($nodeName)) {
+            $node = $event->getParentNode()->addNode($nodeName);
+        } elseif ($options['override']) {
+            $node = $event->getParentNode()->getNode($nodeName);
+        } else {
+            throw new ItemExistsException(
+                sprintf(
+                    'The node \'%s\' already has a child named \'%s\'.',
+                    $event->getParentNode()->getPath(),
+                    $nodeName
+                )
+            );
+        }
 
         $event->setNode($node);
     }
