@@ -11,6 +11,7 @@
 
 namespace Sulu\Component\DocumentManager\Tests\Unit\Subscriber\Behavior\Audit\Path;
 
+use PHPCR\ItemExistsException;
 use PHPCR\NodeInterface;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
 use Sulu\Component\DocumentManager\Event\PersistEvent;
@@ -106,6 +107,7 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $options = $this->resolveOptions(['path' => '/path/to/nodename']);
         $this->nodeManager->find('/path/to')->willReturn($this->parentNode->reveal());
+        $this->parentNode->hasNode('nodename')->shouldBeCalled()->willReturn(false);
         $this->parentNode->addNode('nodename')->shouldBeCalled()->willReturn($this->node->reveal());
 
         $this->persistEvent->getDocument()->willReturn($this->document);
@@ -115,6 +117,56 @@ class ExplicitSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->persistEvent->getOptions()->willReturn($options);
         $this->persistEvent->hasNode()->willReturn(false);
         $this->persistEvent->setNode($this->node->reveal())->shouldBeCalled();
+
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should use a new node when override flag is true.
+     */
+    public function testNewNodeFromPathOverwrite()
+    {
+        $options = $this->resolveOptions(['path' => '/path/to/nodename', 'override' => true]);
+        $this->nodeManager->find('/path/to')->willReturn($this->parentNode->reveal());
+        $this->parentNode->hasNode('nodename')->shouldBeCalled()->willReturn(true);
+        $this->parentNode->addNode('nodename')->shouldNotBeCalled();
+        $this->parentNode->getNode('nodename')->shouldBeCalled()->willReturn($this->node->reveal());
+
+        $this->persistEvent->getDocument()->willReturn($this->document);
+        $this->persistEvent->setParentNode($this->parentNode->reveal())->shouldBeCalled();
+        $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
+        $this->persistEvent->hasParentNode()->willReturn(true);
+        $this->persistEvent->getOptions()->willReturn($options);
+        $this->persistEvent->hasNode()->willReturn(false);
+        $this->persistEvent->setNode($this->node->reveal())->shouldBeCalled();
+
+        $this->subscriber->handlePersist($this->persistEvent->reveal());
+    }
+
+    /**
+     * It should throw exception when override flag is false.
+     */
+    public function testNewNodeFromPathNoOverwrite()
+    {
+        $this->setExpectedException(
+            ItemExistsException::class,
+            'The node \'/path/to\' already has a child named \'nodename\'.'
+        );
+
+        // override default false
+        $options = $this->resolveOptions(['path' => '/path/to/nodename']);
+        $this->nodeManager->find('/path/to')->willReturn($this->parentNode->reveal());
+        $this->parentNode->hasNode('nodename')->shouldBeCalled()->willReturn(true);
+        $this->parentNode->addNode('nodename')->shouldNotBeCalled();
+        $this->parentNode->getNode('nodename')->shouldNotBeCalled();
+        $this->parentNode->getPath()->willReturn('/path/to');
+
+        $this->persistEvent->getDocument()->willReturn($this->document);
+        $this->persistEvent->setParentNode($this->parentNode->reveal())->shouldBeCalled();
+        $this->persistEvent->getParentNode()->willReturn($this->parentNode->reveal());
+        $this->persistEvent->hasParentNode()->willReturn(true);
+        $this->persistEvent->hasNode()->willReturn(false);
+        $this->persistEvent->getOptions()->willReturn($options);
 
         $this->subscriber->handlePersist($this->persistEvent->reveal());
     }
