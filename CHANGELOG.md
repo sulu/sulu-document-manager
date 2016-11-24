@@ -4,7 +4,7 @@ CHANGELOG for Sulu
 * dev-develop
     * BUGFIX      #98 Removed deprecations
 
-* dev-master
+* 0.8.2 (2016-11-24)
     * HOTFIX      #96 Added overwrite option to ExplicitSubscriber
 
 * 0.8.1 (2016-08-08)
