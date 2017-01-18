@@ -87,8 +87,9 @@ interface DocumentManagerInterface
      *
      * @param object $document
      * @param string $locale
+     * @param array $options
      */
-    public function publish($document, $locale);
+    public function publish($document, $locale, array $options = []);
 
     /**
      * Unpublishes a document from the public workspace.
@@ -105,6 +106,18 @@ interface DocumentManagerInterface
      * @param $locale
      */
     public function removeDraft($document, $locale);
+
+    /**
+     * Restores the given version of the document and makes it a new version keeping the linear approach.
+     *
+     * @param object $document
+     * @param string $locale
+     * @param string $version The UUID of the version to restore
+     * @param array $options
+     *
+     * @return mixed
+     */
+    public function restore($document, $locale, $version, array $options = []);
 
     /**
      * Refresh the given document with the persisted state of the node.
