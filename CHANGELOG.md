@@ -1,7 +1,7 @@
 CHANGELOG for Sulu
 ==================
 
-* dev-develop
+* 0.9.0-RC1
     * FEATURE     #105 Fixed changed times for both workspaces
     * FEATURE     #97  Added versioning functionalities
     * ENHANCEMENT #104 Removed phpcr-odm dependency
