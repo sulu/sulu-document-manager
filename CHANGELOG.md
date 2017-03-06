@@ -1,6 +1,13 @@
 CHANGELOG for Sulu
 ==================
 
+* 0.9.0-RC1
+    * FEATURE     #105 Fixed changed times for both workspaces
+    * FEATURE     #97  Added versioning functionalities
+    * ENHANCEMENT #104 Removed phpcr-odm dependency
+    * FEATURE     #101 Added metadata form-type
+    * BUGFIX      #98  Removed deprecations
+
 * 0.8.3 (2016-12-21)
     * HOTFIX      #100 Leave mix:referencable after publish because of jackrabbit misbehavior
 

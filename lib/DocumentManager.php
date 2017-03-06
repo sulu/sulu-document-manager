@@ -63,7 +63,7 @@ class DocumentManager implements DocumentManagerInterface
      */
     public function persist($document, $locale = null, array $options = [])
     {
-        $options = $this->getOptionsResolver(Events::FIND)->resolve($options);
+        $options = $this->getOptionsResolver(Events::PERSIST)->resolve($options);
 
         $event = new Event\PersistEvent($document, $locale, $options);
         $this->eventDispatcher->dispatch(Events::PERSIST, $event);
@@ -110,9 +110,11 @@ class DocumentManager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function publish($document, $locale)
+    public function publish($document, $locale, array $options = [])
     {
-        $event = new Event\PublishEvent($document, $locale);
+        $options = $this->getOptionsResolver(Events::PUBLISH)->resolve($options);
+
+        $event = new Event\PublishEvent($document, $locale, $options);
         $this->eventDispatcher->dispatch(Events::PUBLISH, $event);
     }
 
@@ -132,6 +134,17 @@ class DocumentManager implements DocumentManagerInterface
     {
         $event = new Event\RemoveDraftEvent($document, $locale);
         $this->eventDispatcher->dispatch(Events::REMOVE_DRAFT, $event);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function restore($document, $locale, $version, array $options = [])
+    {
+        $options = $this->getOptionsResolver(Events::RESTORE)->resolve($options);
+
+        $event = new Event\RestoreEvent($document, $locale, $version, $options);
+        $this->eventDispatcher->dispatch(Events::RESTORE, $event);
     }
 
     /**
