@@ -1,5 +1,8 @@
-CHANGELOG for Sulu
-==================
+CHANGELOG for Sulu Document Manager
+===================================
+
+* 0.9.1 (2017-03-16)
+    * ENHANCEMENT #107 Added VersionNotFoundException
 
 * 0.9.0-RC1
     * FEATURE     #105 Fixed changed times for both workspaces
