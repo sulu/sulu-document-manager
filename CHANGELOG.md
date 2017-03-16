@@ -1,7 +1,7 @@
 CHANGELOG for Sulu Document Manager
 ===================================
 
-* dev-master
+* 0.9.1 (2017-03-16)
     * ENHANCEMENT #107 Added VersionNotFoundException
 
 * 0.9.0-RC1
