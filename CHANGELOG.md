@@ -1,7 +1,7 @@
 CHANGELOG for Sulu Document Manager
 ===================================
 
-* dev-develop
+* 0.10.0-RC1 (2017-06-01)
     * BUGFIX      #113 Updated ProxyManager to be compatible with PHP 7
     * BUGFIX      #112 Fixed overwrite of exist created date. 
     * ENHANCEMENT #110 Added node-name-slugifier to centralice additional node name replacer
