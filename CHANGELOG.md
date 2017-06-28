@@ -1,7 +1,7 @@
 CHANGELOG for Sulu Document Manager
 ===================================
 
-* dev-develop
+* 0.10.0 (2017-06-28)
     * FEATURE     #116 Added set-default-author to metadata
 
 * 0.10.0-RC1 (2017-06-01)
