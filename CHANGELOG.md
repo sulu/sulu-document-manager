@@ -1,7 +1,7 @@
 CHANGELOG for Sulu Document Manager
 ===================================
 
-* dev-master
+* 0.10.1 (2018-03-19)
     * HOTFIX      #119 Refactored version-subscriber to use uuid instead of paths
     * HOTFIX      #118 Set path and node-name after renaming node
     * HOTFIX      #117 Execute rename in flush-event to avoid ItemNotFoundException
