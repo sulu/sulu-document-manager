@@ -12,7 +12,11 @@
 namespace Sulu\Component\DocumentManager\Subscriber\Behavior\Path;
 
 use PHPCR\NodeInterface;
+use PHPCR\SessionInterface;
+use Sulu\Component\DocumentManager\Behavior\Mapping\NodeNameBehavior;
+use Sulu\Component\DocumentManager\Behavior\Mapping\PathBehavior;
 use Sulu\Component\DocumentManager\Behavior\Path\AutoNameBehavior;
+use Sulu\Component\DocumentManager\DocumentAccessor;
 use Sulu\Component\DocumentManager\DocumentHelper;
 use Sulu\Component\DocumentManager\DocumentRegistry;
 use Sulu\Component\DocumentManager\Event\ConfigureOptionsEvent;
@@ -54,21 +58,34 @@ class AutoNameSubscriber implements EventSubscriberInterface
     private $nodeManager;
 
     /**
-     * @param DocumentRegistry $registry
-     * @param SlugifierInterface $slugifier
-     * @param NameResolver $resolver
-     * @param NodeManager $nodeManager
+     * @var SessionInterface
      */
+    private $session;
+
+    /**
+     * @var SessionInterface
+     */
+    private $liveSession;
+
+    /**
+     * @var array
+     */
+    private $scheduledRename = [];
+
     public function __construct(
         DocumentRegistry $registry,
         SlugifierInterface $slugifier,
         NameResolver $resolver,
-        NodeManager $nodeManager
+        NodeManager $nodeManager,
+        SessionInterface $session,
+        SessionInterface $liveSession
     ) {
         $this->registry = $registry;
         $this->slugifier = $slugifier;
         $this->resolver = $resolver;
         $this->nodeManager = $nodeManager;
+        $this->session = $session;
+        $this->liveSession = $liveSession;
     }
 
     /**
@@ -79,13 +96,12 @@ class AutoNameSubscriber implements EventSubscriberInterface
         return [
             Events::CONFIGURE_OPTIONS => 'configureOptions',
             Events::PERSIST => [
+                ['handleScheduleRename'],
                 ['handlePersist', 480],
-                // the rename has to done at the very end to avoid ItemNotFoundException
-                // see https://github.com/jackalope/jackalope/blob/3cf6e0582acb26b5b83b3445be238ea8aadf46ec/src/Jackalope/ObjectManager.php#L429
-                ['handleRename', -480],
             ],
             Events::MOVE => ['handleMove', 480],
             Events::COPY => ['handleCopy', 480],
+            Events::FLUSH => ['handleRename', 510],
         ];
     }
 
@@ -145,7 +161,7 @@ class AutoNameSubscriber implements EventSubscriberInterface
      *
      * @param PersistEvent $event
      */
-    public function handleRename(PersistEvent $event)
+    public function handleScheduleRename(PersistEvent $event)
     {
         $document = $event->getDocument();
 
@@ -165,7 +181,31 @@ class AutoNameSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->rename($event->getNode(), $name);
+        $uuid = $event->getNode()->getIdentifier();
+        $this->scheduledRename[] = ['uuid' => $uuid, 'name' => $name, 'locale' => $event->getLocale()];
+    }
+
+    public function handleRename()
+    {
+        foreach ($this->scheduledRename as $item) {
+            $defaultNode = $this->session->getNodeByIdentifier($item['uuid']);
+            $liveNode = $this->liveSession->getNodeByIdentifier($item['uuid']);
+            $this->rename($defaultNode, $item['name']);
+            $this->rename($liveNode, $item['name']);
+
+            $document = $this->registry->getDocumentForNode($defaultNode, $item['locale']);
+
+            $accessor = new DocumentAccessor($document);
+            if ($document instanceof NodeNameBehavior) {
+                $accessor->set('nodeName', $defaultNode->getName());
+            }
+
+            if ($document instanceof PathBehavior) {
+                $accessor->set('path', $defaultNode->getPath());
+            }
+        }
+
+        $this->scheduledRename = [];
     }
 
     /**
